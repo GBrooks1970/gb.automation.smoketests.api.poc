@@ -1,0 +1,1 @@
+call dotnet run --project ./TokenParserAPI/TokenParserAPI.csproj 

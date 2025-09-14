@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="0d167710-005d-4141-8a9c-59a8adfb27bc" name="brook@DESKTOP-SDT5U6B 2025-09-11 20:38:48" runUser="DESKTOP-SDT5U6B\brook" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-09-11T20:38:48.5695937+01:00" queuing="2025-09-11T20:38:48.5695939+01:00" start="2025-09-11T20:38:46.6169980+01:00" finish="2025-09-11T20:38:48.5760749+01:00" />
+  <TestSettings name="default" id="e6da351d-a0b3-45a6-b2d0-c39ad8cc4251">
+    <Deployment runDeploymentRoot="brook_DESKTOP-SDT5U6B_2025-09-11_20_38_48" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="9f9b605a-8287-4eee-9a86-1e6f66889082" testId="8793979b-81fc-e6ab-4ab0-3b7a260290d3" testName="ParseDynamicStringTokens(&quot;[ALPHA-NUMERIC-PUNCTUATION-10-LINES-2]&quot;,&quot;200&quot;,&quot;parsedToken&quot;,&quot;2 lines of strings with each line containing 10 alpha-numeric-punctuation characters&quot;,null)" computerName="DESKTOP-SDT5U6B" duration="00:00:00.0218230" startTime="2025-09-11T20:38:48.3051334+01:00" endTime="2025-09-11T20:38:48.3269562+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9f9b605a-8287-4eee-9a86-1e6f66889082">
+      <Output>
+        <StdOut>Given the TokenParser API is available&#xD;
+-&gt; done: DynamicStringParser_Steps.GivenTheDynamicStringAPIIsRunning() (0.0s)&#xD;
+When a request with dynamic string token '[ALPHA-NUMERIC-PUNCTUATION-10-LINES-2]' is made to the DynamicStringParser endpoint&#xD;
+encodedUrl '/parse-dynamic-string?tokenString=%5BALPHA-NUMERIC-PUNCTUATION-10-LINES-2%5D' &#xD;
+responseString '{"parsedToken":")C&amp;J855HHR\r\n)C&amp;J855HHR\r\n"}' &#xD;
+-&gt; done: DynamicStringParser_Steps.WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint("[ALPHA-NUMERIC-PU...") (0.0s)&#xD;
+Then the API response should return a status code of 200 for the DynamicStringParser endpoint&#xD;
+-&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(200) (0.0s)&#xD;
+And the response should contain "parsedToken" with the value "2 lines of strings with each line containing 10 alpha-numeric-punctuation characters"&#xD;
+responseString '{"parsedToken":")C&amp;J855HHR\r\n)C&amp;J855HHR\r\n"}' &#xD;
+-&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldContainWithTheValue("parsedToken", "2 lines of string...") (0.0s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2e66c433-e76c-4a1f-9973-308e7c04caa6" testId="933ac686-733d-1454-699e-67bd18980fff" testName="ParseDynamicStringTokens(&quot;[ALPHA-NUMERIC-5]&quot;,&quot;200&quot;,&quot;parsedToken&quot;,&quot;An alpha-numeric string of length 5&quot;,null)" computerName="DESKTOP-SDT5U6B" duration="00:00:00.0248240" startTime="2025-09-11T20:38:48.2541991+01:00" endTime="2025-09-11T20:38:48.2790227+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2e66c433-e76c-4a1f-9973-308e7c04caa6">
+      <Output>
+        <StdOut>Given the TokenParser API is available&#xD;
+-&gt; done: DynamicStringParser_Steps.GivenTheDynamicStringAPIIsRunning() (0.0s)&#xD;
+When a request with dynamic string token '[ALPHA-NUMERIC-5]' is made to the DynamicStringParser endpoint&#xD;
+encodedUrl '/parse-dynamic-string?tokenString=%5BALPHA-NUMERIC-5%5D' &#xD;
+responseString '{"parsedToken":"05NHB\r\n"}' &#xD;
+-&gt; done: DynamicStringParser_Steps.WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint("[ALPHA-NUMERIC-5]") (0.0s)&#xD;
+Then the API response should return a status code of 200 for the DynamicStringParser endpoint&#xD;
+-&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(200) (0.0s)&#xD;
+And the response should contain "parsedToken" with the value "An alpha-numeric string of length 5"&#xD;
+responseString '{"parsedToken":"05NHB\r\n"}' &#xD;
+-&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldContainWithTheValue("parsedToken", "An alpha-numeric ...") (0.0s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="47111970-f6ae-4540-9828-7d9926ffe5ce" testId="e99299ef-8bea-aca7-1daf-ff17a0131899" testName="ParseADateToken(&quot;[TODAY+1YEAR-2MONTH]&quot;,&quot;200&quot;,&quot;parsedToken&quot;,&quot;one year ahead and two months ago from today&quot;,null)" computerName="DESKTOP-SDT5U6B" duration="00:00:00.0220400" startTime="2025-09-11T20:38:48.4065228+01:00" endTime="2025-09-11T20:38:48.4285624+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="47111970-f6ae-4540-9828-7d9926ffe5ce">
+      <Output>
+        <StdOut>Given a valid or invalid date token "[TODAY+1YEAR-2MONTH]"&#xD;
+-&gt; done: DateTokenParser_Steps.GivenAValidOrInvalidDateToken("[TODAY+1YEAR-2MONTH]") (0.0s)&#xD;
+When a GET request is made to the DateTokenParser Endpoint&#xD;
+encodedUrl '/parse-date-token?tokenString=%5BTODAY%2B1YEAR-2MONTH%5D' &#xD;
+responseString '{"parsedToken":"2026-07-11 00:00:00Z"}' &#xD;
+-&gt; done: DateTokenParser_Steps.WhenISendARequestWithTokenToTheParsedTokenAPI() (0.0s)&#xD;
+Then the API response for the DateTokenParser Endpoint should return a status code of 200&#xD;
+-&gt; done: DateTokenParser_Steps.ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(200) (0.0s)&#xD;
+And the response body should contain "parsedToken" with the value "one year ahead and two months ago from today"&#xD;
+responseString '{"parsedToken":"2026-07-11 00:00:00Z"}' &#xD;
+-&gt; done: DateTokenParser_Steps.ThenTheResponseBodyShouldContainWithTheValue("parsedToken", "one year ahead an...") (0.0s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="47c94368-d18c-4774-8af1-776d1f948311" testId="bd85c543-8fc6-5c4f-430f-09e91541a724" testName="ParseDynamicStringTokens(&quot;INVALIDTOKEN&quot;,&quot;400&quot;,&quot;error&quot;,&quot;Invalid string token format&quot;,null)" computerName="DESKTOP-SDT5U6B" duration="00:00:00.0354650" startTime="2025-09-11T20:38:48.2187062+01:00" endTime="2025-09-11T20:38:48.2541706+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="47c94368-d18c-4774-8af1-776d1f948311">
+      <Output>
+        <StdOut>Given the TokenParser API is available&#xD;
+-&gt; done: DynamicStringParser_Steps.GivenTheDynamicStringAPIIsRunning() (0.0s)&#xD;
+When a request with dynamic string token 'INVALIDTOKEN' is made to the DynamicStringParser endpoint&#xD;
+encodedUrl '/parse-dynamic-string?tokenString=INVALIDTOKEN' &#xD;
+responseString '{"error":"Invalid string token format"}' &#xD;
+-&gt; done: DynamicStringParser_Steps.WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint("INVALIDTOKEN") (0.0s)&#xD;
+Then the API response should return a status code of 400 for the DynamicStringParser endpoint&#xD;
+-&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(400) (0.0s)&#xD;
+And the response should contain "error" with the value "Invalid string token format"&#xD;
+responseString '{"error":"Invalid string token format"}' &#xD;
+-&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldContainWithTheValue("error", "Invalid string to...") (0.0s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1d315b0b-b1cd-4203-bd83-af664e9f9586" testId="35821622-737d-34f2-321b-b3a5af775c64" testName="ParseDynamicStringTokens(&quot;[PUNCTUATION-3]&quot;,&quot;200&quot;,&quot;parsedToken&quot;,&quot;A string of punctuation characters of length 3&quot;,null)" computerName="DESKTOP-SDT5U6B" duration="00:00:00.0260370" startTime="2025-09-11T20:38:48.2790698+01:00" endTime="2025-09-11T20:38:48.3051069+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1d315b0b-b1cd-4203-bd83-af664e9f9586">
+      <Output>
+        <StdOut>Given the TokenParser API is available&#xD;
+-&gt; done: DynamicStringParser_Steps.GivenTheDynamicStringAPIIsRunning() (0.0s)&#xD;
+When a request with dynamic string token '[PUNCTUATION-3]' is made to the DynamicStringParser endpoint&#xD;
+encodedUrl '/parse-dynamic-string?tokenString=%5BPUNCTUATION-3%5D' &#xD;
+responseString '{"parsedToken":"@%&amp;\r\n"}' &#xD;
+-&gt; done: DynamicStringParser_Steps.WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint("[PUNCTUATION-3]") (0.0s)&#xD;
+Then the API response should return a status code of 200 for the DynamicStringParser endpoint&#xD;
+-&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(200) (0.0s)&#xD;
+And the response should contain "parsedToken" with the value "A string of punctuation characters of length 3"&#xD;
+responseString '{"parsedToken":"@%&amp;\r\n"}' &#xD;
+-&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldContainWithTheValue("parsedToken", "A string of punct...") (0.0s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c70daf47-cc55-4894-8b87-1eb416715aa7" testId="a108ab3e-adad-b9a1-4cd9-2d6bb5837b40" testName="ParseADateToken(&quot;[TODAY-1YEAR-1MONTH]&quot;,&quot;200&quot;,&quot;parsedToken&quot;,&quot;one year and one month ago from today&quot;,null)" computerName="DESKTOP-SDT5U6B" duration="00:00:00.0230970" startTime="2025-09-11T20:38:48.3833980+01:00" endTime="2025-09-11T20:38:48.4064942+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c70daf47-cc55-4894-8b87-1eb416715aa7">
+      <Output>
+        <StdOut>Given a valid or invalid date token "[TODAY-1YEAR-1MONTH]"&#xD;
+-&gt; done: DateTokenParser_Steps.GivenAValidOrInvalidDateToken("[TODAY-1YEAR-1MONTH]") (0.0s)&#xD;
+When a GET request is made to the DateTokenParser Endpoint&#xD;
+encodedUrl '/parse-date-token?tokenString=%5BTODAY-1YEAR-1MONTH%5D' &#xD;
+responseString '{"parsedToken":"2024-08-11 00:00:00Z"}' &#xD;
+-&gt; done: DateTokenParser_Steps.WhenISendARequestWithTokenToTheParsedTokenAPI() (0.0s)&#xD;
+Then the API response for the DateTokenParser Endpoint should return a status code of 200&#xD;
+-&gt; done: DateTokenParser_Steps.ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(200) (0.0s)&#xD;
+And the response body should contain "parsedToken" with the value "one year and one month ago from today"&#xD;
+responseString '{"parsedToken":"2024-08-11 00:00:00Z"}' &#xD;
+-&gt; done: DateTokenParser_Steps.ThenTheResponseBodyShouldContainWithTheValue("parsedToken", "one year and one ...") (0.0s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2b10408d-3bb0-4503-aaf5-293681a56b0a" testId="0094b877-6d7c-94c4-7288-1b7cc8e0794a" testName="ParseADateToken(&quot;INVALIDTOKEN&quot;,&quot;400&quot;,&quot;error&quot;,&quot;Invalid string token format&quot;,null)" computerName="DESKTOP-SDT5U6B" duration="00:00:00.0244090" startTime="2025-09-11T20:38:48.3320239+01:00" endTime="2025-09-11T20:38:48.3564328+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2b10408d-3bb0-4503-aaf5-293681a56b0a">
+      <Output>
+        <StdOut>Given a valid or invalid date token "INVALIDTOKEN"&#xD;
+-&gt; done: DateTokenParser_Steps.GivenAValidOrInvalidDateToken("INVALIDTOKEN") (0.0s)&#xD;
+When a GET request is made to the DateTokenParser Endpoint&#xD;
+encodedUrl '/parse-date-token?tokenString=INVALIDTOKEN' &#xD;
+responseString '{"error":"Invalid string token format"}' &#xD;
+-&gt; done: DateTokenParser_Steps.WhenISendARequestWithTokenToTheParsedTokenAPI() (0.0s)&#xD;
+Then the API response for the DateTokenParser Endpoint should return a status code of 400&#xD;
+-&gt; done: DateTokenParser_Steps.ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(400) (0.0s)&#xD;
+And the response body should contain "error" with the value "Invalid string token format"&#xD;
+responseString '{"error":"Invalid string token format"}' &#xD;
+-&gt; done: DateTokenParser_Steps.ThenTheResponseBodyShouldContainWithTheValue("error", "Invalid string to...") (0.0s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e3582a10-e198-443c-ae67-8abe394bbd86" testId="8b2723d3-d7f3-0c1e-5ff0-2f816a40cbec" testName="ParseADateToken(&quot;[TODAY]&quot;,&quot;200&quot;,&quot;parsedToken&quot;,&quot;today&quot;,null)" computerName="DESKTOP-SDT5U6B" duration="00:00:00.0268910" startTime="2025-09-11T20:38:48.3564690+01:00" endTime="2025-09-11T20:38:48.3833595+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e3582a10-e198-443c-ae67-8abe394bbd86">
+      <Output>
+        <StdOut>Given a valid or invalid date token "[TODAY]"&#xD;
+-&gt; done: DateTokenParser_Steps.GivenAValidOrInvalidDateToken("[TODAY]") (0.0s)&#xD;
+When a GET request is made to the DateTokenParser Endpoint&#xD;
+encodedUrl '/parse-date-token?tokenString=%5BTODAY%5D' &#xD;
+responseString '{"parsedToken":"2025-09-11 00:00:00Z"}' &#xD;
+-&gt; done: DateTokenParser_Steps.WhenISendARequestWithTokenToTheParsedTokenAPI() (0.0s)&#xD;
+Then the API response for the DateTokenParser Endpoint should return a status code of 200&#xD;
+-&gt; done: DateTokenParser_Steps.ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(200) (0.0s)&#xD;
+And the response body should contain "parsedToken" with the value "today"&#xD;
+responseString '{"parsedToken":"2025-09-11 00:00:00Z"}' &#xD;
+-&gt; done: DateTokenParser_Steps.ThenTheResponseBodyShouldContainWithTheValue("parsedToken", "today") (0.0s)</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="56c5fa40-d479-40de-99d4-fac6861b4d04" testId="630bdd6a-c278-95a7-416d-f9376683c975" testName="VerifyingTheAPIRespondsSuccessfullyToAHealthCheck" computerName="DESKTOP-SDT5U6B" duration="00:00:00.8073680" startTime="2025-09-11T20:38:47.4032915+01:00" endTime="2025-09-11T20:38:48.2105867+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="56c5fa40-d479-40de-99d4-fac6861b4d04">
+      <Output>
+        <StdOut>Given the API is available&#xD;
+Given the API is available&#xD;
+-&gt; done: AliveEndpoint_Steps.GiventheAPIIsAvailable() (0.0s)&#xD;
+When a GET request is made to the Alive Endpoint&#xD;
+Response 'APIResponse: 200 OK&#xD;
+  Connection: close&#xD;
+  Content-Type: application/json; charset=utf-8&#xD;
+  Date: Thu, 11 Sep 2025 19:38:48 GMT&#xD;
+  Server: Kestrel&#xD;
+  Transfer-Encoding: chunked' &#xD;
+-&gt; done: AliveEndpoint_Steps.WhenISendAGETRequestTo() (0.7s)&#xD;
+Then the API response should return a status code of 200&#xD;
+-&gt; done: AliveEndpoint_Steps.ThenTheResponseShouldReturnAStatusCodeOf(200) (0.0s)&#xD;
+And the Alive Endpoint response body should contain "Status" with the value "ALIVE-AND-KICKING"&#xD;
+responseString '{"status":"ALIVE-AND-KICKING"}' &#xD;
+-&gt; done: AliveEndpoint_Steps.ThenTheResponseShouldContainTheMessage("Status", "ALIVE-AND-KICKING") (0.0s)</StdOut>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="ParseADateToken(&quot;[TODAY]&quot;,&quot;200&quot;,&quot;parsedToken&quot;,&quot;today&quot;,null)" storage="d:\_ucas\ucas.automation.smoketests.api.poc\_api_testing_gherkin_\demoapp002_csharp_playwright\tokenparsertests\bin\debug\net8.0\tokenparsertests.dll" id="8b2723d3-d7f3-0c1e-5ff0-2f816a40cbec">
+      <Execution id="e3582a10-e198-443c-ae67-8abe394bbd86" />
+      <TestMethod codeBase="D:\_UCAS\ucas.automation.smoketests.api.poc\_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT\TokenParserTests\bin\Debug\net8.0\TokenParserTests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TokenParserTests.Features.TokenDateParserEndpointFeature" name="ParseADateToken(&quot;[TODAY]&quot;,&quot;200&quot;,&quot;parsedToken&quot;,&quot;today&quot;,null)" />
+    </UnitTest>
+    <UnitTest name="ParseDynamicStringTokens(&quot;[PUNCTUATION-3]&quot;,&quot;200&quot;,&quot;parsedToken&quot;,&quot;A string of punctuation characters of length 3&quot;,null)" storage="d:\_ucas\ucas.automation.smoketests.api.poc\_api_testing_gherkin_\demoapp002_csharp_playwright\tokenparsertests\bin\debug\net8.0\tokenparsertests.dll" id="35821622-737d-34f2-321b-b3a5af775c64">
+      <Execution id="1d315b0b-b1cd-4203-bd83-af664e9f9586" />
+      <TestMethod codeBase="D:\_UCAS\ucas.automation.smoketests.api.poc\_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT\TokenParserTests\bin\Debug\net8.0\TokenParserTests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TokenParserTests.Features.DynamicStringParserEndpoint01Feature" name="ParseDynamicStringTokens(&quot;[PUNCTUATION-3]&quot;,&quot;200&quot;,&quot;parsedToken&quot;,&quot;A string of punctuation characters of length 3&quot;,null)" />
+    </UnitTest>
+    <UnitTest name="ParseADateToken(&quot;[TODAY-1YEAR-1MONTH]&quot;,&quot;200&quot;,&quot;parsedToken&quot;,&quot;one year and one month ago from today&quot;,null)" storage="d:\_ucas\ucas.automation.smoketests.api.poc\_api_testing_gherkin_\demoapp002_csharp_playwright\tokenparsertests\bin\debug\net8.0\tokenparsertests.dll" id="a108ab3e-adad-b9a1-4cd9-2d6bb5837b40">
+      <Execution id="c70daf47-cc55-4894-8b87-1eb416715aa7" />
+      <TestMethod codeBase="D:\_UCAS\ucas.automation.smoketests.api.poc\_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT\TokenParserTests\bin\Debug\net8.0\TokenParserTests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TokenParserTests.Features.TokenDateParserEndpointFeature" name="ParseADateToken(&quot;[TODAY-1YEAR-1MONTH]&quot;,&quot;200&quot;,&quot;parsedToken&quot;,&quot;one year and one month ago from today&quot;,null)" />
+    </UnitTest>
+    <UnitTest name="ParseADateToken(&quot;INVALIDTOKEN&quot;,&quot;400&quot;,&quot;error&quot;,&quot;Invalid string token format&quot;,null)" storage="d:\_ucas\ucas.automation.smoketests.api.poc\_api_testing_gherkin_\demoapp002_csharp_playwright\tokenparsertests\bin\debug\net8.0\tokenparsertests.dll" id="0094b877-6d7c-94c4-7288-1b7cc8e0794a">
+      <Execution id="2b10408d-3bb0-4503-aaf5-293681a56b0a" />
+      <TestMethod codeBase="D:\_UCAS\ucas.automation.smoketests.api.poc\_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT\TokenParserTests\bin\Debug\net8.0\TokenParserTests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TokenParserTests.Features.TokenDateParserEndpointFeature" name="ParseADateToken(&quot;INVALIDTOKEN&quot;,&quot;400&quot;,&quot;error&quot;,&quot;Invalid string token format&quot;,null)" />
+    </UnitTest>
+    <UnitTest name="VerifyingTheAPIRespondsSuccessfullyToAHealthCheck" storage="d:\_ucas\ucas.automation.smoketests.api.poc\_api_testing_gherkin_\demoapp002_csharp_playwright\tokenparsertests\bin\debug\net8.0\tokenparsertests.dll" id="630bdd6a-c278-95a7-416d-f9376683c975">
+      <Execution id="56c5fa40-d479-40de-99d4-fac6861b4d04" />
+      <TestMethod codeBase="D:\_UCAS\ucas.automation.smoketests.api.poc\_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT\TokenParserTests\bin\Debug\net8.0\TokenParserTests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TokenParserTests.Features.APIHealthCheckEndpointFeature" name="VerifyingTheAPIRespondsSuccessfullyToAHealthCheck" />
+    </UnitTest>
+    <UnitTest name="ParseDynamicStringTokens(&quot;INVALIDTOKEN&quot;,&quot;400&quot;,&quot;error&quot;,&quot;Invalid string token format&quot;,null)" storage="d:\_ucas\ucas.automation.smoketests.api.poc\_api_testing_gherkin_\demoapp002_csharp_playwright\tokenparsertests\bin\debug\net8.0\tokenparsertests.dll" id="bd85c543-8fc6-5c4f-430f-09e91541a724">
+      <Execution id="47c94368-d18c-4774-8af1-776d1f948311" />
+      <TestMethod codeBase="D:\_UCAS\ucas.automation.smoketests.api.poc\_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT\TokenParserTests\bin\Debug\net8.0\TokenParserTests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TokenParserTests.Features.DynamicStringParserEndpoint01Feature" name="ParseDynamicStringTokens(&quot;INVALIDTOKEN&quot;,&quot;400&quot;,&quot;error&quot;,&quot;Invalid string token format&quot;,null)" />
+    </UnitTest>
+    <UnitTest name="ParseDynamicStringTokens(&quot;[ALPHA-NUMERIC-5]&quot;,&quot;200&quot;,&quot;parsedToken&quot;,&quot;An alpha-numeric string of length 5&quot;,null)" storage="d:\_ucas\ucas.automation.smoketests.api.poc\_api_testing_gherkin_\demoapp002_csharp_playwright\tokenparsertests\bin\debug\net8.0\tokenparsertests.dll" id="933ac686-733d-1454-699e-67bd18980fff">
+      <Execution id="2e66c433-e76c-4a1f-9973-308e7c04caa6" />
+      <TestMethod codeBase="D:\_UCAS\ucas.automation.smoketests.api.poc\_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT\TokenParserTests\bin\Debug\net8.0\TokenParserTests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TokenParserTests.Features.DynamicStringParserEndpoint01Feature" name="ParseDynamicStringTokens(&quot;[ALPHA-NUMERIC-5]&quot;,&quot;200&quot;,&quot;parsedToken&quot;,&quot;An alpha-numeric string of length 5&quot;,null)" />
+    </UnitTest>
+    <UnitTest name="ParseADateToken(&quot;[TODAY+1YEAR-2MONTH]&quot;,&quot;200&quot;,&quot;parsedToken&quot;,&quot;one year ahead and two months ago from today&quot;,null)" storage="d:\_ucas\ucas.automation.smoketests.api.poc\_api_testing_gherkin_\demoapp002_csharp_playwright\tokenparsertests\bin\debug\net8.0\tokenparsertests.dll" id="e99299ef-8bea-aca7-1daf-ff17a0131899">
+      <Execution id="47111970-f6ae-4540-9828-7d9926ffe5ce" />
+      <TestMethod codeBase="D:\_UCAS\ucas.automation.smoketests.api.poc\_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT\TokenParserTests\bin\Debug\net8.0\TokenParserTests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TokenParserTests.Features.TokenDateParserEndpointFeature" name="ParseADateToken(&quot;[TODAY+1YEAR-2MONTH]&quot;,&quot;200&quot;,&quot;parsedToken&quot;,&quot;one year ahead and two months ago from today&quot;,null)" />
+    </UnitTest>
+    <UnitTest name="ParseDynamicStringTokens(&quot;[ALPHA-NUMERIC-PUNCTUATION-10-LINES-2]&quot;,&quot;200&quot;,&quot;parsedToken&quot;,&quot;2 lines of strings with each line containing 10 alpha-numeric-punctuation characters&quot;,null)" storage="d:\_ucas\ucas.automation.smoketests.api.poc\_api_testing_gherkin_\demoapp002_csharp_playwright\tokenparsertests\bin\debug\net8.0\tokenparsertests.dll" id="8793979b-81fc-e6ab-4ab0-3b7a260290d3">
+      <Execution id="9f9b605a-8287-4eee-9a86-1e6f66889082" />
+      <TestMethod codeBase="D:\_UCAS\ucas.automation.smoketests.api.poc\_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT\TokenParserTests\bin\Debug\net8.0\TokenParserTests.dll" adapterTypeName="executor://nunit3testexecutor/" className="TokenParserTests.Features.DynamicStringParserEndpoint01Feature" name="ParseDynamicStringTokens(&quot;[ALPHA-NUMERIC-PUNCTUATION-10-LINES-2]&quot;,&quot;200&quot;,&quot;parsedToken&quot;,&quot;2 lines of strings with each line containing 10 alpha-numeric-punctuation characters&quot;,null)" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="8793979b-81fc-e6ab-4ab0-3b7a260290d3" executionId="9f9b605a-8287-4eee-9a86-1e6f66889082" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="933ac686-733d-1454-699e-67bd18980fff" executionId="2e66c433-e76c-4a1f-9973-308e7c04caa6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e99299ef-8bea-aca7-1daf-ff17a0131899" executionId="47111970-f6ae-4540-9828-7d9926ffe5ce" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bd85c543-8fc6-5c4f-430f-09e91541a724" executionId="47c94368-d18c-4774-8af1-776d1f948311" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="35821622-737d-34f2-321b-b3a5af775c64" executionId="1d315b0b-b1cd-4203-bd83-af664e9f9586" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a108ab3e-adad-b9a1-4cd9-2d6bb5837b40" executionId="c70daf47-cc55-4894-8b87-1eb416715aa7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0094b877-6d7c-94c4-7288-1b7cc8e0794a" executionId="2b10408d-3bb0-4503-aaf5-293681a56b0a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8b2723d3-d7f3-0c1e-5ff0-2f816a40cbec" executionId="e3582a10-e198-443c-ae67-8abe394bbd86" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="630bdd6a-c278-95a7-416d-f9376683c975" executionId="56c5fa40-d479-40de-99d4-fac6861b4d04" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="9" executed="9" passed="9" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>NUnit Adapter 4.5.0.0: Test execution started&#xD;
+Running all tests in D:\_UCAS\ucas.automation.smoketests.api.poc\_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT\TokenParserTests\bin\Debug\net8.0\TokenParserTests.dll&#xD;
+   NUnit3TestExecutor discovered 9 of 9 NUnit test cases using Current Discovery mode, Non-Explicit run&#xD;
+NUnit Adapter 4.5.0.0: Test execution complete&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="DESKTOP-SDT5U6B" outcome="Warning" timestamp="2025-09-11T20:38:48.2232775+01:00">
+        <Text>Given the API is available&#xD;
+Given the API is available&#xD;
+-&gt; done: AliveEndpoint_Steps.GiventheAPIIsAvailable() (0.0s)&#xD;
+When a GET request is made to the Alive Endpoint&#xD;
+Response 'APIResponse: 200 OK&#xD;
+  Connection: close&#xD;
+  Content-Type: application/json; charset=utf-8&#xD;
+  Date: Thu, 11 Sep 2025 19:38:48 GMT&#xD;
+  Server: Kestrel&#xD;
+  Transfer-Encoding: chunked' &#xD;
+-&gt; done: AliveEndpoint_Steps.WhenISendAGETRequestTo() (0.7s)&#xD;
+Then the API response should return a status code of 200&#xD;
+-&gt; done: AliveEndpoint_Steps.ThenTheResponseShouldReturnAStatusCodeOf(200) (0.0s)&#xD;
+And the Alive Endpoint response body should contain "Status" with the value "ALIVE-AND-KICKING"&#xD;
+responseString '{"status":"ALIVE-AND-KICKING"}' &#xD;
+-&gt; done: AliveEndpoint_Steps.ThenTheResponseShouldContainTheMessage("Status", "ALIVE-AND-KICKING") (0.0s)&#xD;
+</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-SDT5U6B" outcome="Warning" timestamp="2025-09-11T20:38:48.2552890+01:00">
+        <Text>Given the TokenParser API is available&#xD;
+-&gt; done: DynamicStringParser_Steps.GivenTheDynamicStringAPIIsRunning() (0.0s)&#xD;
+When a request with dynamic string token 'INVALIDTOKEN' is made to the DynamicStringParser endpoint&#xD;
+encodedUrl '/parse-dynamic-string?tokenString=INVALIDTOKEN' &#xD;
+responseString '{"error":"Invalid string token format"}' &#xD;
+-&gt; done: DynamicStringParser_Steps.WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint("INVALIDTOKEN") (0.0s)&#xD;
+Then the API response should return a status code of 400 for the DynamicStringParser endpoint&#xD;
+-&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(400) (0.0s)&#xD;
+And the response should contain "error" with the value "Invalid string token format"&#xD;
+responseString '{"error":"Invalid string token format"}' &#xD;
+-&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldContainWithTheValue("error", "Invalid string to...") (0.0s)&#xD;
+</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-SDT5U6B" outcome="Warning" timestamp="2025-09-11T20:38:48.2799757+01:00">
+        <Text>Given the TokenParser API is available&#xD;
+-&gt; done: DynamicStringParser_Steps.GivenTheDynamicStringAPIIsRunning() (0.0s)&#xD;
+When a request with dynamic string token '[ALPHA-NUMERIC-5]' is made to the DynamicStringParser endpoint&#xD;
+encodedUrl '/parse-dynamic-string?tokenString=%5BALPHA-NUMERIC-5%5D' &#xD;
+responseString '{"parsedToken":"05NHB\r\n"}' &#xD;
+-&gt; done: DynamicStringParser_Steps.WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint("[ALPHA-NUMERIC-5]") (0.0s)&#xD;
+Then the API response should return a status code of 200 for the DynamicStringParser endpoint&#xD;
+-&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(200) (0.0s)&#xD;
+And the response should contain "parsedToken" with the value "An alpha-numeric string of length 5"&#xD;
+responseString '{"parsedToken":"05NHB\r\n"}' &#xD;
+-&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldContainWithTheValue("parsedToken", "An alpha-numeric ...") (0.0s)&#xD;
+</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-SDT5U6B" outcome="Warning" timestamp="2025-09-11T20:38:48.3059301+01:00">
+        <Text>Given the TokenParser API is available&#xD;
+-&gt; done: DynamicStringParser_Steps.GivenTheDynamicStringAPIIsRunning() (0.0s)&#xD;
+When a request with dynamic string token '[PUNCTUATION-3]' is made to the DynamicStringParser endpoint&#xD;
+encodedUrl '/parse-dynamic-string?tokenString=%5BPUNCTUATION-3%5D' &#xD;
+responseString '{"parsedToken":"@%&amp;\r\n"}' &#xD;
+-&gt; done: DynamicStringParser_Steps.WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint("[PUNCTUATION-3]") (0.0s)&#xD;
+Then the API response should return a status code of 200 for the DynamicStringParser endpoint&#xD;
+-&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(200) (0.0s)&#xD;
+And the response should contain "parsedToken" with the value "A string of punctuation characters of length 3"&#xD;
+responseString '{"parsedToken":"@%&amp;\r\n"}' &#xD;
+-&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldContainWithTheValue("parsedToken", "A string of punct...") (0.0s)&#xD;
+</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-SDT5U6B" outcome="Warning" timestamp="2025-09-11T20:38:48.3280521+01:00">
+        <Text>Given the TokenParser API is available&#xD;
+-&gt; done: DynamicStringParser_Steps.GivenTheDynamicStringAPIIsRunning() (0.0s)&#xD;
+When a request with dynamic string token '[ALPHA-NUMERIC-PUNCTUATION-10-LINES-2]' is made to the DynamicStringParser endpoint&#xD;
+encodedUrl '/parse-dynamic-string?tokenString=%5BALPHA-NUMERIC-PUNCTUATION-10-LINES-2%5D' &#xD;
+responseString '{"parsedToken":")C&amp;J855HHR\r\n)C&amp;J855HHR\r\n"}' &#xD;
+-&gt; done: DynamicStringParser_Steps.WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint("[ALPHA-NUMERIC-PU...") (0.0s)&#xD;
+Then the API response should return a status code of 200 for the DynamicStringParser endpoint&#xD;
+-&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(200) (0.0s)&#xD;
+And the response should contain "parsedToken" with the value "2 lines of strings with each line containing 10 alpha-numeric-punctuation characters"&#xD;
+responseString '{"parsedToken":")C&amp;J855HHR\r\n)C&amp;J855HHR\r\n"}' &#xD;
+-&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldContainWithTheValue("parsedToken", "2 lines of string...") (0.0s)&#xD;
+</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-SDT5U6B" outcome="Warning" timestamp="2025-09-11T20:38:48.3572308+01:00">
+        <Text>Given a valid or invalid date token "INVALIDTOKEN"&#xD;
+-&gt; done: DateTokenParser_Steps.GivenAValidOrInvalidDateToken("INVALIDTOKEN") (0.0s)&#xD;
+When a GET request is made to the DateTokenParser Endpoint&#xD;
+encodedUrl '/parse-date-token?tokenString=INVALIDTOKEN' &#xD;
+responseString '{"error":"Invalid string token format"}' &#xD;
+-&gt; done: DateTokenParser_Steps.WhenISendARequestWithTokenToTheParsedTokenAPI() (0.0s)&#xD;
+Then the API response for the DateTokenParser Endpoint should return a status code of 400&#xD;
+-&gt; done: DateTokenParser_Steps.ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(400) (0.0s)&#xD;
+And the response body should contain "error" with the value "Invalid string token format"&#xD;
+responseString '{"error":"Invalid string token format"}' &#xD;
+-&gt; done: DateTokenParser_Steps.ThenTheResponseBodyShouldContainWithTheValue("error", "Invalid string to...") (0.0s)&#xD;
+</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-SDT5U6B" outcome="Warning" timestamp="2025-09-11T20:38:48.3842392+01:00">
+        <Text>Given a valid or invalid date token "[TODAY]"&#xD;
+-&gt; done: DateTokenParser_Steps.GivenAValidOrInvalidDateToken("[TODAY]") (0.0s)&#xD;
+When a GET request is made to the DateTokenParser Endpoint&#xD;
+encodedUrl '/parse-date-token?tokenString=%5BTODAY%5D' &#xD;
+responseString '{"parsedToken":"2025-09-11 00:00:00Z"}' &#xD;
+-&gt; done: DateTokenParser_Steps.WhenISendARequestWithTokenToTheParsedTokenAPI() (0.0s)&#xD;
+Then the API response for the DateTokenParser Endpoint should return a status code of 200&#xD;
+-&gt; done: DateTokenParser_Steps.ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(200) (0.0s)&#xD;
+And the response body should contain "parsedToken" with the value "today"&#xD;
+responseString '{"parsedToken":"2025-09-11 00:00:00Z"}' &#xD;
+-&gt; done: DateTokenParser_Steps.ThenTheResponseBodyShouldContainWithTheValue("parsedToken", "today") (0.0s)&#xD;
+</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-SDT5U6B" outcome="Warning" timestamp="2025-09-11T20:38:48.4072723+01:00">
+        <Text>Given a valid or invalid date token "[TODAY-1YEAR-1MONTH]"&#xD;
+-&gt; done: DateTokenParser_Steps.GivenAValidOrInvalidDateToken("[TODAY-1YEAR-1MONTH]") (0.0s)&#xD;
+When a GET request is made to the DateTokenParser Endpoint&#xD;
+encodedUrl '/parse-date-token?tokenString=%5BTODAY-1YEAR-1MONTH%5D' &#xD;
+responseString '{"parsedToken":"2024-08-11 00:00:00Z"}' &#xD;
+-&gt; done: DateTokenParser_Steps.WhenISendARequestWithTokenToTheParsedTokenAPI() (0.0s)&#xD;
+Then the API response for the DateTokenParser Endpoint should return a status code of 200&#xD;
+-&gt; done: DateTokenParser_Steps.ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(200) (0.0s)&#xD;
+And the response body should contain "parsedToken" with the value "one year and one month ago from today"&#xD;
+responseString '{"parsedToken":"2024-08-11 00:00:00Z"}' &#xD;
+-&gt; done: DateTokenParser_Steps.ThenTheResponseBodyShouldContainWithTheValue("parsedToken", "one year and one ...") (0.0s)&#xD;
+</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-SDT5U6B" outcome="Warning" timestamp="2025-09-11T20:38:48.4296364+01:00">
+        <Text>Given a valid or invalid date token "[TODAY+1YEAR-2MONTH]"&#xD;
+-&gt; done: DateTokenParser_Steps.GivenAValidOrInvalidDateToken("[TODAY+1YEAR-2MONTH]") (0.0s)&#xD;
+When a GET request is made to the DateTokenParser Endpoint&#xD;
+encodedUrl '/parse-date-token?tokenString=%5BTODAY%2B1YEAR-2MONTH%5D' &#xD;
+responseString '{"parsedToken":"2026-07-11 00:00:00Z"}' &#xD;
+-&gt; done: DateTokenParser_Steps.WhenISendARequestWithTokenToTheParsedTokenAPI() (0.0s)&#xD;
+Then the API response for the DateTokenParser Endpoint should return a status code of 200&#xD;
+-&gt; done: DateTokenParser_Steps.ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(200) (0.0s)&#xD;
+And the response body should contain "parsedToken" with the value "one year ahead and two months ago from today"&#xD;
+responseString '{"parsedToken":"2026-07-11 00:00:00Z"}' &#xD;
+-&gt; done: DateTokenParser_Steps.ThenTheResponseBodyShouldContainWithTheValue("parsedToken", "one year ahead an...") (0.0s)&#xD;
+</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

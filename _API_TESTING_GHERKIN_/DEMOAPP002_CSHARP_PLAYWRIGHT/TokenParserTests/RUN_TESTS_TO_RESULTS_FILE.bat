@@ -1,0 +1,1 @@
+call dotnet test > TEST_RUN001.txt 

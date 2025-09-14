@@ -1,0 +1,24 @@
+{
+  "ide": {
+    "editor": {
+      "gherkinFormat": {
+        "indentAndSteps": true
+      }
+    }
+  },
+  "language": {
+    "feature": "en"
+  },
+  "bindingCulture": {
+    "name": "en"
+  },
+  "unitTestProvider": {
+    "name": "NUnit"
+  },
+  "plugins": [
+    {
+      "name": "SpecFlow.NUnit",
+      "type": "UnitTestProvider"
+    }
+  ]
+}

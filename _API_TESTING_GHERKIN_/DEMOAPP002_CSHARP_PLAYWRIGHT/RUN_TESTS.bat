@@ -1,0 +1,1 @@
+call dotnet test ./TokenParserTests/TokenParserTests.csproj --logger "trx;LogFileName=TokenParserTests.trx" --results-directory ./TokenParserTests/TestResults
