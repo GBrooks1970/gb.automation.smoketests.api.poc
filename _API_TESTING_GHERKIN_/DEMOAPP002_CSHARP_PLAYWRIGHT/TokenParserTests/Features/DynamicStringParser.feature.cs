@@ -35,9 +35,9 @@ namespace TokenParserTests.Features
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en"), "Features", "Dynamic String Parser Endpoint 01", "  As a user\r\n  I want to parse tokens and generate strings based on different tok" +
-                    "en formats\r\n  So that the correct type of string is returned based on the input " +
-                    "token in the API response.", ProgrammingLanguage.CSharp, featureTags);
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en"), "Features", "Dynamic String Parser Endpoint 01", "  As a user\n  I want to parse tokens and generate strings based on different toke" +
+                    "n formats\n  So that the correct type of string is returned based on the input to" +
+                    "ken in the API response.", ProgrammingLanguage.CSharp, featureTags);
             testRunner.OnFeatureStart(featureInfo);
         }
         

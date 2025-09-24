@@ -35,8 +35,8 @@ namespace TokenParserTests.Features
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en"), "Features", "API Health Check Endpoint", "  As a system user, \r\n  I want to receive a confirmation that the API is alive\r\n " +
-                    " So I can verify that the API is operational", ProgrammingLanguage.CSharp, featureTags);
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en"), "Features", "API Health Check Endpoint", "  As a system user, \n  I want to receive a confirmation that the API is alive\n  S" +
+                    "o I can verify that the API is operational", ProgrammingLanguage.CSharp, featureTags);
             testRunner.OnFeatureStart(featureInfo);
         }
         

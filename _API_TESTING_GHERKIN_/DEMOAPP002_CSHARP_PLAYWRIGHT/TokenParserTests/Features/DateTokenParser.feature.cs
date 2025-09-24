@@ -35,9 +35,9 @@ namespace TokenParserTests.Features
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en"), "Features", "Token Date Parser Endpoint", "  As a user \r\n  I want to parse date tokens and receive the computed dates in the" +
-                    " API response.\r\n  So that the correct type of string is returned based on the in" +
-                    "put token in the API response.", ProgrammingLanguage.CSharp, featureTags);
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en"), "Features", "Token Date Parser Endpoint", "  As a user \n  I want to parse date tokens and receive the computed dates in the " +
+                    "API response.\n  So that the correct type of string is returned based on the inpu" +
+                    "t token in the API response.", ProgrammingLanguage.CSharp, featureTags);
             testRunner.OnFeatureStart(featureInfo);
         }
         
