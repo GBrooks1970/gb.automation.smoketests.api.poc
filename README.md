@@ -1,68 +1,82 @@
-# README
+# API Automation Smoke Tests POC
 
-This repository is a small proof-of-concept workspace for API automation and smoke tests using different stacks (TypeScript + Cypress and C# + Playwright). Below is a concise overview of the repository layout and a short description of each folder / project with pointers to key files.
+**Updated: 04/11/25**
 
-Repository root
+This repository hosts two end-to-end API automation demos that exercise a shared Token Parser API idea:
 
-- [README.md](README.md) (this file)
-- [_API_TESTING_GHERKIN_](./_API_TESTING_GHERKIN_/)
+- **TypeScript / Express / Cypress** (`_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS`)
+- **.NET 8 Minimal API / SpecFlow / Playwright** (`_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT`)
 
-Top-level demos: [_API_TESTING_GHERKIN_/](./_API_TESTING_GHERKIN_/)
+Each stack exposes Swagger documentation, provides scripted start-and-test flows, and demonstrates how token parsing utilities drive automated checks.
 
-- DEMOAPP001_TYPESCRIPT_CYPRESS/ — TypeScript + Cypress demo
-  - Key files
-    - [`cypress.config.ts`](./_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/cypress.config.ts)
-    - [`package.json`](./_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/package.json)
-    - [`tsconfig.json`](./_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/tsconfig.json)
-  - Source layout
-    - [`cypress/`](./_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/cypress/) — Cypress tests, fixtures and support files
-    - [`src/server.ts`](./_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/src/server.ts) — demo API server entry
-    - [`src/services/`](./_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/src/services/) — service modules used by the demo API
-    - [`src/tokenparser/`](./_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/src/tokenparser/) — token parsing logic used by tests
-  - Notes
-    - Inspect [`package.json`](./_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/package.json) for available npm scripts (start, test, build).
-    - Typical workflow: install deps in the demo (`npm install`) and run Cypress via npm scripts or `npx cypress`.
+---
 
-- DEMOAPP002_CSHARP_PLAYWRIGHT/ — C# / .NET demo using Playwright and NUnit
-  - Top-level files
-    - [`TokenParserAPI.sln`](./_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/TokenParserAPI.sln) — Visual Studio solution
-    - [`RUN_API.bat`](./_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/RUN_API.bat) — convenience batch to run the API
-    - [`RUN_TESTS.bat`](./_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/RUN_TESTS.bat) — convenience batch to run tests
-  - Projects
-    - [`TokenParserAPI/`](./_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/TokenParserAPI/) — ASP.NET/.NET API project
-      - Contains configuration and application code (e.g. `appsettings.Development.json`) and a typical .NET project layout.
-      - Build artifacts and Playwright runtime files may appear under `bin/` and `obj/` (e.g. see `obj/Debug/net8.0/TokenParserAPI.csproj.FileListAbsolute.txt` and `.playwright` entries).
-      - Inspect the project NuGet spec files under `obj/` for referenced packages (`project.assets.json` etc).
-      - Key paths: [`TokenParserAPI/`](./_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/TokenParserAPI/)
-    - [`TokenParserTests/`](./_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/TokenParserTests/) — test project
-      - Uses NUnit + Microsoft.Playwright for browser-driven tests and SpecFlow in some setups (see package references in `obj/project.assets.json`).
-      - Key files include the test project file and generated `obj/` metadata (`obj/project.assets.json`, `obj/Debug/net8.0/TokenParserTests.csproj.FileListAbsolute.txt`).
-      - Key path: [`TokenParserTests/`](./_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/TokenParserTests/)
-  - Notes
-    - Open the solution [`TokenParserAPI.sln`](./_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/TokenParserAPI.sln) in Visual Studio or run the included batch scripts:
-      - Start API: [`RUN_API.bat`](./_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/RUN_API.bat)
-      - Run tests: [`RUN_TESTS.bat`](./_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/RUN_TESTS.bat)
-    - The test project references the API project as a project dependency (see `TokenParserTests/obj/...`).
+## Quick Start
 
-Build / run notes (brief)
+### TypeScript API + Cypress
 
-- TypeScript demo
-  - cd into [_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/](./_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/)
-  - Inspect [`package.json`](./_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/package.json) for scripts. Typical steps: `npm install` then `npm run <script>` or `npx cypress open`.
-- .NET demo
-  - Open [`TokenParserAPI.sln`](./_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/TokenParserAPI.sln) in Visual Studio / Rider or run the batch files:
-    - [`RUN_API.bat`](./_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/RUN_API.bat)
-    - [`RUN_TESTS.bat`](./_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/RUN_TESTS.bat)
-  - Tests use NUnit and Playwright; dependencies and runtime browser bundles can appear under `bin/Debug/net8.0/.playwright/` (see `obj` and `bin` listings).
+1. `cd _API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS`
+2. `npm install`
+3. Start the API: `npm run start`  
+   - Swagger UI: `http://localhost:3000/swagger/v1/json`  
+   - OpenAPI JSON: `http://localhost:3000/swagger/v1/swagger.json`  
+   - OpenAPI YAML: `http://localhost:3000/swagger/v1/swagger.yaml`
+4. Run tests: `npx cypress run` (results recorded by `.batch/RUN_API_AND_TESTS.BAT`)
 
-What to ignore (build artifacts)
+The batch script `.\.batch\RUN_API_AND_TESTS.BAT` launches the API, waits for port readiness, opens Swagger automatically, runs Cypress, and stores results under `.results/`.
 
-- Many `obj/`, `bin/`, and `.playwright/` files are build artifacts. NuGet packages and generated files are under `*/obj/` and `*/bin/`. Use [.gitignore](.gitignore) to avoid committing them.
+### .NET API + SpecFlow/Playwright
 
-Where to look next
+1. `cd _API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT`
+2. `dotnet restore TokenParserAPI.sln`
+3. Start the API: `dotnet run --project TokenParserAPI --urls http://localhost:5228`  
+   - Swagger UI: `http://localhost:5228/swagger`  
+   - OpenAPI JSON: `http://localhost:5228/swagger/v1/swagger.json`  
+   - OpenAPI YAML: `http://localhost:5228/swagger/v1/swagger.yaml`
+4. Run tests: `dotnet test TokenParserTests --no-build`
 
-- TypeScript demo entry: [`_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/src/server.ts`](./_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/src/server.ts)
-- Cypress tests: [`_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/cypress/`](./_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/cypress/)
-- C# solution: [`_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/TokenParserAPI.sln`](./_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/TokenParserAPI.sln)
-- C# API project: [`_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/TokenParserAPI/`](./_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/TokenParserAPI/)
-- C# tests: [`_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/TokenParserTests/`](./_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/TokenParserTests/)
+Use `.\.batch\RUN_CS_API_AND_TESTS.BAT` to orchestrate the same workflow automatically (includes Playwright dependency bootstrap and Swagger launch).
+
+---
+
+## Token Parser API Endpoints
+
+Both stacks expose the same contract:
+
+| Endpoint | Method | Description | Success (200) | Error (400) |
+| --- | --- | --- | --- | --- |
+| `/alive` | GET | Lightweight health indicator | `{ "Status": "ALIVE-AND-KICKING" }` | N/A |
+| `/parse-dynamic-string-token` | GET | Generates strings from tokens such as `[ALPHA-NUMERIC-LEN-10]` (optionally `-LINES-n`) | `{ "ParsedToken": "<generated>" }` | `{ "Error": "Invalid string token format" }` (TypeScript variant appends context) |
+| `/parse-date-token` | GET | Parses relative or range-based date tokens and normalises to UTC | `{ "ParsedToken": "yyyy-MM-dd HH:mm:ssZ" }` | `{ "Error": "Invalid string token format" }` (TypeScript variant appends context) |
+
+Detailed behaviour is captured in stack-specific documentation (`API Testing POC/typescript_cucumber_cypress.md`, `API Testing POC/csharp_specflow_playwright.md`).
+
+---
+
+## Repository Layout
+
+- `README.md` (this guide)
+- `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/`
+  - `src/server.ts` – Express API entry point with Swagger configuration
+  - `src/tokenparser/` – Date and dynamic string parser implementations
+  - `cypress/` – BDD feature files, step definitions, and Cypress config
+- `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/`
+  - `TokenParserAPI/Program.cs` – Minimal API host with Swagger UI
+  - `TokenParserAPI/utils/` – Token parsing utilities
+  - `TokenParserTests/` – SpecFlow feature files and Playwright test project
+- `.batch/` – Automation scripts (start API, run tests, capture output)
+- `API Testing POC/` – Supporting documentation and comparison guides
+
+---
+
+## Build Artifacts
+
+Generated content under `*/bin`, `*/obj`, and `.playwright/` is safe to ignore. These paths are covered by `.gitignore`.
+
+---
+
+## Additional Documentation
+
+- `API Testing POC/typescript_cucumber_cypress.md` – Full breakdown of the TypeScript stack
+- `API Testing POC/csharp_specflow_playwright.md` – Full breakdown of the C# stack
+- `API Testing POC/api_testing_comparison.md` – Cross-stack comparisons and rationale
