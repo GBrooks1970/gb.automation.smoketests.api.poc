@@ -19,7 +19,7 @@ The TypeScript Express server in `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CY
 
 ### 2. GET `/parse-dynamic-string-token`
 
-- Query: `token` (string, required) — dynamic string token in the `[TYPE]-LEN-<length>[-LINES-<count>]` format.
+- Query: `token` (string, required) - dynamic string token in the `[TYPE]-LEN-<length>[-LINES-<count>]` format.
 - Purpose: Generates a random string that matches the requested token rules (character sets and optional multi-line output).
 - Success (200): Returns the generated string.
 
@@ -35,7 +35,7 @@ The TypeScript Express server in `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CY
 
 ### 3. GET `/parse-date-token`
 
-- Query: `token` (string, required) — date token describing offsets or ranges.
+- Query: `token` (string, required) - date token describing offsets or ranges.
 - Purpose: Parses the supplied token and returns a UTC timestamp that honours the rules encoded in the token.
 - Success (200): Timestamp is normalised to `yyyy-MM-dd HH:mm:ssZ`.
 

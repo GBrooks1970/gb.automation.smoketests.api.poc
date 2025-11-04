@@ -22,7 +22,7 @@ const swaggerOptions = {
             version: '1.0.0',
             description: 'API to parse token date strings and dynamic string tokens',
         },
-        servers: [{ url: 'http://localhost:3000' }],
+        servers: [{ url: '/' }],
     },
     apis: ['./src/server.ts'],
 };
@@ -71,7 +71,7 @@ app.get('/alive', (req, res) => {
 
 /**
  * @swagger
- * /Parse-date-token:
+ * /parse-date-token:
  *   get:
  *     summary: Parse a date token
  *     description: Parses the provided token into a formatted date string.
@@ -94,7 +94,7 @@ app.get('/alive', (req, res) => {
  *                   type: string
  *                   example: 2023-10-15 12:00:00Z
  *       400:
- *         description: Invalid string token format .
+ *         description: Invalid string token format.
  *         content:
  *           application/json:
  *             schema:
@@ -102,7 +102,7 @@ app.get('/alive', (req, res) => {
  *               properties:
  *                 Error:
  *                   type: string
- *                   example: Invalid string token format 
+ *                   example: Invalid string token format
  */
 app.get('/parse-date-token', (req: Request, res: Response) => {
     const tokenString = req.query.token as string;
@@ -122,7 +122,7 @@ app.get('/parse-date-token', (req: Request, res: Response) => {
 
 /**
  * @swagger
- * /Parse-dynamic-string-token:
+ * /parse-dynamic-string-token:
  *   get:
  *     summary: Parse a dynamic string token
  *     description: Parses the provided token into a dynamic string.
@@ -145,7 +145,7 @@ app.get('/parse-date-token', (req: Request, res: Response) => {
  *                   type: string
  *                   example: generatedstring
  *       400:
- *         description: Invalid string token format .
+ *         description: Invalid string token format.
  *         content:
  *           application/json:
  *             schema:
@@ -153,7 +153,7 @@ app.get('/parse-date-token', (req: Request, res: Response) => {
  *               properties:
  *                 Error:
  *                   type: string
- *                   example: Invalid string token format 
+ *                   example: Invalid string token format
  */
 app.get('/parse-dynamic-string-token', (req: Request, res: Response) => {
     const tokenString = req.query.token as string;

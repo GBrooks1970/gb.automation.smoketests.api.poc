@@ -1,30 +1,20 @@
 @TokenParserAPI_HostAddress = http://localhost:5228
 
-get {{TokenParserAPI_HostAddress}}/parse-date-token?tokenString=%5BTODAY%5D
+### Alive
+get {{TokenParserAPI_HostAddress}}/alive
 Accept: application/json
 
 ###
-get {{TokenParserAPI_HostAddress}}/parse-date-token?tokenString=%5BTODAY%2B1YEAR-2MONTH%5D
+### Parse today's date token
+get {{TokenParserAPI_HostAddress}}/parse-date-token?token=%5BTODAY%5D
 Accept: application/json
 
 ###
-get {{TokenParserAPI_HostAddress}}/parse-dynamic-string?tokenString=%5BALPHA-NUMERIC-PUNCTUATION-10-LINES-2%5D
+### Parse adjusted date token
+get {{TokenParserAPI_HostAddress}}/parse-date-token?token=%5BTODAY%2B1YEAR-2MONTH%5D
 Accept: application/json
 
 ###
-get {{TokenParserAPI_HostAddress}}/greet?name=Gerald&age=101
-Accept: application/json
-
-###
-get {{TokenParserAPI_HostAddress}}/parse-token/ff.gg.hh
-Accept: application/json
-
-###
-post {{TokenParserAPI_HostAddress}}/echo/booom%23
-Accept: application/json
-
-
-
-###
-post {{TokenParserAPI_HostAddress}}/alive/
+### Parse dynamic string token
+get {{TokenParserAPI_HostAddress}}/parse-dynamic-string-token?token=%5BALPHA-NUMERIC-PUNCTUATION-10-LINES-2%5D
 Accept: application/json

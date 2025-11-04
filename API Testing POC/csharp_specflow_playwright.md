@@ -19,7 +19,7 @@ The .NET 8 minimal API in `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/To
 
 ### 2. GET `/parse-dynamic-string-token`
 
-- Query: `token` (string, required) â€” formatted as `[ALPHA|NUMERIC|PUNCTUATION|SPECIAL]-LEN-<length>[-LINES-<count>]`.
+- Query: `token` (string, required) — formatted as `[ALPHA|NUMERIC|PUNCTUATION|SPECIAL]-LEN-<length>[-LINES-<count>]`.
 - Purpose: Generates strings using the requested character sets and optional multi-line output.
 - Success (200): Returns the generated value.
 
@@ -35,7 +35,7 @@ The .NET 8 minimal API in `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/To
 
 ### 3. GET `/parse-date-token`
 
-- Query: `token` (string, required) â€” describes relative or range-based dates.
+- Query: `token` (string, required) — describes relative or range-based dates.
 - Purpose: Parses the token and returns the computed UTC date/time.
 - Success (200): Date is emitted using the `yyyy-MM-dd HH:mm:ssZ` format.
 
@@ -53,7 +53,7 @@ The .NET 8 minimal API in `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/To
 
 ## Swagger / OpenAPI
 
-- Swagger UI: `http://localhost:5228/swagger`
+- Swagger UI: `http://localhost:5228/swagger/v1/json`
 - Raw OpenAPI JSON: `http://localhost:5228/swagger/v1/swagger.json`
 - Raw OpenAPI YAML: `http://localhost:5228/swagger/v1/swagger.yaml`
 

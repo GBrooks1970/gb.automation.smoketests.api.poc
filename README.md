@@ -30,7 +30,7 @@ The batch script `.\.batch\RUN_API_AND_TESTS.BAT` launches the API, waits for po
 1. `cd _API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT`
 2. `dotnet restore TokenParserAPI.sln`
 3. Start the API: `dotnet run --project TokenParserAPI --urls http://localhost:5228`  
-   - Swagger UI: `http://localhost:5228/swagger`  
+   - Swagger UI: `http://localhost:5228/swagger/v1/json`  
    - OpenAPI JSON: `http://localhost:5228/swagger/v1/swagger.json`  
    - OpenAPI YAML: `http://localhost:5228/swagger/v1/swagger.yaml`
 4. Run tests: `dotnet test TokenParserTests --no-build`

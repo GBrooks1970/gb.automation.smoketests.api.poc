@@ -105,7 +105,7 @@ API Endpoints documented in Swagger/OpenAPI, with BDD/Gherkin contract testing.
 ### Endpoints
 
 - `/alive` (GET): Health checker.
-- `/parse-dynamic-string` (GET): Outputs computed string.
+- `/parse-dynamic-string-token` (GET): Outputs computed string.
 - `/parse-date-token` (GET): Outputs computed date.
 
 ### Swagger/OpenAPI (Simplified)
@@ -127,9 +127,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
+                  Status:
                     type: string
-                    example: "alive"
+                    example: "ALIVE-AND-KICKING"
 ```
 
 ---
@@ -148,7 +148,7 @@ Feature: API Health Check Endpoint
     Given the API is available
     When a GET request is made to /alive
     Then the response status should be 200
-    And the body should contain "status" = "alive"
+    And the body should contain "Status" = "ALIVE-AND-KICKING"
 ```
 
 ### Scenario 2: Parse a dynamic string token
@@ -161,15 +161,15 @@ Feature: Parse Dynamic String Token Endpoint
 
   Scenario: Valid token parsing
     Given a valid token "[exampleDynamicToken]" is provided
-    When GET /parse-dynamic-string with token
+    When GET /parse-dynamic-string-token with token
     Then status = 200
     And body contains "ParsedToken" = "generatedstring"
 
   Scenario: Invalid token parsing
     Given an invalid token "invalidToken" is provided
-    When GET /parse-dynamic-string with token
+    When GET /parse-dynamic-string-token with token
     Then status = 400
-    And body contains "Error" = "Invalid token"
+    And body contains "Error" = "Invalid string token format"
 ```
 
 ### Scenario 3: Parse a date token
@@ -191,7 +191,7 @@ Feature: Parse Date Token Endpoint
     Given an invalid token "invalidDate" is provided
     When GET /parse-date-token with token
     Then status = 400
-    And body contains "Error" = "Invalid date token"
+    And body contains "Error" = "Invalid string token format"
 ```
 
 ---
@@ -221,9 +221,9 @@ BeforeEach:
 
 ### Tests
 
-- **Alive Test:** GET /alive â†’ assert status=200, body contains "alive".
-- **Dynamic Token Parser:** GET /parse-dynamic-string â†’ assert 200 + parsed value.
-- **Date Token Parser:** GET /parse-date-token â†’ assert 200 + parsed date.
+- **Alive Test:** GET /alive — assert status=200, body contains "Status" = "ALIVE-AND-KICKING".
+- **Dynamic Token Parser:** GET /parse-dynamic-string-token — assert 200 + parsed value.
+- **Date Token Parser:** GET /parse-date-token — assert 200 + parsed date.
 
 ### Teardown
 
