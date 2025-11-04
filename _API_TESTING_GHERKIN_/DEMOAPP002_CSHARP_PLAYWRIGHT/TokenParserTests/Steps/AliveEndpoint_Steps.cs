@@ -7,13 +7,14 @@ using TokenParserAPI.responses;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework.Internal;
 using System;
+using System.Threading.Tasks;
 namespace TokenParserTests.Steps
 {
     [Binding]
     public class AliveEndpoint_Steps
     {
         private IAPIResponse _response;
-        private RequestHelper_PW requestHelper;
+        private readonly RequestHelper_PW requestHelper;
         private string _responseContent;
         public AliveEndpoint_Steps() => requestHelper = new RequestHelper_PW("http://localhost:5228");
 
@@ -47,6 +48,12 @@ namespace TokenParserTests.Steps
 
             var actualString = RequestHelper_PW.GetPropertyValue(responseBody, propertyName).ToString();
             Assert.That(expectedString, Is.EqualTo(actualString), $"Expected string: {expectedString}, but got: {actualString}");
+        }
+
+        [AfterScenario]
+        public async Task DisposeContext()
+        {
+            await requestHelper.DisposeAsync();
         }
     }
 }

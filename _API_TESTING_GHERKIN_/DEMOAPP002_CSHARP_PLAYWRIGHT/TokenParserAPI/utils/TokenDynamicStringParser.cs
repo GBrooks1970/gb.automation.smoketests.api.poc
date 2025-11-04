@@ -84,13 +84,28 @@ namespace TokenParserAPI.utils
             return sb.ToString();
         }
 
-        private string GenerateLines(string ParsedToken, int lineCount)
+        private string GenerateLines(string parsedToken, int lineCount)
         {
+            if (lineCount <= 0)
+            {
+                throw new ArgumentException("Invalid line count in token format");
+            }
+
+            if (lineCount == 1)
+            {
+                return parsedToken;
+            }
+
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < lineCount; i++)
             {
-                sb.AppendLine(ParsedToken);
+                if (i > 0)
+                {
+                    sb.Append("\r\n");
+                }
+                sb.Append(parsedToken);
             }
+
             return sb.ToString();
         }
 

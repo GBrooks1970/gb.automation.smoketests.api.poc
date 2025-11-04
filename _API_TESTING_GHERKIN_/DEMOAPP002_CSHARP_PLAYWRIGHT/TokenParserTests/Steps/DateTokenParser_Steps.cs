@@ -31,7 +31,7 @@ namespace TokenParserTests.Steps
             string endpoint = "/parse-date-token";
             var queryParams = new Dictionary<string, string>
             {
-                { "tokenString", _Token }
+                { "token", _Token }
             };
             string encodedUrl = UrlHelper.BuildEncodedUrl(endpoint, queryParams);
 

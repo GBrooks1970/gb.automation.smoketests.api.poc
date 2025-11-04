@@ -24,6 +24,9 @@ if errorlevel 1 (
     goto cleanup_fail
 )
 
+echo Opening Swagger UI at http://localhost:3000/swagger/v1/json...
+start "" "http://localhost:3000/swagger/v1/json"
+
 pushd "_API_TESTING_GHERKIN_\DEMOAPP001_TYPESCRIPT_CYPRESS"
 echo Running Cypress test suite...
 call npx cypress run > "%RESULT_FILE%" 2>&1

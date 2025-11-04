@@ -7,17 +7,31 @@ using System.Text.RegularExpressions;
 
 namespace TokenParserTests.Helpers
 {
-    public class RequestHelper_PW(string baseAddress)
+    public class RequestHelper_PW : IAsyncDisposable
     {
-        //private readonly IAPIRequestContext _requestContext;
+        private readonly string _baseAddress;
+        private IPlaywright? _playwright;
+        private IAPIRequestContext? _requestContext;
+
+        public RequestHelper_PW(string baseAddress)
+        {
+            _baseAddress = baseAddress;
+        }
 
         public async Task<IAPIRequestContext> GetRequestContext()
         {
-            var playwright = await Playwright.CreateAsync();
-            return await playwright.APIRequest.NewContextAsync(new APIRequestNewContextOptions
+            if (_requestContext != null)
             {
-                BaseURL = baseAddress
+                return _requestContext;
+            }
+
+            _playwright = await Playwright.CreateAsync();
+            _requestContext = await _playwright.APIRequest.NewContextAsync(new APIRequestNewContextOptions
+            {
+                BaseURL = _baseAddress
             });
+
+            return _requestContext;
         }
 
         public async Task<IAPIResponse> GetAsyncToEndpoint(string endpoint, bool authenticated = false)
@@ -131,6 +145,21 @@ namespace TokenParserTests.Helpers
 
             // Get the value of the property for the given object
             return property.GetValue(obj);
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            if (_requestContext != null)
+            {
+                await _requestContext.DisposeAsync();
+                _requestContext = null;
+            }
+
+            if (_playwright != null)
+            {
+                _playwright.Dispose();
+                _playwright = null;
+            }
         }
     }
 }

@@ -26,6 +26,29 @@ if errorlevel 1 (
     goto cleanup_fail
 )
 
+echo Opening Swagger UI at http://localhost:5228/swagger...
+start "" "http://localhost:5228/swagger"
+
+if exist "%TEST_DIR%\..\playwright.ps1" (
+    echo Ensuring Playwright dependencies are installed...
+    powershell -NoProfile -Command "Try { & '%TEST_DIR%\..\playwright.ps1' install > $null 2>&1 } Catch { Write-Error 'Playwright install failed. Run `playwright install` manually.'; exit 1 }"
+    if errorlevel 1 (
+        echo Playwright dependency installation failed.
+        set "TEST_EXIT=1"
+        goto cleanup
+    )
+) else if exist "%TEST_DIR%\..\bin\Debug\net8.0\playwright.ps1" (
+    echo Ensuring Playwright dependencies are installed...
+    powershell -NoProfile -Command "Try { & '%TEST_DIR%\..\bin\Debug\net8.0\playwright.ps1' install > $null 2>&1 } Catch { Write-Error 'Playwright install failed. Run `playwright install` manually.'; exit 1 }"
+    if errorlevel 1 (
+        echo Playwright dependency installation failed.
+        set "TEST_EXIT=1"
+        goto cleanup
+    )
+) else (
+    echo Playwright installation script not found; skipping dependency check.
+)
+
 pushd "%TEST_DIR%"
 echo Running SpecFlow Playwright tests...
 call dotnet test --no-build > "%RESULT_FILE%" 2>&1

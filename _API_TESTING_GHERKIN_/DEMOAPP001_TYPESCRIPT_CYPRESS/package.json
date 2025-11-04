@@ -6,7 +6,8 @@
   "scripts": {
     "start": "tsx src/server.ts",
     "test": "cypress open",
-    "ts:check": "tsc --noEmit"
+    "ts:check": "tsc --noEmit",
+    "postinstall": "npx cypress verify"
   },
   "keywords": [],
   "author": "",

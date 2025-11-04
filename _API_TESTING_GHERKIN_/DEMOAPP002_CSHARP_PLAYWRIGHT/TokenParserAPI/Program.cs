@@ -1,13 +1,20 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
-using System.Text.Json;
 using TokenParserAPI.responses;
 using TokenParserAPI.utils;
+using HttpJsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "TokenParserAPI", Version = "v1" });
+});
+
+builder.Services.Configure<HttpJsonOptions>(options =>
+{
+    options.SerializerOptions.PropertyNamingPolicy = null;
+    options.SerializerOptions.DictionaryKeyPolicy = null;
 });
 
 var app = builder.Build();
@@ -37,13 +44,19 @@ app.MapGet("/alive", () =>
 });
 
 // Endpoint 2: Route to parse date token
-app.MapGet("/parse-date-token", (string tokenString) =>
+app.MapGet("/parse-date-token", (
+    [FromQuery(Name = "token")] string? token) =>
 {
+    if (string.IsNullOrWhiteSpace(token))
+    {
+        return Results.BadRequest(new TokenParserApiErrorResponse { Error = "Token date is required" });
+    }
+
     try
     {
-        var parsedDate = TokenParser.ParseDateToken(tokenString);
-        TokenParserApiResponse resp = new TokenParserApiResponse { ParsedToken = parsedDate };
-        return Results.Ok(resp);
+        var parsedDate = TokenParser.ParseDateToken(token);
+        var response = new TokenParserApiResponse { ParsedToken = parsedDate };
+        return Results.Ok(response);
     }
     catch (ArgumentException ex)
     {
@@ -52,13 +65,19 @@ app.MapGet("/parse-date-token", (string tokenString) =>
 });
 
 // Endpoint 3: Route to parse dynamic string token
-app.MapGet("/parse-dynamic-string", (string tokenString) =>
+app.MapGet("/parse-dynamic-string-token", (
+    [FromQuery(Name = "token")] string? token) =>
 {
+    if (string.IsNullOrWhiteSpace(token))
+    {
+        return Results.BadRequest(new TokenParserApiErrorResponse { Error = "Token string is required" });
+    }
+
     try
     {
-        var ParsedToken = TokenParser.ParseDynamicStringToken(tokenString);
-        TokenParserApiResponse resp = new TokenParserApiResponse { ParsedToken = ParsedToken };
-        return Results.Ok(resp);
+        var parsedToken = TokenParser.ParseDynamicStringToken(token);
+        var response = new TokenParserApiResponse { ParsedToken = parsedToken };
+        return Results.Ok(response);
     }
     catch (ArgumentException ex)
     {

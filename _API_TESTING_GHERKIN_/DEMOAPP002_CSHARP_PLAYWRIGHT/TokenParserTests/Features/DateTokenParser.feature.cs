@@ -77,10 +77,10 @@ namespace TokenParserTests.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Parse a date token")]
-        [NUnit.Framework.TestCaseAttribute("INVALIDTOKEN", "400", "error", "Invalid string token format", null)]
-        [NUnit.Framework.TestCaseAttribute("[TODAY]", "200", "parsedToken", "today", null)]
-        [NUnit.Framework.TestCaseAttribute("[TODAY-1YEAR-1MONTH]", "200", "parsedToken", "one year and one month ago from today", null)]
-        [NUnit.Framework.TestCaseAttribute("[TODAY+1YEAR-2MONTH]", "200", "parsedToken", "one year ahead and two months ago from today", null)]
+        [NUnit.Framework.TestCaseAttribute("INVALIDTOKEN", "400", "Error", "Invalid string token format", null)]
+        [NUnit.Framework.TestCaseAttribute("[TODAY]", "200", "ParsedToken", "today", null)]
+        [NUnit.Framework.TestCaseAttribute("[TODAY-1YEAR-1MONTH]", "200", "ParsedToken", "one year and one month ago from today", null)]
+        [NUnit.Framework.TestCaseAttribute("[TODAY+1YEAR-2MONTH]", "200", "ParsedToken", "one year ahead and two months ago from today", null)]
         public void ParseADateToken(string token, string statusCode, string key, string expectedValue, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;

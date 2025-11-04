@@ -11,8 +11,8 @@ Scenario Outline: Parse a date token
 
     Examples:
       | token                | statusCode | key         | expectedValue                                         |
-      | INVALIDTOKEN         | 400        | error       | Invalid string token format                           |
-      | [TODAY]              | 200        | parsedToken | today                                                 |
-      | [TODAY-1YEAR-1MONTH] | 200        | parsedToken | one year and one month ago from today                 |
-      | [TODAY+1YEAR-2MONTH] | 200        | parsedToken | one year ahead and two months ago from today          |
+      | INVALIDTOKEN         | 400        | Error       | Invalid string token format                           |
+      | [TODAY]              | 200        | ParsedToken | today                                                 |
+      | [TODAY-1YEAR-1MONTH] | 200        | ParsedToken | one year and one month ago from today                 |
+      | [TODAY+1YEAR-2MONTH] | 200        | ParsedToken | one year ahead and two months ago from today          |
 

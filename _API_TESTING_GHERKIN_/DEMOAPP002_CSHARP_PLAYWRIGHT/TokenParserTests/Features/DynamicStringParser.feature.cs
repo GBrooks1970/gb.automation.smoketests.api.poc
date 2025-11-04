@@ -77,10 +77,10 @@ namespace TokenParserTests.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Parse dynamic string tokens")]
-        [NUnit.Framework.TestCaseAttribute("INVALIDTOKEN", "400", "error", "Invalid string token format", null)]
-        [NUnit.Framework.TestCaseAttribute("[ALPHA-NUMERIC-5]", "200", "parsedToken", "An alpha-numeric string of length 5", null)]
-        [NUnit.Framework.TestCaseAttribute("[PUNCTUATION-3]", "200", "parsedToken", "A string of punctuation characters of length 3", null)]
-        [NUnit.Framework.TestCaseAttribute("[ALPHA-NUMERIC-PUNCTUATION-10-LINES-2]", "200", "parsedToken", "2 lines of strings with each line containing 10 alpha-numeric-punctuation charact" +
+        [NUnit.Framework.TestCaseAttribute("INVALIDTOKEN", "400", "Error", "Invalid string token format", null)]
+        [NUnit.Framework.TestCaseAttribute("[ALPHA-NUMERIC-5]", "200", "ParsedToken", "An alpha-numeric string of length 5", null)]
+        [NUnit.Framework.TestCaseAttribute("[PUNCTUATION-3]", "200", "ParsedToken", "A string of punctuation characters of length 3", null)]
+        [NUnit.Framework.TestCaseAttribute("[ALPHA-NUMERIC-PUNCTUATION-10-LINES-2]", "200", "ParsedToken", "2 lines of strings with each line containing 10 alpha-numeric-punctuation charact" +
             "ers", null)]
         public void ParseDynamicStringTokens(string token, string statusCode, string key, string expectedValue, string[] exampleTags)
         {

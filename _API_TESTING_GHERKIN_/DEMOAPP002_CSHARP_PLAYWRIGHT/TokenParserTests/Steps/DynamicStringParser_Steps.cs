@@ -26,11 +26,11 @@ namespace TokenParserTests.Steps
         [When(@"a request with dynamic string token '(.*)' is made to the DynamicStringParser endpoint")]
         public async Task WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint(string token)
         {
-            var endpoint = $"/parse-dynamic-string";
+            var endpoint = "/parse-dynamic-string-token";
 
             var queryParams = new Dictionary<string, string>
             {
-                { "tokenString",token }
+                { "token", token }
             };
             string encodedUrl = UrlHelper.BuildEncodedUrl(endpoint, queryParams);
 
