@@ -1,84 +1,77 @@
 # C#/SpecFlow/Playwright - TOKENPARSER API
 
-**Version 1 – [21/11/24]**
+**Version 1 - [04/11/25]**
 
-C# Minimal API Server setup provides a fully functional **TOKENPARSER API** with three endpoints, documentation using Swagger, and testing using Playwright and SpecFlow with BDD/Gherkin Test Cases.
+The .NET 8 minimal API in `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/TokenParserAPI` hosts the **TOKENPARSER API** on `http://localhost:5228`. Swagger UI is enabled and the service is validated with SpecFlow + Playwright end-to-end tests.
 
 ---
 
 ## TOKENPARSER API Endpoints
 
-### 1. Alive (GET)
+### 1. GET `/alive`
 
-**Purpose:** Health checker of the API.
+- Purpose: Confirms the API host is running.
+- Success (200):
 
-- **Success:**
-  - Status Code: `200`
-  - Response Body:
+  ```json
+  { "Status": "ALIVE-AND-KICKING" }
+  ```
 
-    ```json
-    { "Status": "ALIVE-AND-KICKING" }
-    ```
+### 2. GET `/parse-dynamic-string-token`
 
-### 2. Parse-dynamic-string-token (GET)
+- Query: `token` (string, required) — formatted as `[ALPHA|NUMERIC|PUNCTUATION|SPECIAL]-LEN-<length>[-LINES-<count>]`.
+- Purpose: Generates strings using the requested character sets and optional multi-line output.
+- Success (200): Returns the generated value.
 
-**Purpose:** Outputs a computed string from an input token string.
+  ```json
+  { "ParsedToken": "ABcd1234" }
+  ```
 
-- **Success:**
-  - Status Code: `200`
-  - Response Body:
+- Error (400): Invalid token format or line configuration.
 
-    ```json
-    { "ParsedToken": "generatedstring" }
-    ```
+  ```json
+  { "Error": "Invalid string token format" }
+  ```
 
-- **Error:**
-  - Status Code: `400`
-  - Response Body:
+### 3. GET `/parse-date-token`
 
-    ```json
-    { "Error": "error message" }
-    ```
+- Query: `token` (string, required) — describes relative or range-based dates.
+- Purpose: Parses the token and returns the computed UTC date/time.
+- Success (200): Date is emitted using the `yyyy-MM-dd HH:mm:ssZ` format.
 
-### 3. Parse-date-token (GET)
+  ```json
+  { "ParsedToken": "2025-11-04 00:00:00Z" }
+  ```
 
-**Purpose:** Outputs a computed date from an input token string.
+- Error (400): Invalid token structure or parameters.
 
-- **Success:**
-  - Status Code: `200`
-  - Response Body:
-
-    ```json
-    { "ParsedToken": "generatedstring" }
-    ```
-
-- **Error:**
-  - Status Code: `400`
-  - Response Body:
-
-    ```json
-    { "Error": "error message" }
-    ```
+  ```json
+  { "Error": "Invalid string token format" }
+  ```
 
 ---
 
-## Included Code Snippets
+## Swagger / OpenAPI
 
-Below are example code snippets and artifacts included in this POC:
+- Swagger UI: `http://localhost:5228/swagger`
+- Raw OpenAPI JSON: `http://localhost:5228/swagger/v1/swagger.json`
+- Raw OpenAPI YAML: `http://localhost:5228/swagger/v1/swagger.yaml`
 
-- **Alive Endpoint Server Code**
-- **Swagger Definition**
-- **BDD/Gherkin Feature File** containing basic test case scenarios
-- **Step Implementation** of the Alive endpoint test case scenario
-- **RequestHelper Helper Class**
-- **API Startup Instructions (Local)**
-- **Successful Execution of Alive Endpoint Feature**
-- **Swagger UI Output**
+---
+
+## Included Artifacts
+
+This solution contains:
+
+- Minimal API entry point (`Program.cs`) with Swagger configuration.
+- Token parsing utilities for date and dynamic string tokens.
+- SpecFlow feature files and Playwright bindings that validate API behaviour.
+- Batch scripts that start the API and execute the Playwright test suite.
 
 ---
 
 ## Repository
 
-The source code and project are stored in the following Bitbucket repository:
+Source code is stored in Bitbucket:
 
-[UCAS Automation Smoke Tests API POC – dev/MDT-automation-base](https://bitbucket.org/UCAS/ucas.automation.smoketests.api.poc/branch/dev/MDT-automation-base)
+[UCAS Automation Smoke Tests API POC - dev/MDT-automation-base](https://bitbucket.org/UCAS/ucas.automation.smoketests.api.poc/branch/dev/MDT-automation-base)
