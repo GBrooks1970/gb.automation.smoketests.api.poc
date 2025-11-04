@@ -56,9 +56,9 @@ export class SymbolsDS {
 	public static readonly PUNCTUATION = 'PUNCTUATION'; //| punctuation characters
 	public static readonly SPECIAL = 'SPECIAL'; //| special characters
 	public static readonly LINES = 'LINES'; //| indicates lines of repeated tokens
+	public static readonly ALL = 'ALL'; //| indicates all characters from pools
 
 	// Regular expression to match the Dynamic String token format
 	// regex also handles the optional LINES-XXX part
-	public static readonly DynamicStringRegex = /\[(?<types>(?:(?:ALPHA|NUMERIC|PUNCTUATION|SPECIAL)(?:-(?!-))?)+)-(?<length>\d+|ALL)(?:-LINES-(?<lines>\d+))?\]/;
+	public static readonly DynamicStringRegex = /\[(?<types>(?:(?:ALPHA|NUMERIC|PUNCTUATION|SPECIAL)(?:-(?!-))?)+)-(?<length>(?:[1-9]\d*|ALL))(?:-LINES-(?<lines>\d+))?\]/;
 }
-

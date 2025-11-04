@@ -12,14 +12,15 @@ export class TokenDynamicStringParser {
     private static readonly NUMERIC_CHARS = '0123456789';
     private static readonly PUNCTUATION_CHARS = '.,!?;:';
     private static readonly SPECIAL_CHARS = '!@#$%^&*()_+[]{}|;:,.<>?';
+    private static readonly errorInvalidStringTokenFormat = 'Invalid string token format ';
 
     static parseDynamicString(token: string): string {
         // Placeholder: Implement dynamic string parsing logic based on the token
         if (token === 'HELLO-WORLD') {
           return 'Hello, World!';
         }
-    
-        throw new Error('Invalid string token format ');
+
+        throw new Error(TokenDynamicStringParser.errorInvalidStringTokenFormat);
       }
 
     static isValidDynamicStringToken(token: string): boolean {
@@ -35,35 +36,40 @@ export class TokenDynamicStringParser {
         return false;
     }
 
-    private static tryParseInt(value : string):number{
-        const _val = parseInt(value, 10);      
-        return Number.isNaN(_val) ? 0 : _val;
+    private static tryParseInt(value: string): number {
+        const parsed = Number.parseInt(value, 10);
+        return Number.isNaN(parsed) ? Number.NaN : parsed;
     }
 
     public static parseAndGenerate(token: string): string {
         const match = token.match(SymbolsDS.DynamicStringRegex);
         if (!match || !match.groups) {
-            throw new Error(`${TokenDynamicStringParser.name} : Invalid string token format : ${token}`);
+            throw new Error(`${TokenDynamicStringParser.name} : ${TokenDynamicStringParser.errorInvalidStringTokenFormat} : ${token}`);
         }
 
         const { types, length, lines } = match.groups;
         // types - // ALPHA, NUMERIC, PUNCTUATION, SPECIAL
         // length - amount of characters on one line
         // lines - line count - Default to 1 line if LINES-XXX is not provided
-        const lengthNum = this.tryParseInt(length); // ALL or 0 will produce 0, which means ALL Characters
+        const lengthToken = length.trim();
+        const normalizedLength = lengthToken.toUpperCase();
+        const isAllLength = normalizedLength === SymbolsDS.ALL;
+        const parsedLength = isAllLength ? Number.NaN : this.tryParseInt(lengthToken);
         const linesNum = lines ? parseInt(lines, 10) : 1; // Default to 1 line if LINES-XXX is not provided
 
         console.log(`TOKEN ${token} : types ${CommonUtils.toJSONString(types)}`);
-        console.log(`TOKEN ${token} : length ${CommonUtils.toJSONString(length)}`);
+        console.log(`TOKEN ${token} : length ${CommonUtils.toJSONString(lengthToken)}`);
         console.log(`TOKEN ${token} : lines ${CommonUtils.toJSONString(lines)}`);
 
-        console.log(`TOKEN ${token} : lengthNum ${CommonUtils.toJSONString(lengthNum)}`);
+        console.log(`TOKEN ${token} : lengthValue ${CommonUtils.toJSONString(lengthToken)}`);
         console.log(`TOKEN ${token} : linesNum ${CommonUtils.toJSONString(linesNum)}`);
 
-        if (lengthNum < 0) {
-            throw new Error(`${TokenDynamicStringParser.name} : Invalid length in token: ${token}`);
+        if (!isAllLength) {
+            if (!Number.isInteger(parsedLength) || parsedLength <= 0) {
+                throw new Error(`${TokenDynamicStringParser.name} : Invalid length in token: ${token}`);
+            }
         }
-        if (linesNum <= 0) {
+        if (!Number.isInteger(linesNum) || linesNum <= 0) {
             throw new Error(`${TokenDynamicStringParser.name} : Invalid line count in token: ${token}`);
         }
 
@@ -96,13 +102,13 @@ export class TokenDynamicStringParser {
         let result = '';
         for (let line = 0; line < linesNum; line++) {
             let lineResult = '';
-            if (lengthNum == 0) {
+            if (isAllLength) {
                 console.log(`TOKEN ${token} : ALL charSet '${CommonUtils.toJSONString(charSet)}'`);
         
                 lineResult += charSet;
             }
             else {
-                for (let i = 0; i < lengthNum; i++) {
+                for (let i = 0; i < parsedLength; i++) {
                     const randomIndex = Math.floor(Math.random() * charSet.length);
                     lineResult += charSet[randomIndex];
                 }

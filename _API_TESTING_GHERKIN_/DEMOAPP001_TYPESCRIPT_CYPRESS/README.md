@@ -1,43 +1,65 @@
 # DEMOAPP001_TYPESCRIPT_CYPRESS
 
-Short description
+TypeScript demo API that exposes token parsing endpoints, together with Cypress + Cucumber tests that exercise the same behaviours end to end.
 
-- Small TypeScript demo API with Cypress-based API tests and smoke checks. Includes a minimal Express/Koa-like server, token parsing logic and example service modules used by the tests.
+## Repository Layout
 
-Key files / folders
+- `package.json` – npm scripts (`start`, `test`) and dependencies.
+- `src/server.ts` – Express entry point and Swagger wiring.
+- `src/tokenparser/` – date and dynamic string token parsing logic used by the API and tests.
+- `cypress/` – Cypress feature files, step definitions, and shared support code.
+- `.batch/` – automation scripts (for example `RUN_API_AND_TESTS.BAT`).
+- `.results/` – timestamped run artifacts written by automation.
 
-- package.json — npm scripts (start, test, build)
-- cypress.config.ts — Cypress configuration
-- cypress/ — tests, fixtures and support
-- src/server.ts — demo API entry point
-- src/services/ — service modules used by the API
-- src/tokenparser/ — token parsing logic used by tests
+## Prerequisites
 
-Prerequisites
+- Node.js (use the current LTS release).
+- npm (bundled with Node.js).
 
-- Node.js (recommended LTS)
-- npm (bundled with Node.js)
+Install dependencies once per clone:
 
-How to run the API (Windows)
+```bash
+npm install
+```
 
-1. Open PowerShell or CMD.
-2. Change to the project folder:
-   - cd /d d:\_UCAS\ucas.automation.smoketests.api.poc\_API_TESTING_GHERKIN_\DEMOAPP001_TYPESCRIPT_CYPRESS
-3. Install dependencies:
-   - npm install
-4. Start the API (uses the npm script exposed in package.json):
-   - npm run start
+## Running the API
 
-How to run the test suite (Cypress)
+```bash
+npm run start
+```
 
-- Interactive (desktop runner):
-  - npx cypress open
-- Headless (CI / terminal):
-  - npx cypress run
-- Or use the npm test script if provided:
-  - npm run test
+This command starts the Express host on port `3000` and serves Swagger at `/swagger/v1/swagger.json` and `/swagger/v1/swagger.yaml`.
 
-Notes
+## Running Cypress Tests
 
-- Run the API first (step above) so tests target a running server, or configure tests to start the server as part of the test lifecycle.
-- Check package.json for exact script names and any environment variables the server/tests expect.
+| Mode        | Command              |
+|-------------|----------------------|
+| Interactive | `npx cypress open`   |
+| Headless    | `npx cypress run`    |
+| npm script  | `npm run test`       |
+
+Make sure the API is available on port `3000` before running the tests, or use the automation script below which handles startup automatically.
+
+## One-Step API + Test Run (Windows)
+
+A helper script is provided at `.batch\RUN_API_AND_TESTS.BAT`. It:
+
+1. Starts the API via `npm run start`.
+2. Waits until port `3000` is reachable.
+3. Executes the Cypress suite headlessly.
+4. Captures stdout/stderr to `.results\cy_results_<UTC_TIMESTAMP>.txt`.
+5. Stops the API process and exits with the Cypress status code.
+
+Run it from a command prompt or PowerShell:
+
+```bat
+call .batch\RUN_API_AND_TESTS.BAT
+```
+
+Logs use UTC timestamps in `yyyyMMddTHHmmZ` format (for example `cy_results_20251104T1400Z.txt`).
+
+## Additional Notes
+
+- API responses that contain dates are normalised to UTC to avoid timezone drift between environments.
+- Refer to the Cypress feature files in `cypress/integration` for example token strings and expected outputs.
+- Update environment variables or ports in `src/server.ts` if you need to run multiple instances concurrently.

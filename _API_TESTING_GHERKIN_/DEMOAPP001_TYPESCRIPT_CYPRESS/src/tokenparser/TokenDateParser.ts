@@ -32,6 +32,7 @@ export type DateTokenFormats = {
 };
 
 export class TokenDateParser {
+    static readonly errorInvalidStringTokenFormat = 'Invalid string token format';
 
     static parse(token: string): string {
         // Simple mock logic for now
@@ -78,7 +79,7 @@ export class TokenDateParser {
         console.log(`PARSING TOKEN ${token} : ${this.parseDateStringToken.name}`);
 
         if (!this.isValidDateToken(token)) {
-            throw new Error(`${this.parseDateStringToken.name} : Invalid string token format : ${token}`);
+            throw new Error(`${this.parseDateStringToken.name} : ${TokenDateParser.errorInvalidStringTokenFormat} : ${token}`);
         }
 
         // const innerToken = token.slice(1, -1); // Remove the surrounding brackets        
@@ -97,7 +98,7 @@ export class TokenDateParser {
         let parsedDate = this.setToUnixZeroDate(); // Return unix zero time
 
         if (!this.isValidDateToken(token)) {
-            throw new Error(`${this.parseDateStringToken_internal.name} : Invalid string token format : ${token}`);
+            throw new Error(`${this.parseDateStringToken_internal.name} : ${TokenDateParser.errorInvalidStringTokenFormat} : ${token}`);
         }
 
         const innerToken = token.slice(1, -1); // Remove the surrounding brackets        
@@ -110,7 +111,7 @@ export class TokenDateParser {
             console.log(`USING ${this.parseDateStringToken_MonthStartEnd_internal.name} for ${token}`);
             parsedDate = this.parseDateStringToken_MonthStartEnd_internal(innerToken);
         } else {
-            throw new Error(`${this.parseDateStringToken_internal.name} : Unrecognised date token format: ${token}`);
+            throw new Error(`${this.parseDateStringToken_internal.name} : Unrecognised date token format : ${token}`);
         }
 
         console.log(`TOKEN ${token} : PARSED DATE ${CommonUtils.toJSONString(parsedDate)}`);
@@ -128,7 +129,7 @@ export class TokenDateParser {
         const match = SymbolsDate.TokenDate.FullRegex.exec(innerToken);
         console.log(`${this.parseDateStringToken_Full.name} : INNERTOKEN ${innerToken} : match ${CommonUtils.toJSONString(match)}`);
         if (!match || !match.groups) {
-            throw new Error(`${this.parseDateStringToken_Full.name} : Invalid string token format : ${token}`);
+            throw new Error(`${this.parseDateStringToken_Full.name} : ${TokenDateParser.errorInvalidStringTokenFormat} : ${token}`);
         }
 
         console.log(`${this.parseDateStringToken_Full.name} : match.groups: ${CommonUtils.toJSONString(match.groups)}`);
@@ -154,7 +155,7 @@ export class TokenDateParser {
     static parseDateStringToken_MonthStartEnd(token: string): Date {
         console.log(`PARSING TOKEN ${token} : ${this.parseDateStringToken_MonthStartEnd.name}`);
         if (!this.isValidDateToken(token)) {
-            throw new Error(`${this.parseDateStringToken_MonthStartEnd.name} : Invalid string token format : ${token}`);
+            throw new Error(`${this.parseDateStringToken_MonthStartEnd.name} : ${TokenDateParser.errorInvalidStringTokenFormat} : ${token}`);
         }
         const innerToken = token.slice(1, -1); // Remove the surrounding brackets        
         console.log(`Remove the surrounding brackets : ${token} -> ${innerToken}: ${this.parseDateStringToken_MonthStartEnd.name}`);
@@ -165,7 +166,7 @@ export class TokenDateParser {
     private static splitDateStringTokenPartial(token: string): string[] {
         const matches = token.match(SymbolsDate.TokenDate.RangeRegex);
         if (!matches) {
-            throw new Error(`${this.splitDateStringTokenPartial.name} : Invalid string token format : ${token}`);
+            throw new Error(`${this.splitDateStringTokenPartial.name} : ${TokenDateParser.errorInvalidStringTokenFormat} : ${token}`);
         }
         return [matches[1], matches[2], matches[3]];
     }
@@ -175,13 +176,13 @@ export class TokenDateParser {
     */
     static parseDateStringToken_DateRange(token: string): DateRange {
         // if (!this.isValidToken(token)) {
-        //     throw new Error(`${this.parseDateRangeToken.name} isValidToken : Invalid string token format : ${token}`);
+        //     throw new Error(`${this.parseDateRangeToken.name} isValidToken : ${errorInvalidStringTokenFormat} : ${token}`);
         // }
         const innerToken = token.slice(1, -1); // Remove the surrounding brackets        
         console.log(`Remove the surrounding brackets : ${token} -> ${innerToken}: ${this.parseDateStringToken_DateRange.name}`);
         const tokenParts = innerToken.split('<->');
         if (tokenParts.length !== 2) {
-            throw new Error(`${this.parseDateStringToken_DateRange.name} tokenParts.length[${tokenParts.length}]: Invalid string token format : ${token}`);
+            throw new Error(`${this.parseDateStringToken_DateRange.name} : tokenParts.length[${tokenParts.length}]: ${TokenDateParser.errorInvalidStringTokenFormat} : ${token}`);
         }
 
         let tokenParts_0 = `[${tokenParts[0]}]`;
@@ -203,7 +204,7 @@ export class TokenDateParser {
         const year = parseInt(yearStr);
 
         if (isNaN(month) || isNaN(year)) {
-            throw new Error(`${this.parseDateStringToken_MonthStartEnd_internal.name} : Invalid string token format : ${token}`);
+            throw new Error(`${this.parseDateStringToken_MonthStartEnd_internal.name} : ${TokenDateParser.errorInvalidStringTokenFormat} : ${token}`);
         }
 
         return this.computeMonthStartEndDate(dateRangeMonthStartEnd, month, year);
@@ -255,7 +256,7 @@ export class TokenDateParser {
                 break;
             default:
                 console.log(`${dateUnit} : UNRECOGNISED - Invalid date section`);
-                throw new Error(`${dateUnit} : UNRECOGNISED - Invalid date`);
+                throw new Error(`${dateUnit} : UNRECOGNISED - Invalid date section`);
         }
         console.log(`Adjusting ${dateUnit} by ${adjustValue}`);
         console.log(`Adjusted date: ${CommonUtils.toJSONString(date)}`);

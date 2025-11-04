@@ -1,8 +1,17 @@
 import { Given, When, Then } from '@badeball/cypress-cucumber-preprocessor';
-import { format, sub, add, set } from 'date-fns';
+import { TokenDateParser } from '../../../../../src/tokenparser/TokenDateParser';
 
 let tokenString: string;
-let expectedValue: string;
+
+const toApiProperty = (propertyName: string): string =>
+    propertyName
+        ? propertyName.charAt(0).toUpperCase() + propertyName.slice(1)
+        : propertyName;
+
+const formatDateUtc = (date: Date): string => {
+    const iso = date.toISOString();
+    return `${iso.slice(0, 19).replace('T', ' ')}Z`;
+};
 
 Given('a valid or invalid date token {string}', (inputToken: string) => {
     tokenString = inputToken;
@@ -22,26 +31,17 @@ Then('the API response for the DateTokenParser Endpoint should return a status c
 });
 
 Then('the response body should contain {string} with the value {string}', (propertyName: string, expected: string) => {
-    cy.get('@apiResponse').its(`body.${propertyName}`).should('exist');
+    const propertyKey = toApiProperty(propertyName);
+    cy.get('@apiResponse').its(`body.${propertyKey}`).should('exist');
 
-    // Generate expected values based on expected pattern
-    // Set the base date with time zeroed out
-    const today = set(new Date(), { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 });
-    switch (expected) {
-        case 'today':
-            expectedValue = format(today, 'yyyy-MM-dd HH:mm:ssX');
-            break;
-        case 'one year and one month ago from today':
-            expectedValue = format(sub(today, { years: 1, months: 1 }), 'yyyy-MM-dd HH:mm:ssX');
-            break;
-        case 'one year ahead and two months ago from today':
-            expectedValue = format(add(today, { years: 1, months: -2 }), 'yyyy-MM-dd HH:mm:ssX');
-            break;
-        default:
-            expectedValue = 'Invalid string token format';
+    let expectedValue = expected;
+
+    if (expected !== 'Invalid string token format' && propertyKey === 'ParsedToken') {
+        const parsedDate = TokenDateParser.parseDateStringToken(tokenString);
+        expectedValue = formatDateUtc(parsedDate);
     }
 
-    const assertType = propertyName === 'ParsedToken' ? 'equal' : 'contains';
+    const assertType = propertyKey === 'ParsedToken' ? 'equal' : 'contain';
 
-    cy.get('@apiResponse').its(`body.${propertyName}`).should(assertType, expectedValue);
+    cy.get('@apiResponse').its(`body.${propertyKey}`).should(assertType, expectedValue);
 });

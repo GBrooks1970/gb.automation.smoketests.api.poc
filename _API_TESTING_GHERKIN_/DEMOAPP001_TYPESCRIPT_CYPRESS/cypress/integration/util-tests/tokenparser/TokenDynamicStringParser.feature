@@ -29,3 +29,14 @@ Feature: TokenDynamicStringParser String Generation
             | [SPECIAL-ALL]                  | 24     | SPECIAL                   | 1     |
             | [PUNCTUATION-ALL]              | 6      | PUNCTUATION               | 1     |
             | [SPECIAL-PUNCTUATION-ALL]      | 30     | SPECIAL_PUNCTUATION       | 1     |
+
+    Scenario Outline: Invalid tokens raise descriptive errors
+        Given a token "<token>"
+        When I parse and generate the string
+        Then a dynamic string parser error should be thrown with message "<message>"
+
+        Examples:
+            | token                   | message                         |
+            | [ALPHA-5-LINES-0]       | Invalid line count in token     |
+            | [ALPHA-5-LINES-XYZ]     | Invalid string token format     |
+            | [ALPHA-0]               | Invalid string token format     |

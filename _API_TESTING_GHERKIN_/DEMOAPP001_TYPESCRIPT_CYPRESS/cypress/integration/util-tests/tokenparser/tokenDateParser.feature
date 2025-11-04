@@ -68,7 +68,7 @@ Feature: Parsing dates from token format strings using TokenDateParser
     Scenario: Handling null or invalid token input - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]
         Given An invalid date range string "INVALID-TOKEN"
         When I parse the token
-        Then an error should be thrown with message "Invalid date token format: INVALID-TOKEN"
+        Then an error should be thrown with message "Invalid string token format : INVALID-TOKEN"
 
     Scenario Outline: Parsing several instances of a second format of date string tokens - [MONTHENDSTART][MONTH][YEAR]
         Given A date string "<dateStringToken>"

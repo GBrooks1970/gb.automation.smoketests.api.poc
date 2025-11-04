@@ -2,13 +2,17 @@ import express, { Request, Response } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsDoc from 'swagger-jsdoc';
 import bodyParser from 'body-parser';
-import { format } from 'date-fns';
 import { TokenDateParser } from './tokenparser/TokenDateParser';
 import { TokenDynamicStringParser } from './tokenparser/TokenDynamicStringParser';
 import YAML from "js-yaml";
 
 const app = express();
 app.use(bodyParser.json());
+
+const formatDateUtc = (date: Date): string => {
+    const iso = date.toISOString(); // Always UTC
+    return `${iso.slice(0, 19).replace('T', ' ')}Z`; // Trim milliseconds and keep trailing Z
+};
 
 const swaggerOptions = {
     swaggerDefinition: {
@@ -108,8 +112,8 @@ app.get('/parse-date-token', (req: Request, res: Response) => {
 
     try {
         const parsedDate = TokenDateParser.parseDateStringToken(tokenString); // Use the TokenDateParser class
-        // Generate the current date and format it to the desired format
-        const formattedDate = format(parsedDate, "yyyy-MM-dd HH:mm:ssX");
+        // Always format in UTC regardless of host timezone
+        const formattedDate = formatDateUtc(parsedDate);
         return res.status(200).json({ ParsedToken: formattedDate });
     } catch (e) {
         return res.status(400).json({ Error: (e as Error).message });
