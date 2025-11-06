@@ -1,4 +1,4 @@
-# UI Testing Concepts
+﻿# UI Testing Concepts
 
 ## Manual Testing Concepts
 
@@ -54,3 +54,4 @@
 
 - Manual: Chrome, Edge, Firefox, Developer Tools
 - Automated: SpecFlow, Selenium WebDriver, .NET, Screenplay pattern libraries
+

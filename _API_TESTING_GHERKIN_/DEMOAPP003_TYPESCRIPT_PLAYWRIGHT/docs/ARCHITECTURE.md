@@ -11,29 +11,29 @@
 ## Folder Layout
 ```
 _DEMOAPP003_TYPESCRIPT_PLAYWRIGHT/
-├── docs/
-│   ├── ARCHITECTURE.md
-│   ├── QA_STRATEGY.md              ← risk-based/ISTQB alignment (to be produced)
-│   └── SCREENPLAY_GUIDE.md         ← usage patterns & conventions (to be produced)
-├── features/
-│   ├── api/
-│   │   ├── healthcheck/
-│   │   └── tokenparser/
-│   └── util-tests/
-├── screenplay/
-│   ├── abilities/
-│   ├── actors/
-│   ├── questions/
-│   ├── tasks/
-│   └── support/
-├── src/                            ← domain services shared with Cypress project
-├── tooling/
-│   ├── cucumber.mjs                ← Cucumber CLI wiring (ESM)
-│   └── playwright.config.ts        ← Playwright test config & shared fixtures
-├── package.json
-├── playwright-report/              ← default Playwright HTML report output
-├── .env, .env.example              ← deterministic config if needed
-└── tsconfig.json
+|--- docs/
+|   |--- ARCHITECTURE.md
+|   |--- QA_STRATEGY.md              <- risk-based/ISTQB alignment (to be produced)
+|   `--- SCREENPLAY_GUIDE.md         <- usage patterns & conventions (to be produced)
+|--- features/
+|   |--- api/
+|   |   |--- healthcheck/
+|   |   `--- tokenparser/
+|   `--- util-tests/
+|--- screenplay/
+|   |--- abilities/
+|   |--- actors/
+|   |--- questions/
+|   |--- tasks/
+|   `--- support/
+|--- src/                            <- domain services shared with Cypress project
+|--- tooling/
+|   |--- cucumber.mjs                <- Cucumber CLI wiring (ESM)
+|   `--- playwright.config.ts        <- Playwright test config & shared fixtures
+|--- package.json
+|--- playwright-report/              <- default Playwright HTML report output
+|--- .env, .env.example              <- deterministic config if needed
+`--- tsconfig.json
 ```
 
 ## Tooling Decisions
@@ -56,3 +56,4 @@ _DEMOAPP003_TYPESCRIPT_PLAYWRIGHT/
 - Scaffold Screenplay core classes and Cucumber world helpers.
 - Port feature files & step definitions from DEMOAPP001 with Playwright adaptations.
 - Implement npm/batch scripts for local+CI runs and document QA strategy/ISTQB mapping.
+

@@ -1,4 +1,4 @@
-# Token Parser API Contract
+﻿# Token Parser API Contract
 
 _Reference specification for any Token Parser implementation._
 
@@ -218,3 +218,4 @@ Unexpected server faults SHOULD return `500 Internal Server Error` with a body o
 ---
 
 Maintain this file as the single source of truth. All codebases, tests, and documentation MUST treat deviations as defects unless otherwise ratified by contract version changes.
+

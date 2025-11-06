@@ -1,4 +1,4 @@
-# Typescript/Cucumber/Cypress - TOKENPARSER API
+﻿# Typescript/Cucumber/Cypress - TOKENPARSER API
 
 **Version 1 - [04/11/25]**
 
@@ -75,3 +75,4 @@ This proof of concept provides:
 Source code is stored in Bitbucket:
 
 [UCAS Automation Smoke Tests API POC - dev/MDT-automation-base](https://bitbucket.org/UCAS/ucas.automation.smoketests.api.poc/branch/dev/MDT-automation-base)
+

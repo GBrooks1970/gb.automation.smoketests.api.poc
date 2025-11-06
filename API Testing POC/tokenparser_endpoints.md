@@ -1,4 +1,4 @@
-# Token Parser API Endpoints
+﻿# Token Parser API Endpoints
 
 _Last updated: 2025-11-04_
 
@@ -56,7 +56,7 @@ Converts a relative or range-based date token into an ISO-like UTC timestamp (`y
 | ------- | ------- | -------- | ----- |
 | `[ ... ]` | All date tokens must start and end with square brackets. | Yes | Failure to enclose the token causes an `Invalid string token format` error. |
 | `ANCHOR` | Starting point for calculations. One of `TODAY`, `TOMORROW`, `YESTERDAY`. | Yes | Case-sensitive. |
-| `ADJUSTMENTS` | Zero or more adjustments of the form `±<number><UNIT>`. | Optional | `<UNIT>` is `YEAR`, `MONTH`, or `DAY`. Sign is mandatory for each adjustment. |
+| `ADJUSTMENTS` | Zero or more adjustments of the form `+/-<number><UNIT>`. | Optional | `<UNIT>` is `YEAR`, `MONTH`, or `DAY`. Sign is mandatory for each adjustment. |
 | `RANGE` | Optional start/end markers of the form `START-<MONTH>-<YEAR>` or `END-<MONTH>-<YEAR>`. | Optional | When supplied, the parser selects either the start or end of the referenced calendar month/year. |
 
 #### Simple examples
@@ -109,7 +109,7 @@ Generates a random string (optionally multi-line) based on character set directi
 | Segment | Meaning | Required | Notes |
 | ------- | ------- | -------- | ----- |
 | `TYPE-LIST` | Hyphen-delimited list drawn from `ALPHA`, `NUMERIC`, `PUNCTUATION`, `SPECIAL`. | Yes | Order does not matter; duplicates are ignored. |
-| `LENGTH` | Either a positive integer (`1-…`) or `ALL`. | Yes | When `ALL`, every character from the assembled pool is emitted once per line. |
+| `LENGTH` | Either a positive integer (`1-|`) or `ALL`. | Yes | When `ALL`, every character from the assembled pool is emitted once per line. |
 | `LINES-<COUNT>` | Optional instruction to repeat the generated string across multiple lines. | No | Defaults to 1. When present, `<COUNT>` must be a positive integer. |
 
 ### Character pools
@@ -159,3 +159,4 @@ Generates a random string (optionally multi-line) based on character set directi
 | `/parse-dynamic-string-token` | `token` | `{ "ParsedToken": "<generated string>" }` | `{ "Error": "Invalid string token format" }` |
 
 Use the token anatomy tables above to craft valid requests and to build new automated checks across both demo applications.
+

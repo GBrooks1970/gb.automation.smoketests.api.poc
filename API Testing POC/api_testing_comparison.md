@@ -1,4 +1,4 @@
-# Comparison Report: Testing APIs using BDD/Gherkin User Stories and Contract Testing
+ï»¿# Comparison Report: Testing APIs using BDD/Gherkin User Stories and Contract Testing
 
 ## Overview
 
@@ -24,7 +24,7 @@ The approaches are:
 
 ### Cons
 
-- **Lesser Focus on API-First Development:** Cypressâ€™ primary focus is not API testing; may lack features for API-first strategies like contract testing.
+- **Lesser Focus on API-First Development:** Cypress(TM) primary focus is not API testing; may lack features for API-first strategies like contract testing.
 - **Scalability Concerns:** Being browser-centric, Cypress may become less efficient for complex or high-volume API test suites.
 - **Limited Parallelization:** Test execution slows with large suites due to limited support for multi-machine parallelization.
 
@@ -221,9 +221,9 @@ BeforeEach:
 
 ### Tests
 
-- **Alive Test:** GET /alive — assert status=200, body contains "Status" = "ALIVE-AND-KICKING".
-- **Dynamic Token Parser:** GET /parse-dynamic-string-token — assert 200 + parsed value.
-- **Date Token Parser:** GET /parse-date-token — assert 200 + parsed date.
+- **Alive Test:** GET /alive - assert status=200, body contains "Status" = "ALIVE-AND-KICKING".
+- **Dynamic Token Parser:** GET /parse-dynamic-string-token - assert 200 + parsed value.
+- **Date Token Parser:** GET /parse-date-token - assert 200 + parsed date.
 
 ### Teardown
 
@@ -244,3 +244,4 @@ AfterAll:
 - **Test Coverage:** Core endpoints validated.
 
 This approach is adaptable to both **Typescript/Cucumber/Cypress** and **C#/SpecFlow/Playwright** while staying consistent with BDD and contract testing principles.
+

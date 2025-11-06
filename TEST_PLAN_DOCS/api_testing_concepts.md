@@ -1,4 +1,4 @@
-# API / Microservices Testing Concepts
+﻿# API / Microservices Testing Concepts
 
 ## Manual Testing Concepts
 
@@ -74,3 +74,4 @@
 
 - Manual: Postman, Swagger UI
 - Automated: Newman, Specflow, Resharper
+

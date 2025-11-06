@@ -1,6 +1,6 @@
-# Using the 3A (Arrange, Act, Assert) Pattern in Testing Guidelines
+﻿# Using the 3A (Arrange, Act, Assert) Pattern in Testing Guidelines
 
-**Version 1 – [17/07/24]**
+**Version 1 - [17/07/24]**
 
 ---
 
@@ -49,9 +49,9 @@ Assert.Equal(8, result);
 
 **Description:** The AAA pattern maps directly to the **Given-When-Then** structure in BDD (Behaviour-Driven Development).
 
-- **Given → Arrange:** Sets up the initial context or preconditions.
-- **When → Act:** Describes the action that triggers behaviour.
-- **Then → Assert:** Defines the expected outcome.
+- **Given *' Arrange:** Sets up the initial context or preconditions.
+- **When *' Act:** Describes the action that triggers behaviour.
+- **Then *' Assert:** Defines the expected outcome.
 
 This alignment ensures that tests are clear, concise, and easy to understand.
 
@@ -114,9 +114,9 @@ Then('the result should be {int}', function (expected: number) {
 
 ## Explanation of AAA Alignment with BDD
 
-- **Given → Arrange:** Prepares the initial context/environment.
-- **When → Act:** Executes the functionality under test.
-- **Then → Assert:** Compares the outcome to the expected result.
+- **Given *' Arrange:** Prepares the initial context/environment.
+- **When *' Act:** Executes the functionality under test.
+- **Then *' Assert:** Compares the outcome to the expected result.
 
 ---
 
@@ -128,3 +128,4 @@ Then('the result should be {int}', function (expected: number) {
 - **BDD-Friendly:** Directly aligns with Gherkin for seamless integration.
 
 By following this structured approach, tests remain well-organized, readable, and maintainable, while combining the clarity of BDD with the simplicity of the AAA pattern.
+

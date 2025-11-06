@@ -1,4 +1,4 @@
-# Screenplay Pattern in BDD Testing
+﻿# Screenplay Pattern in BDD Testing
 
 The **Screenplay Pattern** is a model for organizing automated acceptance tests, especially well-suited for Behavior-Driven Development (BDD). 
 It emphasizes **clear roles**, **task-based design**, and **separation of concerns** to improve test maintainability, readability, and reusability.
@@ -85,3 +85,4 @@ This scenario can be broken into:
 - **Maintainable**: Encourages separation of concerns and clean architecture.
 
 The screenplay pattern aligns naturally with BDD, promoting collaboration through domain-specific language and clarity of intent in automated tests.
+
