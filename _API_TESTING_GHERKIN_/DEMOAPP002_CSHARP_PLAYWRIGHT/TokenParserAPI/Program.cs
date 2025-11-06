@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
@@ -9,9 +10,16 @@ using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using TokenParserAPI.responses;
 using TokenParserAPI.utils;
+using TokenParserAPI.Logging;
 using HttpJsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 var builder = WebApplication.CreateBuilder(args);
+var envLogLevel = Environment.GetEnvironmentVariable("TOKENPARSER_LOG_LEVEL");
+var configuredLogLevel = builder.Configuration["TokenParser:Logging:Level"];
+var logLevel = TokenParserLogger.ParseLevel(envLogLevel ?? configuredLogLevel);
+TokenParserLogger.Configure(logLevel);
+var startupLogger = TokenParserLogger.For(nameof(Program));
+startupLogger.Info("Initialising Token Parser API (log level: {0})", logLevel);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {

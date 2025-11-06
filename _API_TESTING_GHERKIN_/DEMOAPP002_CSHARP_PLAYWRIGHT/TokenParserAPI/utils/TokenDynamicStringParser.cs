@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.RegularExpressions;
+using TokenParserAPI.Logging;
 
 namespace TokenParserAPI.utils
 {
@@ -18,6 +19,7 @@ namespace TokenParserAPI.utils
 
     public class TokenDynamicStringParser
     {
+        private static readonly TokenParserLogger Logger = TokenParserLogger.For(nameof(TokenDynamicStringParser));
         private static Random _random = new Random();
 
         public string ParseToken(string token)
@@ -32,16 +34,23 @@ namespace TokenParserAPI.utils
             string lengthValue = match.Groups["length"].Value;
             int lineCount = match.Groups["lines"].Success ? int.Parse(match.Groups["lines"].Value) : 1;
 
+            Logger.Debug("Parsing dynamic string token {0}", token);
+            Logger.Debug("Token breakdown types={0}, length={1}, lines={2}", types, lengthValue, lineCount);
+
             bool useAllCharacters = lengthValue == SymbolsDS.ALL;
             int count = useAllCharacters ? 0 : int.Parse(lengthValue); // If ALL, count will be handled later.
 
             string ParsedToken = GenerateString(types, count, useAllCharacters);
-            return GenerateLines(ParsedToken, lineCount);
+            Logger.Debug("Generated base string {0}", ParsedToken);
+            var result = GenerateLines(ParsedToken, lineCount);
+            Logger.Debug("Generated string result with line count {0}: {1}", lineCount, result);
+            return result;
         }
 
         private string GenerateString(string types, int count, bool useAllCharacters)
         {
             var charPool = new StringBuilder();
+            Logger.Debug("Building character pool for types {0}", types);
 
             // Build the pool of possible characters based on the token types
             if (types.Contains(SymbolsDS.ALPHA))
@@ -52,6 +61,8 @@ namespace TokenParserAPI.utils
                 charPool.Append("!@#$%^&*()");  // Add punctuation characters to the pool
             if (types.Contains(SymbolsDS.SPECIAL))
                 charPool.Append("~`|\\/?");  // Add special characters to the pool
+
+            Logger.Debug("Character pool size {0}. useAllCharacters={1}", charPool.Length, useAllCharacters);
 
             // If ALL is specified, use all characters in the pool once in the output
             if (useAllCharacters)
@@ -65,6 +76,7 @@ namespace TokenParserAPI.utils
 
         private string GenerateRandomStringFromPool(string charPool, int count)
         {
+            Logger.Debug("Generating random string from pool length {0} with count {1}", charPool.Length, count);
             var result = new StringBuilder();
             for (int i = 0; i < count; i++)
             {
@@ -90,6 +102,8 @@ namespace TokenParserAPI.utils
             {
                 throw new ArgumentException("Invalid line count in token format");
             }
+
+            Logger.Debug("Applying line count {0}", lineCount);
 
             if (lineCount == 1)
             {

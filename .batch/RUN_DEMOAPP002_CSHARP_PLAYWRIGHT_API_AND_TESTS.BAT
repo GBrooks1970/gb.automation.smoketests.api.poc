@@ -9,7 +9,7 @@ set "TEST_DIR=%ROOT_DIR%\_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT\Toke
 if not exist ".results" mkdir ".results"
 
 for /f %%I in ('powershell -NoProfile -Command "(Get-Date).ToUniversalTime().ToString(\"yyyyMMddTHHmmZ\")"') do set "UTC_TIMESTAMP=%%I"
-set "RESULT_FILE=%ROOT_DIR%\.results\tokenparser_cs_results_%UTC_TIMESTAMP%.txt"
+set "RESULT_FILE=%ROOT_DIR%\.results\demoapp002_csharp_playwright_%UTC_TIMESTAMP%.txt"
 
 for /f %%I in ('powershell -NoProfile -Command "$p = Start-Process -FilePath 'dotnet' -ArgumentList 'run','--no-build','--project','%API_DIR%','--urls','http://localhost:5228' -WorkingDirectory '%API_DIR%' -PassThru; $p.Id"') do set "API_PID=%%I"
 
@@ -67,10 +67,10 @@ if defined API_PID (
 
 if defined TEST_EXIT (
     if "%TEST_EXIT%"=="0" (
-        echo Playwright tests completed successfully. Results saved to "%RESULT_FILE%"
+echo DEMOAPP002 C# + Playwright tests completed successfully. Results saved to "%RESULT_FILE%"
         set "EXIT_CODE=0"
     ) else (
-        echo Playwright tests failed. See "%RESULT_FILE%"
+echo DEMOAPP002 C# + Playwright tests failed. See "%RESULT_FILE%"
         set "EXIT_CODE=%TEST_EXIT%"
     )
 ) else (
