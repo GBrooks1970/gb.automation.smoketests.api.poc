@@ -1,53 +1,26 @@
-﻿# Typescript/Cucumber/Cypress - TOKENPARSER API
+# DEMOAPP001 - TypeScript / Express / Cypress
 
-**Version 1 - [04/11/25]**
+**Version 2 - [06/11/25]**
 
-The TypeScript Express server in `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS` hosts the **TOKENPARSER API** on `http://localhost:3000`. It exposes Swagger UI and is validated through Cypress + Cucumber BDD tests.
+The `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS` project hosts the TOKENPARSER API on `http://localhost:3000`. Swagger UI is enabled and the service is validated with Cypress + Cucumber BDD tests running against the shared token parsing utilities.
 
 ---
 
-## TOKENPARSER API Endpoints
+## Token Parser API Endpoints
 
-### 1. GET `/alive`
+1. **GET `/alive`**
+   - Purpose: Lightweight health probe.
+   - Success (200): `{ "Status": "ALIVE-AND-KICKING" }`
 
-- Purpose: Lightweight health check for the API host.
-- Success (200):
+2. **GET `/parse-dynamic-string-token`**
+   - Query: `token` (string, required) in the `[TYPE-LIST]-LEN-<length>[-LINES-<count>]` format.
+   - Success (200): `{ "ParsedToken": "<generated string>" }`
+   - Error (400): `{ "Error": "TokenDynamicStringParser : Invalid string token format : <token>" }`
 
-  ```json
-  { "Status": "ALIVE-AND-KICKING" }
-  ```
-
-### 2. GET `/parse-dynamic-string-token`
-
-- Query: `token` (string, required) - dynamic string token in the `[TYPE]-LEN-<length>[-LINES-<count>]` format.
-- Purpose: Generates a random string that matches the requested token rules (character sets and optional multi-line output).
-- Success (200): Returns the generated string.
-
-  ```json
-  { "ParsedToken": "ABcd1234" }
-  ```
-
-- Error (400): Missing or invalid token.
-
-  ```json
-  { "Error": "TokenDynamicStringParser : Invalid string token format : <token>" }
-  ```
-
-### 3. GET `/parse-date-token`
-
-- Query: `token` (string, required) - date token describing offsets or ranges.
-- Purpose: Parses the supplied token and returns a UTC timestamp that honours the rules encoded in the token.
-- Success (200): Timestamp is normalised to `yyyy-MM-dd HH:mm:ssZ`.
-
-  ```json
-  { "ParsedToken": "2025-11-04 00:00:00Z" }
-  ```
-
-- Error (400): Invalid or missing token.
-
-  ```json
-  { "Error": "TokenDateParser.parseDateStringToken : Invalid string token format : <token>" }
-  ```
+3. **GET `/parse-date-token`**
+   - Query: `token` (string, required) describing anchor dates and adjustments.
+   - Success (200): `{ "ParsedToken": "yyyy-MM-dd HH:mm:ssZ" }`
+   - Error (400): `{ "Error": "TokenDateParser.parseDateStringToken : Invalid string token format : <token>" }`
 
 ---
 
@@ -59,20 +32,58 @@ The TypeScript Express server in `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CY
 
 ---
 
-## Included Artifacts
+## Stack Highlights
 
-This proof of concept provides:
-
-- Express server implementation (`src/server.ts`) with Swagger configuration.
-- Token parsing utilities for dates and dynamic strings.
-- Cucumber feature files and Cypress step definitions that exercise the API.
-- Batch scripts to start the API and run the Cypress suite, capturing results.
+- **Runtime**: Node.js + TypeScript served via Express with Swagger integration.
+- **Testing**: Cypress 13 with the Badeball Cucumber preprocessor for Gherkin support.
+- **Token Utilities**: Shared `TokenDateParser` and `TokenDynamicStringParser` modules consumed by the API and tests.
+- **Automation**: `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` orchestrates start-up, Swagger launch, Cypress execution, and teardown.
 
 ---
 
-## Repository
+## Project Layout
 
-Source code is stored in Bitbucket:
+```
+_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/
+- src/
+  - server.ts (Express host + Swagger)
+  - tokenparser/ (TokenDateParser and TokenDynamicStringParser)
+- cypress/
+  - integration/ (API and util feature files)
+  - support/step_definitions/ (Cucumber step implementations)
+  - support/commands.ts (shared Cypress helpers)
+- .batch/ (automation scripts)
+- .results/ (timestamped run outputs)
+- package.json / tsconfig.json / cypress.config.ts
+```
 
-[UCAS Automation Smoke Tests API POC - dev/MDT-automation-base](https://bitbucket.org/UCAS/ucas.automation.smoketests.api.poc/branch/dev/MDT-automation-base)
+---
 
+## Scripts and Automation
+
+- `npm start` - launches the Express API on port `3000`.
+- `npx cypress run` / `npm run test` - executes the Cypress BDD suite.
+- `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` - runs the API + test workflow end to end and captures logs under `.results/demoapp001_typescript_cypress_<UTC_TIMESTAMP>.txt`.
+
+---
+
+## Logging Configuration
+
+The stack currently relies on direct console output from Express and the token parsers. For quieter CI logs, redirect or filter stdout when invoking the batch script.
+
+---
+
+## Testing Notes
+
+- Feature files under `cypress/integration` mirror the REST contract and utility scenarios.
+- Assertions use UTC-normalised timestamps to avoid timezone drift across environments.
+- Batch runs include automatic Swagger launch for quick manual inspection.
+
+---
+
+## References
+
+- Main README: `README.md`
+- Playwright stack: `API Testing POC/typescript_playwright_cucumber.md`
+- C# stack: `API Testing POC/csharp_specflow_playwright.md`
+- Token contract: `API Testing POC/tokenparser_api_contract.md`

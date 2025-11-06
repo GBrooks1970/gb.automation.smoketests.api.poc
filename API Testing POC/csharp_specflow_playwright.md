@@ -1,53 +1,26 @@
-﻿# C#/SpecFlow/Playwright - TOKENPARSER API
+# DEMOAPP002 - .NET 8 Minimal API / SpecFlow / Playwright
 
-**Version 1 - [04/11/25]**
+**Version 2 - [06/11/25]**
 
-The .NET 8 minimal API in `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/TokenParserAPI` hosts the **TOKENPARSER API** on `http://localhost:5228`. Swagger UI is enabled and the service is validated with SpecFlow + Playwright end-to-end tests.
+The `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/TokenParserAPI` solution hosts the TOKENPARSER API on `http://localhost:5228`. Swagger UI is enabled and the service is validated through SpecFlow feature files executed with Playwright.
 
 ---
 
-## TOKENPARSER API Endpoints
+## Token Parser API Endpoints
 
-### 1. GET `/alive`
+1. **GET `/alive`**
+   - Purpose: Confirms the API host is healthy.
+   - Success (200): `{ "Status": "ALIVE-AND-KICKING" }`
 
-- Purpose: Confirms the API host is running.
-- Success (200):
+2. **GET `/parse-dynamic-string-token`**
+   - Query: `token` (string, required) in the `[TYPE-LIST]-LEN-<length>[-LINES-<count>]` format.
+   - Success (200): `{ "ParsedToken": "<generated string>" }`
+   - Error (400): `{ "Error": "Invalid string token format" }`
 
-  ```json
-  { "Status": "ALIVE-AND-KICKING" }
-  ```
-
-### 2. GET `/parse-dynamic-string-token`
-
-- Query: `token` (string, required) - formatted as `[ALPHA|NUMERIC|PUNCTUATION|SPECIAL]-LEN-<length>[-LINES-<count>]`.
-- Purpose: Generates strings using the requested character sets and optional multi-line output.
-- Success (200): Returns the generated value.
-
-  ```json
-  { "ParsedToken": "ABcd1234" }
-  ```
-
-- Error (400): Invalid token format or line configuration.
-
-  ```json
-  { "Error": "Invalid string token format" }
-  ```
-
-### 3. GET `/parse-date-token`
-
-- Query: `token` (string, required) - describes relative or range-based dates.
-- Purpose: Parses the token and returns the computed UTC date/time.
-- Success (200): Date is emitted using the `yyyy-MM-dd HH:mm:ssZ` format.
-
-  ```json
-  { "ParsedToken": "2025-11-04 00:00:00Z" }
-  ```
-
-- Error (400): Invalid token structure or parameters.
-
-  ```json
-  { "Error": "Invalid string token format" }
-  ```
+3. **GET `/parse-date-token`**
+   - Query: `token` (string, required) describing relative or range-based dates.
+   - Success (200): `{ "ParsedToken": "yyyy-MM-dd HH:mm:ssZ" }`
+   - Error (400): `{ "Error": "Invalid string token format" }`
 
 ---
 
@@ -59,20 +32,57 @@ The .NET 8 minimal API in `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/To
 
 ---
 
-## Included Artifacts
+## Stack Highlights
 
-This solution contains:
-
-- Minimal API entry point (`Program.cs`) with Swagger configuration.
-- Token parsing utilities for date and dynamic string tokens.
-- SpecFlow feature files and Playwright bindings that validate API behaviour.
-- Batch scripts that start the API and execute the Playwright test suite.
+- **Runtime**: .NET 8 minimal API with Swashbuckle for Swagger generation.
+- **Testing**: SpecFlow BDD scenarios backed by Playwright drivers.
+- **Token Utilities**: `TokenDateParser` and `TokenDynamicStringParser` classes reused by the API and tests.
+- **Automation**: `.batch/RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT` starts the API, ensures Playwright dependencies, opens Swagger, executes tests, and stops the host.
 
 ---
 
-## Repository
+## Project Layout
 
-Source code is stored in Bitbucket:
+```
+_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/
+- TokenParserAPI/
+  - Program.cs (minimal API host + Swagger + logging configuration)
+  - utils/ (token parsing utilities)
+- TokenParserTests/
+  - Features/ (SpecFlow feature files)
+  - Steps/ (Playwright bindings)
+- .batch/ (automation scripts)
+- .results/ (timestamped run outputs)
+- TokenParserAPI.sln / project files
+```
 
-[UCAS Automation Smoke Tests API POC - dev/MDT-automation-base](https://bitbucket.org/UCAS/ucas.automation.smoketests.api.poc/branch/dev/MDT-automation-base)
+---
 
+## Scripts and Automation
+
+- `dotnet run --project TokenParserAPI --urls http://localhost:5228` - starts the API.
+- `dotnet test TokenParserTests --no-build` - executes the SpecFlow + Playwright suite.
+- `.batch/RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT` - automates the full workflow and writes results to `.results/demoapp002_csharp_playwright_<UTC_TIMESTAMP>.txt`.
+
+---
+
+## Logging Configuration
+
+Logging level is controlled via `TokenParser:Logging:Level` (appsettings) or the `TOKENPARSER_LOG_LEVEL` environment variable. Supported values: `Silent`, `Error`, `Warn`, `Info`, `Debug`.
+
+---
+
+## Testing Notes
+
+- Playwright API calls run headlessly; no browser context is required.
+- SpecFlow scenarios mirror the REST contract and utility tests from the other stacks.
+- Batch runs open Swagger automatically for quick manual verification.
+
+---
+
+## References
+
+- Main README: `README.md`
+- Cypress stack: `API Testing POC/typescript_cucumber_cypress.md`
+- Playwright TypeScript stack: `API Testing POC/typescript_playwright_cucumber.md`
+- Token contract: `API Testing POC/tokenparser_api_contract.md`
