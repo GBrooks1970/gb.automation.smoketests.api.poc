@@ -1,4 +1,4 @@
-﻿using TechTalk.SpecFlow;
+using TechTalk.SpecFlow;
 using Newtonsoft.Json;
 using TokenParserAPI.responses;
 using NUnit.Framework.Legacy;

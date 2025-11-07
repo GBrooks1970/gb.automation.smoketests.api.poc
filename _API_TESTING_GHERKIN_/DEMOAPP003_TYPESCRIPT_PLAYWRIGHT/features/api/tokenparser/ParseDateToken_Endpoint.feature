@@ -1,4 +1,4 @@
-﻿Feature: Parse Date Token Endpoint
+Feature: Parse Date Token Endpoint
   As a user 
   I want to parse date tokens and receive the computed dates in the API response.
   So that the correct type of string is returned based on the input token in the API response.

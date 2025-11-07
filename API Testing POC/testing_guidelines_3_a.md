@@ -1,4 +1,4 @@
-﻿# Using the 3A (Arrange, Act, Assert) Pattern in Testing Guidelines
+# Using the 3A (Arrange, Act, Assert) Pattern in Testing Guidelines
 
 **Version 1 - [17/07/24]**
 

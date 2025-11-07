@@ -3,16 +3,25 @@ setlocal
 
 pushd "%~dp0.."
 set "ROOT_DIR=%CD%"
-set "SERVER_PORT=3001"
-set "PORT=%SERVER_PORT%"
-set "API_BASE_URL=http://localhost:%SERVER_PORT%"
+
+set "PROJECT_DIR=%ROOT_DIR%\_API_TESTING_GHERKIN_\DEMOAPP003_TYPESCRIPT_PLAYWRIGHT"
+
+set "ENV_FILE=%PROJECT_DIR%\.env"
+if not exist "%ENV_FILE%" set "ENV_FILE=%PROJECT_DIR%\.env.example"
+
+for /f "usebackq tokens=1* delims==" %%A in (`powershell -NoProfile -Command "$envFile = '%ENV_FILE%'; Get-Content -LiteralPath $envFile | Where-Object {$_ -match '^(PORT|API_BASE_URL)='} | ForEach-Object { $_.Trim() }"`) do (
+    if /I "%%A"=="PORT" set "PORT=%%B"
+    if /I "%%A"=="API_BASE_URL" set "API_BASE_URL=%%B"
+)
+
+if not defined PORT set "PORT=3001"
+set "SERVER_PORT=%PORT%"
+if not defined API_BASE_URL set "API_BASE_URL=http://localhost:%SERVER_PORT%"
 
 if not exist ".results" mkdir ".results"
 
 for /f %%I in ('powershell -NoProfile -Command "(Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmZ')"') do set "UTC_TIMESTAMP=%%I"
 set "RESULT_FILE=%ROOT_DIR%\.results\demoapp003_typescript_playwright_%UTC_TIMESTAMP%.txt"
-
-set "PROJECT_DIR=%ROOT_DIR%\_API_TESTING_GHERKIN_\DEMOAPP003_TYPESCRIPT_PLAYWRIGHT"
 
 for /f %%I in ('powershell -NoProfile -Command "$p = Start-Process -FilePath 'npm' -ArgumentList 'run','start' -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"') do set "API_PID=%%I"
 
@@ -29,8 +38,8 @@ if errorlevel 1 (
     goto cleanup_fail
 )
 
-echo Opening Swagger UI at http://localhost:%SERVER_PORT%/swagger/v1/json...
-start "" "http://localhost:%SERVER_PORT%/swagger/v1/json"
+echo Opening Swagger UI at %API_BASE_URL%/swagger/v1/json...
+start "" "%API_BASE_URL%/swagger/v1/json"
 
 pushd "%PROJECT_DIR%"
 echo Running Playwright BDD suite...

@@ -1,4 +1,4 @@
-﻿@UTILTEST
+@UTILTEST
 Feature: TokenDynamicStringParser String Generation
 
     As a developer,

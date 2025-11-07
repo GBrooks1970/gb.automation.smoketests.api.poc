@@ -1,4 +1,4 @@
-﻿import { IWorldOptions, setDefaultTimeout, setWorldConstructor, Before, After } from "@cucumber/cucumber";
+import { IWorldOptions, setDefaultTimeout, setWorldConstructor, Before, After } from "@cucumber/cucumber";
 import { Actor } from "../actors/Actor";
 import { CallAnApi } from "../abilities/CallAnApi";
 import { UseTokenParsers } from "../abilities/UseTokenParsers";

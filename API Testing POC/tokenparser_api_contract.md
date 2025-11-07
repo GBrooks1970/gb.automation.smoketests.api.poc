@@ -1,4 +1,4 @@
-﻿# Token Parser API Contract
+# Token Parser API Contract
 
 _Reference specification for any Token Parser implementation._
 

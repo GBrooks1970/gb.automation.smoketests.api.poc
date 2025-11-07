@@ -1,4 +1,4 @@
-﻿# DEMOAPP003 Playwright Architecture Blueprint
+# DEMOAPP003 Playwright Architecture Blueprint
 
 ## Stack Overview
 - **Runtime**: Node.js + TypeScript targeting ES2022, driven by Playwright Test runner for low-level fixtures and Cucumber.js for BDD orchestration.

@@ -5,9 +5,13 @@ import bodyParser from 'body-parser';
 import { TokenDateParser } from './tokenparser/TokenDateParser';
 import { TokenDynamicStringParser } from './tokenparser/TokenDynamicStringParser';
 import YAML from "js-yaml";
+import { getConfig } from "./config";
+import { createLogger } from "./services/logger";
 
 const app = express();
 app.use(bodyParser.json());
+const config = getConfig();
+const logger = createLogger("Server");
 
 const formatDateUtc = (date: Date): string => {
     const iso = date.toISOString(); // Always UTC
@@ -171,5 +175,5 @@ app.get('/parse-dynamic-string-token', (req: Request, res: Response) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`TOKENPARSER API is running on port ${PORT}`);
+    logger.info(`TOKENPARSER API is running on port ${PORT}`, `(log level: ${config.logging.level})`);
 });

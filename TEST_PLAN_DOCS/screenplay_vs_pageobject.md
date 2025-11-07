@@ -1,4 +1,4 @@
-﻿# Benefits of Screenplay Pattern Over Page Object Pattern
+# Benefits of Screenplay Pattern Over Page Object Pattern
 
 - **Greater Reusability**
   - Screenplay promotes reusable Tasks and Questions rather than tying logic to specific page structures.

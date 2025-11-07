@@ -1,4 +1,4 @@
-﻿# DEMOAPP003 - Playwright + TypeScript BDD Skeleton
+# DEMOAPP003 - Playwright + TypeScript BDD Skeleton
 
 ## Overview
 This project mirrors the DEMOAPP001 Cypress suite using Playwright, TypeScript, and the Screenplay pattern. It exercises the shared Token Parser Express API and utility classes while introducing documentation-first quality practices.

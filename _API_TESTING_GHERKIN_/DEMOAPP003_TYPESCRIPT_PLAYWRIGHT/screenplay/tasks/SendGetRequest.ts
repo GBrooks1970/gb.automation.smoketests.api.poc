@@ -1,4 +1,4 @@
-﻿import type { APIResponse } from "@playwright/test";
+import type { APIResponse } from "@playwright/test";
 import { CallAnApi } from "../abilities/CallAnApi";
 import type { Task } from "../support/types";
 import type { Actor } from "../actors/Actor";

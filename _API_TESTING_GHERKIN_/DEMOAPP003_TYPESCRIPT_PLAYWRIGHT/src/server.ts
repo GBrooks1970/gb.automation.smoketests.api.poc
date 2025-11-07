@@ -173,7 +173,7 @@ app.get('/parse-dynamic-string-token', (req: Request, res: Response) => {
     }
   });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     logger.info(`TOKENPARSER API is running on port ${PORT}`, `(log level: ${config.logging.level})`);
 });

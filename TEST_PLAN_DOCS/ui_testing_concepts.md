@@ -1,4 +1,4 @@
-﻿# UI Testing Concepts
+# UI Testing Concepts
 
 ## Manual Testing Concepts
 

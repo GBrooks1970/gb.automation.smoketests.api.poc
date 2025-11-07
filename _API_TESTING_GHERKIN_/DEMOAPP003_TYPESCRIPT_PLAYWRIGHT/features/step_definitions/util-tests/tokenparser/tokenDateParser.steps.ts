@@ -1,4 +1,4 @@
-﻿import { Given, When, Then } from "@cucumber/cucumber";
+import { Given, When, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 import { TokenDateParser, DateRange } from "../../../../src/tokenparser/TokenDateParser";
 import CommonUtils from "../../../../src/services/common-utils";

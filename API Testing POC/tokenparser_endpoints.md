@@ -1,4 +1,4 @@
-﻿# Token Parser API Endpoints
+# Token Parser API Endpoints
 
 _Last updated: 2025-11-04_
 

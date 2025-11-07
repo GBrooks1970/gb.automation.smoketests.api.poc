@@ -1,4 +1,4 @@
-﻿import { APIRequestContext, APIResponse, request } from "@playwright/test";
+import { APIRequestContext, APIResponse, request } from "@playwright/test";
 import type { Ability } from "../support/types";
 
 export class CallAnApi implements Ability {

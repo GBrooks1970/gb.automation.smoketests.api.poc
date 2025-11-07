@@ -37,6 +37,7 @@ The `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS` project hosts the TOKE
 - **Runtime**: Node.js + TypeScript served via Express with Swagger integration.
 - **Testing**: Cypress 13 with the Badeball Cucumber preprocessor for Gherkin support.
 - **Token Utilities**: Shared `TokenDateParser` and `TokenDynamicStringParser` modules consumed by the API and tests.
+- **Screenplay**: Cypress step definitions now use Actors, Abilities, Tasks, and Questions to mirror the Playwright harness.
 - **Automation**: `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` orchestrates start-up, Swagger launch, Cypress execution, and teardown.
 
 ---

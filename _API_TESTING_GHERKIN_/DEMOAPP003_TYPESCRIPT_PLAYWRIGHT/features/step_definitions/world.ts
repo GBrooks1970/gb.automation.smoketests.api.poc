@@ -1,1 +1,1 @@
-﻿import "../../screenplay/support/custom-world";
+import "../../screenplay/support/custom-world";

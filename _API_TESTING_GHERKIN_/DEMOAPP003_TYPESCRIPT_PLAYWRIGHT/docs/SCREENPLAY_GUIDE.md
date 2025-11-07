@@ -1,4 +1,4 @@
-﻿# Screenplay Pattern Reference
+# Screenplay Pattern Reference
 
 ## Actors
 - `Actor` encapsulates abilities and scenario memory. Use `actor.whoCan(...)` to compose behaviours (API calls, parser utilities).

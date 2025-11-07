@@ -1,4 +1,4 @@
-﻿import type { Ability } from "../support/types";
+import type { Ability } from "../support/types";
 import { TokenDateParser, DateRange } from "../../src/tokenparser/TokenDateParser";
 import { TokenDynamicStringParser } from "../../src/tokenparser/TokenDynamicStringParser";
 

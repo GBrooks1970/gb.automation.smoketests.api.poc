@@ -40,3 +40,4 @@ Feature: TokenDynamicStringParser String Generation
             | [ALPHA-5-LINES-0]       | Invalid line count in token     |
             | [ALPHA-5-LINES-XYZ]     | Invalid string token format     |
             | [ALPHA-0]               | Invalid string token format     |
+

@@ -1,4 +1,4 @@
-﻿Feature: Dynamic String Parser Endpoint
+Feature: Dynamic String Parser Endpoint
     As a user
     I want to parse tokens and generate strings based on different token formats
     So that the correct type of string is returned based on the input token in the API response.

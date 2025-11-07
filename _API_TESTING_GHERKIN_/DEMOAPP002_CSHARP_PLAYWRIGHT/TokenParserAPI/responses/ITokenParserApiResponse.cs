@@ -1,4 +1,4 @@
-﻿namespace TokenParserAPI.responses
+namespace TokenParserAPI.responses
 {
     public interface ITokenParserApiResponse
     {

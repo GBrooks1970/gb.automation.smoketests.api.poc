@@ -1,5 +1,6 @@
-import { Given, When, Then, Before, After } from "@badeball/cypress-cucumber-preprocessor";
-import { TokenDateParser, DateRange } from '../../../../../src/tokenparser/TokenDateParser';
+import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
+import { expect } from "chai";
+import { TokenDateParser, DateRange } from "../../../../../src/tokenparser/TokenDateParser";
 import CommonUtils from "../../../../../src/services/common-utils";
 
 let token: string;
@@ -48,7 +49,7 @@ When('I parse the token', function () {
 
 Then('an error should be thrown with message {string}', (expectedMessage: string) => {
     expect(parseError).to.not.be.null;
-    expect(parseError.message).to.contain(expectedMessage);
+    expect(parseError?.message ?? "").to.contain(expectedMessage);
 });
 
 Then('the result should be today\'s date minus two year and four month', function () {
@@ -59,7 +60,7 @@ Then('the result should be today\'s date minus two year and four month', functio
     console.log(`TOKEN ${token} : 
         PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
         EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).to.deep.equal(expectedDate.toUTCString());
+    expect(result.toUTCString()).to.equal(expectedDate.toUTCString());
 });
 
 Then('the result should be today\'s date minus one year and one month', function () {
@@ -70,7 +71,7 @@ Then('the result should be today\'s date minus one year and one month', function
     console.log(`TOKEN ${token} : 
         PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
         EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).to.deep.equal(expectedDate.toUTCString());
+    expect(result.toUTCString()).to.equal(expectedDate.toUTCString());
 });
 
 Then('the result should be today\'s date', () => {
@@ -79,7 +80,7 @@ Then('the result should be today\'s date', () => {
     console.log(`TOKEN ${token} : 
         PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
         EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).to.deep.equal(expectedDate.toUTCString());
+    expect(result.toUTCString()).to.equal(expectedDate.toUTCString());
 });
 
 
@@ -91,7 +92,7 @@ Then('the result should be tomorrow\'s date', () => {
     console.log(`TOKEN ${token} : 
         PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
         EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).to.deep.equal(expectedDate.toUTCString());
+    expect(result.toUTCString()).to.equal(expectedDate.toUTCString());
 });
 
 Then('the result should be yesterday\'s date', () => {
@@ -102,7 +103,7 @@ Then('the result should be yesterday\'s date', () => {
     console.log(`TOKEN ${token} : 
         PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
         EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).to.deep.equal(expectedDate.toUTCString());
+    expect(result.toUTCString()).to.equal(expectedDate.toUTCString());
 });
 
 Then('the result should be today\'s date minus two years', () => {
@@ -113,7 +114,7 @@ Then('the result should be today\'s date minus two years', () => {
     console.log(`TOKEN ${token} : 
         PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
         EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).to.deep.equal(expectedDate.toUTCString());
+    expect(result.toUTCString()).to.equal(expectedDate.toUTCString());
 });
 
 Then('the result should be today\'s date minus one year, two months, and three days', () => {
@@ -126,7 +127,7 @@ Then('the result should be today\'s date minus one year, two months, and three d
     console.log(`TOKEN ${token} : 
         PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
         EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).to.deep.equal(expectedDate.toUTCString());
+    expect(result.toUTCString()).to.equal(expectedDate.toUTCString());
 });
 
 Then('the result should be today\'s date plus one year, minus one month, and plus one day', () => {
@@ -139,7 +140,7 @@ Then('the result should be today\'s date plus one year, minus one month, and plu
     console.log(`TOKEN ${token} : 
         PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
         EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).to.deep.equal(expectedDate.toUTCString());
+    expect(result.toUTCString()).to.equal(expectedDate.toUTCString());
 });
 
 Then('the result should be today\'s date plus two years', () => {
@@ -150,7 +151,7 @@ Then('the result should be today\'s date plus two years', () => {
     console.log(`TOKEN ${token} : 
         PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
         EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).to.deep.equal(expectedDate.toUTCString());
+    expect(result.toUTCString()).to.equal(expectedDate.toUTCString());
 });
 
 Then('the result should be today\'s date plus five months', () => {
@@ -161,7 +162,7 @@ Then('the result should be today\'s date plus five months', () => {
     console.log(`TOKEN ${token} : 
         PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
         EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).to.deep.equal(expectedDate.toUTCString());
+    expect(result.toUTCString()).to.equal(expectedDate.toUTCString());
 });
 
 Then('the result should be tomorrow\'s date plus five months', () => {
@@ -173,7 +174,7 @@ Then('the result should be tomorrow\'s date plus five months', () => {
     console.log(`TOKEN ${token} : 
         PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
         EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).to.deep.equal(expectedDate.toUTCString());
+    expect(result.toUTCString()).to.equal(expectedDate.toUTCString());
 });
 
 Then('the result should be yesterday\'s date plus five months and minus one year', () => {
@@ -186,7 +187,7 @@ Then('the result should be yesterday\'s date plus five months and minus one year
     console.log(`TOKEN ${token} : 
         PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
         EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).to.deep.equal(expectedDate.toUTCString());
+    expect(result.toUTCString()).to.equal(expectedDate.toUTCString());
 });
 
 Given('A null or invalid date token', () => {
@@ -203,7 +204,7 @@ Then('the result should be the Unix zero date', () => {
     console.log(`TOKEN ${token} : 
         PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
         EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).to.deep.equal(expectedDate.toUTCString());
+    expect(result.toUTCString()).to.equal(expectedDate.toUTCString());
 });
 
 
@@ -225,7 +226,7 @@ Then('the result should be {string}', (expectedDateStr: string) => {
     console.log(`TOKEN ${dateStringToken} : 
         PARSED TOKEN DATE ${CommonUtils.toJSONString(parsedResult2)} : 
         EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(parsedResult2.toUTCString()).to.deep.equal(expectedDate.toUTCString());
+    expect(parsedResult2.toUTCString()).to.equal(expectedDate.toUTCString());
 });
 
 let dateRangeTokenString: string;
@@ -256,3 +257,4 @@ Then('the start date should be {string} and the end date should be {string}', (S
     expect(resultRange.Start.toUTCString()).to.equal(expectedStartDate.toUTCString());
     expect(resultRange.End.toUTCString()).to.equal(expectedEndDate.toUTCString());
 });
+

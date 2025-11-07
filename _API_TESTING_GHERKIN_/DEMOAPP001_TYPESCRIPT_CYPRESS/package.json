@@ -6,7 +6,9 @@
   "scripts": {
     "start": "tsx src/server.ts",
     "test": "cypress open",
+    "test:bdd": "cypress run",
     "ts:check": "tsc --noEmit",
+    "verify": "npm run ts:check && npm run test:bdd",
     "postinstall": "npx cypress verify"
   },
   "keywords": [],
@@ -15,6 +17,7 @@
   "devDependencies": {
     "@badeball/cypress-cucumber-preprocessor": "^20.1.2",
     "@bahmutov/cypress-esbuild-preprocessor": "^2.2.3",
+    "@types/chai": "^5.2.3",
     "@types/express": "^4.17.21",
     "@types/node": "^22.5.5",
     "@types/swagger-jsdoc": "^6.0.4",
@@ -27,6 +30,7 @@
   "dependencies": {
     "@types/js-yaml": "^4.0.9",
     "body-parser": "^1.20.3",
+    "chai": "^6.2.0",
     "date-fns": "^4.1.0",
     "express": "^4.21.0",
     "js-yaml": "^4.1.0",

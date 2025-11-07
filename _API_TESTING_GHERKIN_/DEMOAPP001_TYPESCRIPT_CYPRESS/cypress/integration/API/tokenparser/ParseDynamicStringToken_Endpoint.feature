@@ -15,3 +15,4 @@ Feature: Dynamic String Parser Endpoint
             | [ALPHA-NUMERIC-5]                      | 200        | ParsedToken | An alpha-numeric string of length 5                                                  |
             | [PUNCTUATION-3]                        | 200        | ParsedToken | A string of punctuation characters of length 3                                       |
             | [ALPHA-NUMERIC-PUNCTUATION-10-LINES-2] | 200        | ParsedToken | 2 lines of strings with each line containing 10 alpha-numeric-punctuation characters |
+

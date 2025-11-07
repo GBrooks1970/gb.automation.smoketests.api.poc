@@ -1,11 +1,14 @@
 import CommonUtils from "../services/common-utils";
 import { SymbolsDS } from "../services/symbol-consts";
+import { createLogger } from "../services/logger";
 
 /*
 Utility class that parses tokens with the specified format and generates a string based on the inputted token. 
 The token can have combinations of ALPHA, NUMERIC, PUNCTUATION, and SPECIAL, 
 followed by a number that specifies the length of the string to be generated.
 */
+const logger = createLogger("TokenDynamicStringParser");
+
 export class TokenDynamicStringParser {
     // Character sets for different token types
     private static readonly ALPHA_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -30,7 +33,9 @@ export class TokenDynamicStringParser {
                 return true;
             }
         } catch (error) {
-            console.log(`${this.isValidDynamicStringToken.name}: ERROR VALIDATING TOKEN DYNAMIC STRING ${token} : ${error}`);
+            logger.error(
+                `${this.isValidDynamicStringToken.name}: ERROR VALIDATING TOKEN DYNAMIC STRING ${token} : ${error}`
+            );
             return false;
         }
         return false;
@@ -57,12 +62,12 @@ export class TokenDynamicStringParser {
         const parsedLength = isAllLength ? Number.NaN : this.tryParseInt(lengthToken);
         const linesNum = lines ? parseInt(lines, 10) : 1; // Default to 1 line if LINES-XXX is not provided
 
-        console.log(`TOKEN ${token} : types ${CommonUtils.toJSONString(types)}`);
-        console.log(`TOKEN ${token} : length ${CommonUtils.toJSONString(lengthToken)}`);
-        console.log(`TOKEN ${token} : lines ${CommonUtils.toJSONString(lines)}`);
+        logger.debug(`TOKEN ${token} : types ${CommonUtils.toJSONString(types)}`);
+        logger.debug(`TOKEN ${token} : length ${CommonUtils.toJSONString(lengthToken)}`);
+        logger.debug(`TOKEN ${token} : lines ${CommonUtils.toJSONString(lines)}`);
 
-        console.log(`TOKEN ${token} : lengthValue ${CommonUtils.toJSONString(lengthToken)}`);
-        console.log(`TOKEN ${token} : linesNum ${CommonUtils.toJSONString(linesNum)}`);
+        logger.debug(`TOKEN ${token} : lengthValue ${CommonUtils.toJSONString(lengthToken)}`);
+        logger.debug(`TOKEN ${token} : linesNum ${CommonUtils.toJSONString(linesNum)}`);
 
         if (!isAllLength) {
             if (!Number.isInteger(parsedLength) || parsedLength <= 0) {
@@ -93,7 +98,7 @@ export class TokenDynamicStringParser {
         });
 
 
-        console.log(`TOKEN ${token} : charSet '${CommonUtils.toJSONString(charSet)}'`);
+        logger.debug(`TOKEN ${token} : charSet '${CommonUtils.toJSONString(charSet)}'`);
 
         if (charSet === '') {
             throw new Error(`${TokenDynamicStringParser.name} : No valid character types found in token: ${token}`);
@@ -103,7 +108,7 @@ export class TokenDynamicStringParser {
         for (let line = 0; line < linesNum; line++) {
             let lineResult = '';
             if (isAllLength) {
-                console.log(`TOKEN ${token} : ALL charSet '${CommonUtils.toJSONString(charSet)}'`);
+                logger.debug(`TOKEN ${token} : ALL charSet '${CommonUtils.toJSONString(charSet)}'`);
         
                 lineResult += charSet;
             }
@@ -114,7 +119,7 @@ export class TokenDynamicStringParser {
                 }
             }
 
-            console.log(`TOKEN ${token} : Generated string LINE[${line}]'${CommonUtils.toJSONString(lineResult)}'`);
+            logger.debug(`TOKEN ${token} : Generated string LINE[${line}]'${CommonUtils.toJSONString(lineResult)}'`);
 
             result += lineResult;
             if (line < linesNum - 1) {
@@ -123,7 +128,7 @@ export class TokenDynamicStringParser {
         }
 
 
-        console.log(`TOKEN ${token} : Generated string '${CommonUtils.toJSONString(result)}'`);
+        logger.debug(`TOKEN ${token} : Generated string '${CommonUtils.toJSONString(result)}'`);
         return result;
     }
 }

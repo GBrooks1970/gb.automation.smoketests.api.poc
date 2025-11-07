@@ -1,4 +1,4 @@
-﻿# DEMOAPP001_TYPESCRIPT_CYPRESS
+# DEMOAPP001_TYPESCRIPT_CYPRESS
 
 TypeScript demo API that exposes token parsing endpoints, together with Cypress + Cucumber tests that exercise the same behaviours end to end.
 
@@ -63,4 +63,8 @@ Logs use UTC timestamps in `yyyyMMddTHHmmZ` format (for example `cy_results_2025
 - API responses that contain dates are normalised to UTC to avoid timezone drift between environments.
 - Refer to the Cypress feature files in `cypress/integration` for example token strings and expected outputs.
 - Update environment variables or ports in `src/server.ts` if you need to run multiple instances concurrently.
+
+## Logging Configuration
+
+Use the `TOKENPARSER_LOG_LEVEL` environment variable (see `.env.example`) to control verbosity. Supported values are `silent`, `error`, `warn`, `info`, and `debug` (default). Adjust the value before running the API or automation script to reduce noise in CI logs or capture detailed parser telemetry during debugging.
 

@@ -1,4 +1,4 @@
-﻿# QA Strategy for DEMOAPP003 (Playwright + TypeScript)
+# QA Strategy for DEMOAPP003 (Playwright + TypeScript)
 
 ## Purpose
 This strategy governs quality activities for the Playwright-based automation suite that validates the Token Parser API surface and supporting utilities. It aligns with ISTQB test management principles while elevating critical practices (risk-based prioritisation, modern observability, and shift-left automation).

@@ -1,17 +1,28 @@
-﻿@echo off
+@echo off
 setlocal
 
 pushd "%~dp0.."
 set "ROOT_DIR=%CD%"
-set "SERVER_PORT=3000"
-set "PORT=%SERVER_PORT%"
+set "PROJECT_DIR=%ROOT_DIR%\_API_TESTING_GHERKIN_\DEMOAPP001_TYPESCRIPT_CYPRESS"
+
+set "ENV_FILE=%PROJECT_DIR%\.env"
+if not exist "%ENV_FILE%" set "ENV_FILE=%PROJECT_DIR%\.env.example"
+
+for /f "usebackq tokens=1* delims==" %%A in (`powershell -NoProfile -Command "$envFile = '%ENV_FILE%'; Get-Content -LiteralPath $envFile | Where-Object {$_ -match '^(PORT|API_BASE_URL)='} | ForEach-Object { $_.Trim() }"`) do (
+    if /I "%%A"=="PORT" set "PORT=%%B"
+    if /I "%%A"=="API_BASE_URL" set "API_BASE_URL=%%B"
+)
+
+if not defined PORT set "PORT=3000"
+set "SERVER_PORT=%PORT%"
+if not defined API_BASE_URL set "API_BASE_URL=http://localhost:%SERVER_PORT%"
 
 if not exist ".results" mkdir ".results"
 
 for /f %%I in ('powershell -NoProfile -Command "(Get-Date).ToUniversalTime().ToString(\"yyyyMMddTHHmmZ\")"') do set "UTC_TIMESTAMP=%%I"
 set "RESULT_FILE=%ROOT_DIR%\.results\demoapp001_typescript_cypress_%UTC_TIMESTAMP%.txt"
 
-for /f %%I in ('powershell -NoProfile -Command "$p = Start-Process -FilePath 'npm' -ArgumentList 'run','start' -WorkingDirectory '%ROOT_DIR%\_API_TESTING_GHERKIN_\DEMOAPP001_TYPESCRIPT_CYPRESS' -PassThru; $p.Id"') do set "API_PID=%%I"
+for /f %%I in ('powershell -NoProfile -Command "$p = Start-Process -FilePath 'npm' -ArgumentList 'run','start' -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"') do set "API_PID=%%I"
 
 if not defined API_PID (
     echo Failed to start API host.
@@ -26,10 +37,10 @@ if errorlevel 1 (
     goto cleanup_fail
 )
 
-echo Opening Swagger UI at http://localhost:%SERVER_PORT%/swagger/v1/json...
-start "" "http://localhost:%SERVER_PORT%/swagger/v1/json"
+echo Opening Swagger UI at %API_BASE_URL%/swagger/v1/json...
+start "" "%API_BASE_URL%/swagger/v1/json"
 
-pushd "_API_TESTING_GHERKIN_\DEMOAPP001_TYPESCRIPT_CYPRESS"
+pushd "%PROJECT_DIR%"
 echo Running Cypress test suite...
 call npx cypress run > "%RESULT_FILE%" 2>&1
 set "TEST_EXIT=%ERRORLEVEL%"

@@ -1,4 +1,4 @@
-﻿# Comparison Report: Testing APIs using BDD/Gherkin User Stories and Contract Testing
+# Comparison Report: Testing APIs using BDD/Gherkin User Stories and Contract Testing
 
 ## Overview
 

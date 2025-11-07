@@ -1,4 +1,4 @@
-﻿# API / Microservices Testing Concepts
+# API / Microservices Testing Concepts
 
 ## Manual Testing Concepts
 

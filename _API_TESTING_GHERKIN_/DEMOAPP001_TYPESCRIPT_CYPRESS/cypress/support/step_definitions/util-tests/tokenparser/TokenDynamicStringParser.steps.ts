@@ -1,4 +1,5 @@
-import { Given, When, Then, Before, After } from "@badeball/cypress-cucumber-preprocessor";
+import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
+import { expect } from "chai";
 import { TokenDynamicStringParser } from "../../../../../src/tokenparser/TokenDynamicStringParser";
 import CommonUtils from "../../../../../src/services/common-utils";
 
@@ -22,12 +23,12 @@ When("I parse and generate the string", () => {
 });
 
 Then('the generated string should have a length of {int}', (expectedLength: number) => {
-    expect(parseError, parseError?.message ?? undefined).to.be.null;
+    expect(parseError).to.be.null;
     expect(generatedString.replace(/\r\n/g, '').length).to.equal(expectedLength);
 });
 
 Then('the generated string should match the character set {string}', (characterSet: string) => {
-    expect(parseError, parseError?.message ?? undefined).to.be.null;
+    expect(parseError).to.be.null;
     let regex: RegExp;
     switch (characterSet) {
         case 'ALPHA':
@@ -64,12 +65,13 @@ Then('the generated string should match the character set {string}', (characterS
 });
 
 Then('the generated string should have {int} lines', (expectedLines: number) => {
-    expect(parseError, parseError?.message ?? undefined).to.be.null;
+    expect(parseError).to.be.null;
     const lines = generatedString.split('\r\n');
-    expect(lines.length).to.equal(expectedLines);
+    expect(lines).to.have.length(expectedLines);
 });
 
 Then('a dynamic string parser error should be thrown with message {string}', (expectedMessage: string) => {
     expect(parseError).to.not.be.null;
-    expect(parseError?.message).to.contain(expectedMessage);
+    expect(parseError?.message ?? "").to.contain(expectedMessage);
 });
+

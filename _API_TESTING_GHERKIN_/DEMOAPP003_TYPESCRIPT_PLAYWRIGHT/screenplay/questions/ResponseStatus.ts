@@ -1,4 +1,4 @@
-﻿import type { Question } from "../support/types";
+import type { Question } from "../support/types";
 import type { Actor } from "../actors/Actor";
 import type { APIResponse } from "@playwright/test";
 

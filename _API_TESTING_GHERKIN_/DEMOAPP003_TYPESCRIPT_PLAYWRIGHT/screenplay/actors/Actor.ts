@@ -1,4 +1,4 @@
-﻿import { Ability, AbilityType, Question, Task } from "../support/types";
+import { Ability, AbilityType, Question, Task } from "../support/types";
 
 export class Actor {
   private readonly abilities = new Map<AbilityType<Ability>, Ability>();

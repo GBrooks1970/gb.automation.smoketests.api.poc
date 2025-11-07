@@ -1,4 +1,4 @@
-﻿import type { Actor } from "../actors/Actor";
+import type { Actor } from "../actors/Actor";
 
 export interface Ability {
   readonly description: string;

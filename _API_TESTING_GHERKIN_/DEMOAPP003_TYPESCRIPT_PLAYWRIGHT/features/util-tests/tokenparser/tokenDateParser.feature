@@ -1,4 +1,4 @@
-﻿@UTILTEST
+@UTILTEST
 Feature: Parsing dates from token format strings using TokenDateParser
 
     In order to accurately compute dates from token format strings
