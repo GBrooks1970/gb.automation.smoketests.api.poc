@@ -44,10 +44,11 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Token Parser API v1");
-    c.RoutePrefix = "swagger/v1/json";
+    c.RoutePrefix = "swagger";
 });
 
-app.MapGet("/swagger/v1/json", () => Results.Redirect("/swagger/v1/json/index.html", permanent: false));
+app.MapGet("/swagger/v1/json", () => Results.Redirect("/swagger/index.html", permanent: false))
+   .ExcludeFromDescription();
 app.MapGet("/swagger/v1/swagger.yaml", (ISwaggerProvider swaggerProvider) =>
 {
     var swaggerDoc = swaggerProvider.GetSwagger("v1");
@@ -55,7 +56,7 @@ app.MapGet("/swagger/v1/swagger.yaml", (ISwaggerProvider swaggerProvider) =>
     var yamlWriter = new OpenApiYamlWriter(stringWriter);
     swaggerDoc.SerializeAsV3(yamlWriter);
     return Results.Content(stringWriter.ToString(), "application/x-yaml");
-});
+}).ExcludeFromDescription();
 
 
 // Endpoint 1: Route to health checker

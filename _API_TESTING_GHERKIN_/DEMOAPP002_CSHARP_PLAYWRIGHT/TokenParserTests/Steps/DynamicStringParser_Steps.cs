@@ -70,7 +70,7 @@ namespace TokenParserTests.Steps
                 {
                     int expectedLength = 3;
                     Assert.That(expectedLength, Is.EqualTo(actulLength), $"Expected generated string: {actualString} to be of length: {expectedLength}, but got: {actulLength}");
-                    Assert.That(actualString?.Trim(), Does.Match(@"^[!@#$%^&*()]+$"), $"Expected generated string: {actualString} to be a punctuation characters, but it is not");
+                    Assert.That(actualString?.Trim(), Does.Match(@"^[\.\,\!\?\;\:]+$"), $"Expected generated string: {actualString} to only contain punctuation characters .,!?;:, but it is not");
                 }
                 else if (expectedValue == "2 lines of strings with each line containing 10 alpha-numeric-punctuation characters")
                 {
@@ -86,7 +86,7 @@ namespace TokenParserTests.Steps
                         if (line.Length > 0)
                         {
                             Assert.That(charPerLine, Is.EqualTo(line.Length), $"Expected generated string line: {line} to be of length: {charPerLine}, but got: {line.Length}");
-                            Assert.That(line.Trim(), Does.Match(@"^[A-Za-z0-9!@#$%^&*()]+$"), $"Expected generated string line: {line} to be a combination of alpha, numeric, and punctuation characters, but it is not");
+                            Assert.That(line.Trim(), Does.Match(@"^[A-Za-z0-9\.\,\!\?\;\:]+$"), $"Expected generated string line: {line} to be a combination of alpha, numeric, and punctuation characters, but it is not");
                         }
                     }
                 }

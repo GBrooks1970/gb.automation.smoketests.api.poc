@@ -20,7 +20,11 @@ namespace TokenParserAPI.utils
     public class TokenDynamicStringParser
     {
         private static readonly TokenParserLogger Logger = TokenParserLogger.For(nameof(TokenDynamicStringParser));
-        private static Random _random = new Random();
+        private static readonly Random _random = new Random();
+        private const string AlphaChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        private const string NumericChars = "0123456789";
+        private const string PunctuationChars = ".,!?;:";
+        private const string SpecialChars = "!@#$%^&*()_+[]{}|;:,.<>?";
 
         public string ParseToken(string token)
         {
@@ -39,6 +43,10 @@ namespace TokenParserAPI.utils
 
             bool useAllCharacters = lengthValue == SymbolsDS.ALL;
             int count = useAllCharacters ? 0 : int.Parse(lengthValue); // If ALL, count will be handled later.
+            if (!useAllCharacters && count <= 0)
+            {
+                throw new ArgumentException("Invalid string token format");
+            }
 
             string ParsedToken = GenerateString(types, count, useAllCharacters);
             Logger.Debug("Generated base string {0}", ParsedToken);
@@ -54,13 +62,13 @@ namespace TokenParserAPI.utils
 
             // Build the pool of possible characters based on the token types
             if (types.Contains(SymbolsDS.ALPHA))
-                charPool.Append(GetCharRange('A', 'Z'));  // Add A-Z to the pool
+                charPool.Append(AlphaChars);
             if (types.Contains(SymbolsDS.NUMERIC))
-                charPool.Append(GetCharRange('0', '9'));  // Add 0-9 to the pool
+                charPool.Append(NumericChars);
             if (types.Contains(SymbolsDS.PUNCTUATION))
-                charPool.Append("!@#$%^&*()");  // Add punctuation characters to the pool
+                charPool.Append(PunctuationChars);
             if (types.Contains(SymbolsDS.SPECIAL))
-                charPool.Append("~`|\\/?");  // Add special characters to the pool
+                charPool.Append(SpecialChars);
 
             Logger.Debug("Character pool size {0}. useAllCharacters={1}", charPool.Length, useAllCharacters);
 
@@ -84,16 +92,6 @@ namespace TokenParserAPI.utils
                 result.Append(charPool[randomIndex]);
             }
             return result.ToString();
-        }
-
-        private string GetCharRange(char start, char end)
-        {
-            var sb = new StringBuilder();
-            for (char c = start; c <= end; c++)
-            {
-                sb.Append(c);
-            }
-            return sb.ToString();
         }
 
         private string GenerateLines(string parsedToken, int lineCount)
@@ -121,20 +119,6 @@ namespace TokenParserAPI.utils
             }
 
             return sb.ToString();
-        }
-
-        private char GetRandomChar(char min, char max) => (char)_random.Next(min, max + 1);
-
-        private char GetRandomPunctuation()
-        {
-            const string punctuation = "!@#$%^&*()";
-            return punctuation[_random.Next(punctuation.Length)];
-        }
-
-        private char GetRandomSpecialChar()
-        {
-            const string special = "~`|\\/?";
-            return special[_random.Next(special.Length)];
         }
 
         private string ShuffleString(string input)
