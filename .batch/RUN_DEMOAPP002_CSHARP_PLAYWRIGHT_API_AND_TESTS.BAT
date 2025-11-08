@@ -1,33 +1,42 @@
 @echo off
-setlocal
+setlocal EnableDelayedExpansion
 
-pushd "%~dp0.."
+set "SCRIPT_DIR=%~dp0"
+
+pushd "%SCRIPT_DIR%.."
 set "ROOT_DIR=%CD%"
 set "API_DIR=%ROOT_DIR%\_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT\TokenParserAPI"
 set "TEST_DIR=%ROOT_DIR%\_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT\TokenParserTests"
+set "SERVER_PORT=5228"
+set "API_BASE_URL=http://localhost:%SERVER_PORT%"
 
 if not exist ".results" mkdir ".results"
 
 for /f %%I in ('powershell -NoProfile -Command "(Get-Date).ToUniversalTime().ToString(\"yyyyMMddTHHmmZ\")"') do set "UTC_TIMESTAMP=%%I"
 set "RESULT_FILE=%ROOT_DIR%\.results\demoapp002_csharp_playwright_%UTC_TIMESTAMP%.txt"
 
-for /f %%I in ('powershell -NoProfile -Command "$p = Start-Process -FilePath 'dotnet' -ArgumentList 'run','--no-build','--project','%API_DIR%','--urls','http://localhost:5228' -WorkingDirectory '%API_DIR%' -PassThru; $p.Id"') do set "API_PID=%%I"
+call "%SCRIPT_DIR%env_utils.bat" is_port_in_use %SERVER_PORT% PORT_IN_USE
+if "%PORT_IN_USE%"=="1" (
+    echo Port %SERVER_PORT% already in use. Assuming DEMOAPP002 API is running.
+) else (
+    for /f %%I in ('powershell -NoProfile -Command "$p = Start-Process -FilePath 'dotnet' -ArgumentList 'run','--no-build','--project','%API_DIR%','--urls','http://localhost:%SERVER_PORT%' -WorkingDirectory '%API_DIR%' -PassThru; $p.Id"') do set "API_PID=%%I"
 
-if not defined API_PID (
-    echo Failed to start C# API.
-    goto cleanup_fail
+    if not defined API_PID (
+        echo Failed to start C# API.
+        goto cleanup_fail
+    )
+
+    echo API started with PID %API_PID%. Waiting for port %SERVER_PORT%...
+
+    powershell -NoProfile -Command "for($i=0;$i -lt 30;$i++){ if(Test-NetConnection -ComputerName 'localhost' -Port %SERVER_PORT% -InformationLevel Quiet){ exit 0 } Start-Sleep -Seconds 2 }; exit 1"
+    if errorlevel 1 (
+        echo API did not become ready before timeout.
+        goto cleanup_fail
+    )
+
+    echo Opening Swagger UI at %API_BASE_URL%/swagger...
+    start "" "%API_BASE_URL%/swagger"
 )
-
-echo API started with PID %API_PID%. Waiting for port 5228...
-
-powershell -NoProfile -Command "for($i=0;$i -lt 30;$i++){ if(Test-NetConnection -ComputerName 'localhost' -Port 5228 -InformationLevel Quiet){ exit 0 } Start-Sleep -Seconds 2 }; exit 1"
-if errorlevel 1 (
-    echo API did not become ready before timeout.
-    goto cleanup_fail
-)
-
-echo Opening Swagger UI at http://localhost:5228/swagger...
-start "" "http://localhost:5228/swagger"
 
 if exist "%TEST_DIR%\..\playwright.ps1" (
     echo Ensuring Playwright dependencies are installed...

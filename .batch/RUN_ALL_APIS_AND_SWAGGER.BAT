@@ -1,7 +1,9 @@
 @echo off
 setlocal EnableDelayedExpansion
 
-pushd "%~dp0.."
+set "SCRIPT_DIR=%~dp0"
+
+pushd "%SCRIPT_DIR%.."
 set "ROOT_DIR=%CD%"
 set "RESULTS_DIR=%ROOT_DIR%\.results"
 if not exist "%RESULTS_DIR%" mkdir "%RESULTS_DIR%" >nul 2>&1
@@ -43,18 +45,18 @@ set "PROJECT_DIR=%~2"
 set "DEFAULT_PORT=%~3"
 set "PREFIX=%~4"
 
-set "%PREFIX%_PORT="
-set "%PREFIX%_BASE="
-set "ENV_FILE=%PROJECT_DIR%\.env"
-if not exist "%ENV_FILE%" set "ENV_FILE=%PROJECT_DIR%\.env.example"
+set "PORT_VAR=%PREFIX%_PORT"
+set "BASE_VAR=%PREFIX%_BASE"
+call "%SCRIPT_DIR%env_utils.bat" load_env_vars "%PROJECT_DIR%" %DEFAULT_PORT% "http://localhost:%DEFAULT_PORT%" %PORT_VAR% %BASE_VAR%
 
-for /f "usebackq tokens=1* delims==" %%A in (`powershell -NoProfile -Command "$envFile = '%ENV_FILE%'; if (Test-Path $envFile) { Get-Content -LiteralPath $envFile | Where-Object {$_ -match '^(PORT|API_BASE_URL)='} | ForEach-Object { $_.Trim() } }"`) do (
-    if /I "%%A"=="PORT" set "%PREFIX%_PORT=%%B"
-    if /I "%%A"=="API_BASE_URL" set "%PREFIX%_BASE=%%B"
+call set "CURRENT_PORT=%%%PORT_VAR%%%"
+call set "CURRENT_BASE=%%%BASE_VAR%%%"
+
+call "%SCRIPT_DIR%env_utils.bat" is_port_in_use %CURRENT_PORT% PORT_IN_USE
+if "%PORT_IN_USE%"=="1" (
+    echo Port %CURRENT_PORT% already in use. Assuming %LABEL% API is running.
+    exit /b 0
 )
-
-if not defined %PREFIX%_PORT set "%PREFIX%_PORT=%DEFAULT_PORT%"
-if not defined %PREFIX%_BASE set "%PREFIX%_BASE=http://localhost:%DEFAULT_PORT%"
 
 for /f %%I in ('powershell -NoProfile -Command "$p = Start-Process -FilePath 'npm' -ArgumentList 'run','start' -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"') do set "%PREFIX%_PID=%%I"
 if not defined %PREFIX%_PID (
@@ -62,8 +64,6 @@ if not defined %PREFIX%_PID (
     exit /b 1
 )
 
-call set "CURRENT_PORT=%%%PREFIX%_PORT%%%"
-call set "CURRENT_BASE=%%%PREFIX%_BASE%%%"
 call set "CURRENT_PID=%%%PREFIX%_PID%%%"
 
 echo %LABEL% API started on port %CURRENT_PORT% (PID=%CURRENT_PID%).
@@ -76,6 +76,12 @@ set "LABEL=%~1"
 set "PROJECT_DIR=%~2"
 set "PORT=%~3"
 set "PREFIX=%~4"
+
+call "%SCRIPT_DIR%env_utils.bat" is_port_in_use %PORT% PORT_IN_USE
+if "%PORT_IN_USE%"=="1" (
+    echo Port %PORT% already in use. Assuming %LABEL% API is running.
+    exit /b 0
+)
 
 for /f %%I in ('powershell -NoProfile -Command "$p = Start-Process -FilePath 'dotnet' -ArgumentList 'run','--no-build','--project','%PROJECT_DIR%','--urls','http://localhost:%PORT%' -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"') do set "%PREFIX%_PID=%%I"
 if not defined %PREFIX%_PID (
