@@ -88,3 +88,20 @@ The stack currently relies on direct console output from Express and the token p
 - Playwright stack: `API Testing POC/typescript_playwright_cucumber.md`
 - C# stack: `API Testing POC/csharp_specflow_playwright.md`
 - Token contract: `API Testing POC/tokenparser_api_contract.md`
+
+---
+
+## Screenplay Parity Status
+
+| Layer | Current State (DEMOAPP001) | Action Plan |
+| --- | --- | --- |
+| Actor/World setup | Screenplay helpers exist under `src/screenplay/**`, but Cypress step definitions still instantiate helpers directly. | Introduce a lightweight “Cypress World” helper that creates an Actor/Abilities per scenario (likely via `beforeEach`) and export it for all step files. |
+| Abilities | `CallAnApi` and `UseTokenParsers` abilities are implemented but not widely used in step definitions. | Update API step definitions to acquire abilities through the Actor rather than importing `CommonUtils` or using `cy.request` directly. |
+| Tasks | `SendGetRequest` task is available (mirrors Playwright), yet steps invoke `cy.request`. | Replace imperative HTTP calls with `actor.attemptsTo(SendGetRequest...)`. Add additional tasks for multi-step flows as needed. |
+| Questions | `ResponseStatus`/`ResponseJson` exist but assertions often parse the response manually. | Convert assertions to use `actor.answer(ResponseStatus.code())` / `ResponseJson.body()` to ensure parity with DEMOAPP003. |
+| Memory | Actor memory is present but not consistently leveraged; global variables persist between steps. | Migrate shared state (response payloads, tokens) into Actor memory to avoid flaky global state. |
+
+**Milestones**
+1. Wrap all API step definitions in Screenplay (`Given`/`When` use tasks, `Then` uses questions).
+2. Update util step definitions to use Actor memory/abilities.
+3. Document the rollout status in this section and keep the table up to date as coverage improves.

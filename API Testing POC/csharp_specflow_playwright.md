@@ -86,3 +86,20 @@ Logging level is controlled via `TokenParser:Logging:Level` (appsettings) or the
 - Cypress stack: `API Testing POC/typescript_cucumber_cypress.md`
 - Playwright TypeScript stack: `API Testing POC/typescript_playwright_cucumber.md`
 - Token contract: `API Testing POC/tokenparser_api_contract.md`
+
+---
+
+## Screenplay Parity Plan
+
+| Layer | Current State (DEMOAPP002) | Planned Work |
+| --- | --- | --- |
+| Actor abstraction | SpecFlow step classes manage `_response`, `_token` fields manually; no Actor concept. | Introduce a `ScreenplayContext` service registered per scenario that exposes an Actor with abilities. |
+| Abilities | HTTP traffic handled by `RequestHelper`; parser utilities invoked directly. | Wrap HttpClient + parser access as abilities (`CallAnApi`, `UseTokenParsers`) to mirror the Playwright TypeScript implementation. |
+| Tasks | RequestHelper exposes methods but not Screenplay-style tasks. | Create task classes (e.g., `SendGetRequestTask`) so steps invoke `actor.AttemptsTo(...)`. |
+| Questions | Assertions operate on raw JSON via `JsonDocument`. | Add question helpers (status, body fields) that match the semantics of `ResponseStatus`/`ResponseJson`. |
+| Memory | Step classes store state in private fields which can leak across steps if not reset. | Store responses and context in Actor memory or SpecFlow `ScenarioContext` extensions to align with the Playwright Screenplay pattern. |
+
+**Milestones**
+1. Add Screenplay scaffolding project (Actor, Abilities, Tasks, Questions) under `TokenParserTests/Screenplay`.
+2. Gradually migrate SpecFlow bindings to the new abstractions, starting with the Alive endpoint.
+3. Mirror progress in the Cypress doc so all stacks converge on the same Screenplay terminology and capabilities.

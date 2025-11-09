@@ -25,6 +25,14 @@ All responses MUST include a UTF-8 encoded JSON body. Error payloads MUST use th
 | `GET` | `/parse-date-token` | Resolves a date token to a UTC timestamp normalised to `yyyy-MM-dd HH:mm:ssZ`. |
 | `GET` | `/parse-dynamic-string-token` | Generates one or more strings based on the supplied dynamic string token. |
 
+Swagger/OpenAPI MUST be exposed at:
+
+| Resource | Path |
+| --- | --- |
+| Swagger UI | `/swagger/v1/json` (may redirect to `/swagger`) |
+| OpenAPI JSON | `/swagger/v1/swagger.json` |
+| OpenAPI YAML | `/swagger/v1/swagger.yaml` |
+
 ---
 
 ## `/alive`
@@ -181,9 +189,9 @@ Rules:
 | `ALPHA` | Uppercase `A-Z` and lowercase `a-z`. |
 | `NUMERIC` | Digits `0-9`. |
 | `PUNCTUATION` | `.,!?;:` |
-| `SPECIAL` | `!@#$%^&*()_+[]{}|;:,.<>?~\`\/` |
+| `SPECIAL` | `!@#$%^&*()_+[]{}|;:,.<>?` |
 
-These pools define the contract. Implementations MUST use the exact characters to ensure consistent results across environments. When combining multiple types, the pool MUST be the union of the constituent sets (duplicates eliminated before generation).
+These pools define the contract. Implementations MUST use the exact characters. When combining multiple types, the pool is formed by concatenating the constituent character sets (duplicates MAY appear in the internal pool but the generator MUST remain uniform).
 
 Line breaks MUST use `\r\n`. Each line MUST respect the requested length or, when `ALL` is used, contain the entire pool exactly once.
 
@@ -209,13 +217,10 @@ Unexpected server faults SHOULD return `500 Internal Server Error` with a body o
 ## Versioning & Compatibility
 
 - Any change to the token grammar, canonical character pool, or response structure constitutes a breaking change and MUST increment the contract version.
-- Implementations MUST expose Swagger/OpenAPI documents compatible with this contract at:
-  - `/swagger/v1/swagger.json`
-  - `/swagger/v1/swagger.yaml`
-  - `/swagger/v1/json` (interactive UI)
+- Implementations MUST expose Swagger/OpenAPI documents compatible with this contract at the endpoints listed above.
 - Automated tests and third-party integrations SHOULD rely exclusively on this document for endpoint behaviour and error semantics.
 
 ---
 
-Maintain this file as the single source of truth. All codebases, tests, and documentation MUST treat deviations as defects unless otherwise ratified by contract version changes.
+Maintain this file as the single source of truth. As of revision v8 the DEMOAPP001, DEMOAPP002, and DEMOAPP003 services conform to the requirements above; deviations MUST be treated as defects unless ratified by a future contract version change.
 

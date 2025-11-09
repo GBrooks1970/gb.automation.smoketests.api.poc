@@ -103,3 +103,30 @@ Set the value in `.env`, CI variables, or the shell environment before running s
 - Cypress stack: `API Testing POC/typescript_cucumber_cypress.md`
 - C# stack: `API Testing POC/csharp_specflow_playwright.md`
 - Token contract: `API Testing POC/tokenparser_api_contract.md`
+
+---
+
+## Screenplay Mapping & Parity Plan
+
+### DEMOAPP003 (TypeScript + Playwright) Mapping
+- **Actors** – `screenplay/actors/Actor.ts` instantiated via `screenplay/support/custom-world.ts`. Each scenario’s world provides a dedicated actor.
+- **Abilities** – `CallAnApi` wraps Playwright’s `APIRequestContext`; `UseTokenParsers` exposes direct util access.
+- **Tasks** – `screenplay/tasks/SendGetRequest.ts` encapsulates GET calls; more tasks can be added for POST/PUT.
+- **Questions** – `screenplay/questions/ResponseStatus.ts` / `ResponseJson.ts` expose response assertions.
+- **Memory** – Actor’s `remember`/`answer` stores the latest API response.
+
+### Parity Plan
+
+| Layer | DEMOAPP003 (TS+PW) | DEMOAPP001 (TS+Cypress) | DEMOAPP002 (C#+SpecFlow) | Planned Actions |
+| --- | --- | --- | --- | --- |
+| Actor setup | Custom Cucumber world instantiates `Actor` + abilities | Screenplay helpers exist in `src/screenplay/**` but step defs still use raw helpers | No Screenplay abstraction | Create a Cypress “world” helper that instantiates an Actor per scenario and injects abilities; plan equivalent `ScreenplayContext` for SpecFlow. |
+| Abilities | `CallAnApi`, `UseTokenParsers` | Steps call `cy.request` or import `CommonUtils` | `RequestHelper`/`HttpClient` used directly | Rework Cypress steps to call `actor.attemptsTo(...)`. In SpecFlow, wrap HttpClient + parsers as abilities so steps stay declarative. |
+| Tasks | `SendGetRequest` | None (imperative requests) | `RequestHelper.GetAsync...` methods | Port `SendGetRequest` to Cypress (using `cy.task` or `cy.request` internally). Introduce C# task classes (e.g., `SendGetRequestTask`) consumed by steps. |
+| Questions | `ResponseStatus`, `ResponseJson` | Assertions inspect local variables | Steps parse JSON via `JsonDocument` | Expose question helpers for Cypress and SpecFlow so assertions use the same semantics (status/question). |
+| Notes/Memory | Actor stores responses by key | Globals/module scope store last response | `_response` fields per step class | Adopt a shared “Memory” helper for Cypress and create a SpecFlow `ScenarioContext` extension to mimic Actor memory. |
+
+### Milestones
+1. **Cypress** – Introduce a wrapper around `cy.session`/`cy.log` that instantiates Actors; update API step definitions to use Screenplay tasks & questions.
+2. **SpecFlow** – Add `ScreenplayContext` service registered via `ScenarioDependencies`. Gradually migrate step classes to call tasks/questions instead of raw helpers.
+3. **Documentation** – Mirror this section (mapping + parity table) in `API Testing POC/typescript_cucumber_cypress.md` and `API Testing POC/csharp_specflow_playwright.md` with implementation progress indicators.
+4. **CI Enforcement** – Add lint/check scripts that scan step definitions for direct `cy.request`/`RequestHelper` usage and warn when Screenplay abstractions are bypassed.
