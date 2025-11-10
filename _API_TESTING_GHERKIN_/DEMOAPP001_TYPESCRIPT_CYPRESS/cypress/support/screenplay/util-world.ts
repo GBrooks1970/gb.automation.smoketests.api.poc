@@ -1,11 +1,11 @@
 import { Before, After } from "@badeball/cypress-cucumber-preprocessor";
 import { Actor } from "../../../src/screenplay/actors/Actor";
-import { UseTokenParsersUtils } from "../../../src/screenplay/abilities/UseTokenParsersUtils";
+import { UseTokenParsers } from "../../../src/screenplay/abilities/UseTokenParsers";
 
 let currentActor: Actor | null = null;
 
 Before({ tags: "@UTILTEST" }, () => {
-  currentActor = Actor.named("Cypress Util Actor").whoCan(new UseTokenParsersUtils());
+  currentActor = Actor.named("Cypress Util Actor").whoCan(new UseTokenParsers());
 });
 
 After({ tags: "@UTILTEST" }, () => {

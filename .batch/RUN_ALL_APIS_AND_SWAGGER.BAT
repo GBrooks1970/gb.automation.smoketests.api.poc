@@ -91,7 +91,7 @@ if not defined %PREFIX%_PID (
 
 call set "CURRENT_PID=%%%PREFIX%_PID%%%"
 echo %LABEL% API started on port %PORT% (PID=%CURRENT_PID%).
-start "" "http://localhost:%PORT%/swagger"
+start "" "http://localhost:%PORT%/swagger/"
 exit /b 0
 
 :stop_process

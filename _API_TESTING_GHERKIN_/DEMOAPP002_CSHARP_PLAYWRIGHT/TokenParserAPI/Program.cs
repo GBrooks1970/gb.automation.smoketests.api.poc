@@ -46,7 +46,8 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Token Parser API v1");
     c.RoutePrefix = "swagger";
 });
-
+app.MapGet("/swagger/", () => Results.Redirect("/swagger/index.html", permanent: false))
+   .ExcludeFromDescription();
 app.MapGet("/swagger/v1/json", () => Results.Redirect("/swagger/index.html", permanent: false))
    .ExcludeFromDescription();
 app.MapGet("/swagger/v1/swagger.yaml", (ISwaggerProvider swaggerProvider) =>

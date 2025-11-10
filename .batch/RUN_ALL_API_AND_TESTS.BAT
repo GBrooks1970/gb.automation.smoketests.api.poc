@@ -1,8 +1,9 @@
 @echo off
-setlocal
+setlocal EnableDelayedExpansion
 
 pushd "%~dp0"
 set "BATCH_DIR=%CD%"
+set "SCRIPT_DIR=%CD%"
 set "PUSHED_ROOT=0"
 
 if not exist "%BATCH_DIR%\RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT" (
@@ -22,6 +23,9 @@ if not exist "%BATCH_DIR%\RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT
 
 pushd ".."
 set "ROOT_DIR=%CD%"
+set "APP1_DIR=%ROOT_DIR%\_API_TESTING_GHERKIN_\DEMOAPP001_TYPESCRIPT_CYPRESS"
+set "APP3_DIR=%ROOT_DIR%\_API_TESTING_GHERKIN_\DEMOAPP003_TYPESCRIPT_PLAYWRIGHT"
+set "APP2_DIR=%ROOT_DIR%\_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT\TokenParserAPI"
 set "RESULT_DIR=%ROOT_DIR%\.results"
 set "PUSHED_ROOT=1"
 
@@ -37,8 +41,17 @@ set "OVERALL_EXIT=0"
 
 echo === Running TypeScript API and Cypress tests ===
 call :latest_result "%RESULT_DIR%" "demoapp001_typescript_cypress_*.txt" TS_BEFORE
+call "%SCRIPT_DIR%\env_utils.bat" load_env_vars "%APP1_DIR%" 3000 "http://localhost:3000" APP1_PORT APP1_BASE >nul
+call "%SCRIPT_DIR%\env_utils.bat" is_port_in_use !APP1_PORT! APP1_PORT_BUSY >nul
+if "!APP1_PORT_BUSY!"=="1" (
+    set "SKIP_API_START=1"
+    echo Port !APP1_PORT! already in use. Skipping DEMOAPP001 API start.
+) else (
+    set "SKIP_API_START="
+)
 call "%TS_SCRIPT%"
 set "TS_EXIT=%ERRORLEVEL%"
+set "SKIP_API_START="
 call :latest_result "%RESULT_DIR%" "demoapp001_typescript_cypress_*.txt" TS_AFTER
 call :report_result "Cypress" "%RESULT_DIR%" "%TS_BEFORE%" "%TS_AFTER%" "%TS_EXIT%"
 if not "%TS_EXIT%"=="0" set "OVERALL_EXIT=1"
@@ -46,8 +59,17 @@ if not "%TS_EXIT%"=="0" set "OVERALL_EXIT=1"
 echo.
 echo === Running TypeScript API and Playwright BDD tests ===
 call :latest_result "%RESULT_DIR%" "demoapp003_typescript_playwright_*.txt" PW_BEFORE
+call "%SCRIPT_DIR%\env_utils.bat" load_env_vars "%APP3_DIR%" 3001 "http://localhost:3001" APP3_PORT APP3_BASE >nul
+call "%SCRIPT_DIR%\env_utils.bat" is_port_in_use !APP3_PORT! APP3_PORT_BUSY >nul
+if "!APP3_PORT_BUSY!"=="1" (
+    set "SKIP_API_START=1"
+    echo Port !APP3_PORT! already in use. Skipping DEMOAPP003 API start.
+) else (
+    set "SKIP_API_START="
+)
 call "%PW_SCRIPT%"
 set "PW_EXIT=%ERRORLEVEL%"
+set "SKIP_API_START="
 call :latest_result "%RESULT_DIR%" "demoapp003_typescript_playwright_*.txt" PW_AFTER
 call :report_result "Playwright TS" "%RESULT_DIR%" "%PW_BEFORE%" "%PW_AFTER%" "%PW_EXIT%"
 if not "%PW_EXIT%"=="0" set "OVERALL_EXIT=1"
@@ -55,8 +77,17 @@ if not "%PW_EXIT%"=="0" set "OVERALL_EXIT=1"
 echo.
 echo === Running .NET API and Playwright tests ===
 call :latest_result "%RESULT_DIR%" "demoapp002_csharp_playwright_*.txt" CS_BEFORE
+set "APP2_PORT=5228"
+call "%SCRIPT_DIR%\env_utils.bat" is_port_in_use !APP2_PORT! APP2_PORT_BUSY >nul
+if "!APP2_PORT_BUSY!"=="1" (
+    set "SKIP_API_START=1"
+    echo Port !APP2_PORT! already in use. Skipping DEMOAPP002 API start.
+) else (
+    set "SKIP_API_START="
+)
 call "%CS_SCRIPT%"
 set "CS_EXIT=%ERRORLEVEL%"
+set "SKIP_API_START="
 call :latest_result "%RESULT_DIR%" "demoapp002_csharp_playwright_*.txt" CS_AFTER
 call :report_result ".NET Playwright" "%RESULT_DIR%" "%CS_BEFORE%" "%CS_AFTER%" "%CS_EXIT%"
 if not "%CS_EXIT%"=="0" set "OVERALL_EXIT=1"

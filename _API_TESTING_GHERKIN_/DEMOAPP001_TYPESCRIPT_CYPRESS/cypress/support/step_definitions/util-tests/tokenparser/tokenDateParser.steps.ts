@@ -2,14 +2,14 @@ import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import { expect } from "chai";
 import CommonUtils from "../../../../../src/services/common-utils";
 import { utilActor } from "../../../screenplay/util-world";
-import { UseTokenParsersUtils } from "../../../../../src/screenplay/abilities/UseTokenParsersUtils";
+import { UseTokenParsers } from "../../../../../src/screenplay/abilities/UseTokenParsers";
 import { UtilActorMemory } from "../../step_utils/UtilActorMemory";
 
 let token = "";
 let dateStringToken = "";
 let dateRangeTokenString = "";
 
-const parser = () => utilActor().abilityTo(UseTokenParsersUtils);
+const parser = () => utilActor().abilityTo(UseTokenParsers);
 
 function getStartDateUTC(): Date {
   const now = new Date();

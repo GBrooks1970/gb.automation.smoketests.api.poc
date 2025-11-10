@@ -14,9 +14,24 @@ if not exist ".results" mkdir ".results"
 
 for /f %%I in ('powershell -NoProfile -Command "(Get-Date).ToUniversalTime().ToString(\"yyyyMMddTHHmmZ\")"') do set "UTC_TIMESTAMP=%%I"
 set "RESULT_FILE=%ROOT_DIR%\.results\demoapp002_csharp_playwright_%UTC_TIMESTAMP%.txt"
+set "UTIL_RESULT_FILE=%ROOT_DIR%\.results\demoapp002_csharp_playwright_util_%UTC_TIMESTAMP%.txt"
+
+echo Running SpecFlow util tests (no API host)...
+pushd "%TEST_DIR%"
+call dotnet test --no-build --filter "TestCategory=utiltests" > "%UTIL_RESULT_FILE%" 2>&1
+set "UTIL_EXIT=%ERRORLEVEL%"
+popd
+
+if not "%UTIL_EXIT%"=="0" (
+    echo DEMOAPP002 util tests failed. See "%UTIL_RESULT_FILE%"
+    set "TEST_EXIT=%UTIL_EXIT%"
+    goto cleanup
+)
 
 call "%SCRIPT_DIR%env_utils.bat" is_port_in_use %SERVER_PORT% PORT_IN_USE
-if "%PORT_IN_USE%"=="1" (
+if "%SKIP_API_START%"=="1" (
+    echo SKIP_API_START set. Skipping DEMOAPP002 API startup.
+) else if "%PORT_IN_USE%"=="1" (
     echo Port %SERVER_PORT% already in use. Assuming DEMOAPP002 API is running.
 ) else (
     for /f %%I in ('powershell -NoProfile -Command "$p = Start-Process -FilePath 'dotnet' -ArgumentList 'run','--no-build','--project','%API_DIR%','--urls','http://localhost:%SERVER_PORT%' -WorkingDirectory '%API_DIR%' -PassThru; $p.Id"') do set "API_PID=%%I"
@@ -59,8 +74,8 @@ if exist "%TEST_DIR%\..\playwright.ps1" (
 )
 
 pushd "%TEST_DIR%"
-echo Running SpecFlow Playwright tests...
-call dotnet test --no-build > "%RESULT_FILE%" 2>&1
+echo Running SpecFlow Playwright API tests...
+call dotnet test --no-build --filter "TestCategory!=utiltests" > "%RESULT_FILE%" 2>&1
 set "TEST_EXIT=%ERRORLEVEL%"
 popd
 
@@ -70,20 +85,24 @@ goto cleanup
 set "TEST_EXIT=1"
 
 :cleanup
-if defined API_PID (
-    powershell -NoProfile -Command "try { Stop-Process -Id %API_PID% -Force -ErrorAction SilentlyContinue } catch {}" >nul 2>&1
+if "%SKIP_API_START%"=="1" (
+    set "API_PID="
+) else (
+    if defined API_PID (
+        powershell -NoProfile -Command "try { Stop-Process -Id %API_PID% -Force -ErrorAction SilentlyContinue } catch {}" >nul 2>&1
+    )
 )
 
 if defined TEST_EXIT (
     if "%TEST_EXIT%"=="0" (
-echo DEMOAPP002 C# + Playwright tests completed successfully. Results saved to "%RESULT_FILE%"
+echo DEMOAPP002 C# + Playwright tests completed successfully. API results: "%RESULT_FILE%" / Util results: "%UTIL_RESULT_FILE%"
         set "EXIT_CODE=0"
     ) else (
-echo DEMOAPP002 C# + Playwright tests failed. See "%RESULT_FILE%"
+echo DEMOAPP002 C# + Playwright API tests failed. See "%RESULT_FILE%". Util results: "%UTIL_RESULT_FILE%"
         set "EXIT_CODE=%TEST_EXIT%"
     )
 ) else (
-    echo Test execution did not run. See "%RESULT_FILE%" for details.
+    echo Test execution did not run. See "%RESULT_FILE%" for details. Util results: "%UTIL_RESULT_FILE%"
     set "EXIT_CODE=1"
 )
 

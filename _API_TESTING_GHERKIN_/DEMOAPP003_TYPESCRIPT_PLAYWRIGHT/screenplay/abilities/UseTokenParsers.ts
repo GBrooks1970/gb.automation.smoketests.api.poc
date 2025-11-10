@@ -19,12 +19,12 @@ export class UseTokenParsers implements Ability {
     return TokenDateParser.parseDateStringToken_DateRange(token);
   }
 
-  parseTokenizedString(token: string): string {
+  parseDynamicString(token: string): string {
     return TokenDynamicStringParser.parseAndGenerate(token);
   }
 
   parseTokenizedStringLines(token: string): string[] {
-    const generated = this.parseTokenizedString(token);
+    const generated = this.parseDynamicString(token);
     return generated.split(/\r?\n/).filter((line) => line.length > 0);
   }
 }

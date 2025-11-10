@@ -5,10 +5,10 @@
   "scripts": {
     "start": "tsx src/server.ts",
     "dev": "tsx watch src/server.ts",
-    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "ts:check": "tsc --project tsconfig.json --noEmit",
     "test:bdd": "node tooling/run-cucumber-with-summary.cjs",
     "test": "npm run test:bdd",
-    "verify": "npm run typecheck && npm run test:bdd",
+    "verify": "npm run ts:check && npm run test:bdd",
     "pw:test": "playwright test --config tooling/playwright.config.ts",
     "pw:install": "playwright install --with-deps"
   },

@@ -1,259 +1,192 @@
 import { Given, When, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
-import { TokenDateParser, DateRange } from "../../../../src/tokenparser/TokenDateParser";
 import CommonUtils from "../../../../src/services/common-utils";
+import { UseTokenParsers } from "../../../../screenplay/abilities/UseTokenParsers";
+import {
+  LAST_PARSED_DATE,
+  LAST_PARSE_ERROR,
+  SECONDARY_PARSED_DATE,
+  LAST_PARSED_RANGE,
+} from "../../../../screenplay/support/memory-keys";
+import type { CustomWorld } from "../../../../screenplay/support/custom-world";
+import { DateRange } from "../../../../src/tokenparser/TokenDateParser";
+import { UtilActorMemory } from "features/step_definitions/step_utils/UtilActorMemory";
 
-let token: string;
-let result: Date;
-let parseError: any;
+let token = "";
+let dateStringToken = "";
+let dateRangeTokenString = "";
 
-let dateStringToken: string;
-let parsedResult2: Date;
+const parser = (world: CustomWorld) => world.actor.abilityTo(UseTokenParsers);
 
-function getStartDateUTC(): Date {
+const getStartDateUTC = (): Date => {
+  const now = new Date();
+  const startDateUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));
+  console.log(`TEST: StartDateUTC: ${CommonUtils.toJSONString(startDateUTC)}`);
+  return startDateUTC;
+};
 
-    let now = new Date();
-    let startDateUTC = new Date(
-        Date.UTC(now.getUTCFullYear(),
-            now.getUTCMonth(), now.getUTCDate(),
-            0, 0, 0, 0));
+const compareWithExpected = (world: CustomWorld, adjuster: (expected: Date) => void) => {
+  const result = UtilActorMemory.getRememberedDate(world, LAST_PARSED_DATE);
+  const expectedDate = getStartDateUTC();
+  adjuster(expectedDate);
+  console.log(
+    `TOKEN ${token} : PARSED ${CommonUtils.toJSONString(result)} : EXPECTED ${CommonUtils.toJSONString(expectedDate)}`
+  );
+  expect(result.toUTCString()).toBe(expectedDate.toUTCString());
+};
 
-    console.log(`TEST: StartDateUTC: ${CommonUtils.toJSONString(startDateUTC)}`);
-    return startDateUTC;
-}
-
-Given('A date token {string}', (inputToken: string) => {
-    token = inputToken;
+Given<CustomWorld>("A date token {string}", function (this, inputToken: string) {
+  token = inputToken;
 });
 
-Given('An invalid date range string {string}', (inputToken: string) => {
-    token = inputToken;
+Given<CustomWorld>("An invalid date range string {string}", function (this, inputToken: string) {
+  token = inputToken;
+  dateRangeTokenString = inputToken;
 });
 
-
-/* DateToken format - 
-Full : '[STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]';
-*/
-When('I parse the token', function () {
-    parseError = null;
-    result = new Date(0);
-    try {
-        result = TokenDateParser.parseDateStringToken_Full(token);
-        //console.log(`TOKEN ${token} : PARSED TOKEN DATE ${CommonUtils.toJSONString(result)}`);
-    } catch (error) {
-        console.log(`TEST: ERROR PARSING TOKEN DATE ${token}`);
-        console.log(`TEST: PARSE-ERROR : ${error}`);
-        parseError = error;
-    };
+When<CustomWorld>("I parse the token", function (this) {
+  UtilActorMemory.rememberDate(this, LAST_PARSED_DATE, new Date(0));
+  UtilActorMemory.clearError(this);
+  try {
+    const parsed = parser(this).parseDateToken(token);
+    UtilActorMemory.rememberDate(this, LAST_PARSED_DATE, parsed);
+  } catch (error) {
+    UtilActorMemory.rememberError(this, error);
+  }
 });
 
-Then('an error should be thrown with message {string}', (expectedMessage: string) => {
-    expect(parseError).not.toBeNull();
-    expect(parseError?.message ?? "").toContain(expectedMessage);
+Then<CustomWorld>("an error should be thrown with message {string}", function (this, expectedMessage: string) {
+  const error = UtilActorMemory.getParseError(this);
+  expect(error, "Expected parsing to throw").toBeTruthy();
+  expect(error?.message ?? "").toContain(expectedMessage);
 });
 
-Then('the result should be today\'s date minus two year and four month', function () {
-    let expectedDate = getStartDateUTC();
-
-    expectedDate.setUTCFullYear(expectedDate.getUTCFullYear() - 2);
-    expectedDate.setUTCMonth(expectedDate.getUTCMonth() - 4);
-    console.log(`TOKEN ${token} : 
-        PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
-        EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).toBe(expectedDate.toUTCString());
+Then<CustomWorld>("the result should be today's date minus two year and four month", function (this) {
+  compareWithExpected(this, (expected) => {
+    expected.setUTCFullYear(expected.getUTCFullYear() - 2);
+    expected.setUTCMonth(expected.getUTCMonth() - 4);
+  });
 });
 
-Then('the result should be today\'s date minus one year and one month', function () {
-    let expectedDate = getStartDateUTC();
-
-    expectedDate.setUTCFullYear(expectedDate.getUTCFullYear() - 1);
-    expectedDate.setUTCMonth(expectedDate.getUTCMonth() - 1);
-    console.log(`TOKEN ${token} : 
-        PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
-        EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).toBe(expectedDate.toUTCString());
+Then<CustomWorld>("the result should be today's date minus one year and one month", function (this) {
+  compareWithExpected(this, (expected) => {
+    expected.setUTCFullYear(expected.getUTCFullYear() - 1);
+    expected.setUTCMonth(expected.getUTCMonth() - 1);
+  });
 });
 
-Then('the result should be today\'s date', () => {
-    let expectedDate = getStartDateUTC();
-
-    console.log(`TOKEN ${token} : 
-        PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
-        EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).toBe(expectedDate.toUTCString());
+Then<CustomWorld>("the result should be today's date", function (this) {
+  compareWithExpected(this, () => undefined);
 });
 
-
-Then('the result should be tomorrow\'s date', () => {
-    let expectedDate = getStartDateUTC();
-
-    expectedDate.setUTCDate(expectedDate.getUTCDate() + 1);
-
-    console.log(`TOKEN ${token} : 
-        PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
-        EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).toBe(expectedDate.toUTCString());
+Then<CustomWorld>("the result should be tomorrow's date", function (this) {
+  compareWithExpected(this, (expected) => expected.setUTCDate(expected.getUTCDate() + 1));
 });
 
-Then('the result should be yesterday\'s date', () => {
-    let expectedDate = getStartDateUTC();
-
-    expectedDate.setUTCDate(expectedDate.getUTCDate() - 1);
-
-    console.log(`TOKEN ${token} : 
-        PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
-        EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).toBe(expectedDate.toUTCString());
+Then<CustomWorld>("the result should be yesterday's date", function (this) {
+  compareWithExpected(this, (expected) => expected.setUTCDate(expected.getUTCDate() - 1));
 });
 
-Then('the result should be today\'s date minus two years', () => {
-    let expectedDate = getStartDateUTC();
-
-    expectedDate.setUTCFullYear(expectedDate.getUTCFullYear() - 2);
-
-    console.log(`TOKEN ${token} : 
-        PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
-        EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).toBe(expectedDate.toUTCString());
+Then<CustomWorld>("the result should be today's date minus two years", function (this) {
+  compareWithExpected(this, (expected) => expected.setUTCFullYear(expected.getUTCFullYear() - 2));
 });
 
-Then('the result should be today\'s date minus one year, two months, and three days', () => {
-    let expectedDate = getStartDateUTC();
-
-    expectedDate.setUTCFullYear(expectedDate.getUTCFullYear() - 1);
-    expectedDate.setUTCMonth(expectedDate.getUTCMonth() - 2);
-    expectedDate.setUTCDate(expectedDate.getUTCDate() - 3);
-
-    console.log(`TOKEN ${token} : 
-        PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
-        EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).toBe(expectedDate.toUTCString());
+Then<CustomWorld>("the result should be today's date minus one year, two months, and three days", function (this) {
+  compareWithExpected(this, (expected) => {
+    expected.setUTCFullYear(expected.getUTCFullYear() - 1);
+    expected.setUTCMonth(expected.getUTCMonth() - 2);
+    expected.setUTCDate(expected.getUTCDate() - 3);
+  });
 });
 
-Then('the result should be today\'s date plus one year, minus one month, and plus one day', () => {
-    let expectedDate = getStartDateUTC();
-
-    expectedDate.setUTCFullYear(expectedDate.getUTCFullYear() + 1);
-    expectedDate.setUTCMonth(expectedDate.getUTCMonth() - 1);
-    expectedDate.setUTCDate(expectedDate.getUTCDate() + 1);
-
-    console.log(`TOKEN ${token} : 
-        PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
-        EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).toBe(expectedDate.toUTCString());
+Then<CustomWorld>("the result should be today's date plus one year, minus one month, and plus one day", function (this) {
+  compareWithExpected(this, (expected) => {
+    expected.setUTCFullYear(expected.getUTCFullYear() + 1);
+    expected.setUTCMonth(expected.getUTCMonth() - 1);
+    expected.setUTCDate(expected.getUTCDate() + 1);
+  });
 });
 
-Then('the result should be today\'s date plus two years', () => {
-    let expectedDate = getStartDateUTC();
-
-    expectedDate.setUTCFullYear(expectedDate.getUTCFullYear() + 2);
-
-    console.log(`TOKEN ${token} : 
-        PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
-        EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).toBe(expectedDate.toUTCString());
+Then<CustomWorld>("the result should be today's date plus two years", function (this) {
+  compareWithExpected(this, (expected) => expected.setUTCFullYear(expected.getUTCFullYear() + 2));
 });
 
-Then('the result should be today\'s date plus five months', () => {
-    let expectedDate = getStartDateUTC();
-
-    expectedDate.setUTCMonth(expectedDate.getUTCMonth() + 5);
-
-    console.log(`TOKEN ${token} : 
-        PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
-        EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).toBe(expectedDate.toUTCString());
+Then<CustomWorld>("the result should be today's date plus five months", function (this) {
+  compareWithExpected(this, (expected) => expected.setUTCMonth(expected.getUTCMonth() + 5));
 });
 
-Then('the result should be tomorrow\'s date plus five months', () => {
-    let expectedDate = getStartDateUTC();
-
-    expectedDate.setUTCDate(expectedDate.getUTCDate() + 1);
-    expectedDate.setUTCMonth(expectedDate.getUTCMonth() + 5);
-
-    console.log(`TOKEN ${token} : 
-        PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
-        EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).toBe(expectedDate.toUTCString());
+Then<CustomWorld>("the result should be tomorrow's date plus five months", function (this) {
+  compareWithExpected(this, (expected) => {
+    expected.setUTCDate(expected.getUTCDate() + 1);
+    expected.setUTCMonth(expected.getUTCMonth() + 5);
+  });
 });
 
-Then('the result should be yesterday\'s date plus five months and minus one year', () => {
-    let expectedDate = getStartDateUTC();
-
-    expectedDate.setUTCDate(expectedDate.getUTCDate() - 1);
-    expectedDate.setUTCMonth(expectedDate.getUTCMonth() + 5);
-    expectedDate.setUTCFullYear(expectedDate.getUTCFullYear() - 1);
-
-    console.log(`TOKEN ${token} : 
-        PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
-        EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).toBe(expectedDate.toUTCString());
+Then<CustomWorld>("the result should be yesterday's date plus five months and minus one year", function (this) {
+  compareWithExpected(this, (expected) => {
+    expected.setUTCDate(expected.getUTCDate() - 1);
+    expected.setUTCMonth(expected.getUTCMonth() + 5);
+    expected.setUTCFullYear(expected.getUTCFullYear() - 1);
+  });
 });
 
-Given('A null or invalid date token', () => {
-    // Assuming 'INVALID' represents any invalid token
-    // This can be replaced or extended with actual examples of invalid tokens if needed
-    token = 'INVALID'; // or set to null
+Given<CustomWorld>("A null or invalid date token", function () {
+  token = "INVALID";
 });
 
-Then('the result should be the Unix zero date', () => {
-    const expectedDate = new Date(0); // Unix zero date: January 1, 1970, 00:00:00 UTC  
-    expectedDate.setHours(0, 0, 0, 0); // Zero out all time - set to midnight
-
-
-    console.log(`TOKEN ${token} : 
-        PARSED TOKEN DATE ${CommonUtils.toJSONString(result)} : 
-        EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(result.toUTCString()).toBe(expectedDate.toUTCString());
+Then<CustomWorld>("the result should be the Unix zero date", function (this) {
+  const result = UtilActorMemory.getRememberedDate(this, LAST_PARSED_DATE);
+  const expectedDate = new Date(0);
+  expectedDate.setUTCHours(0, 0, 0, 0);
+  expect(result.toUTCString()).toBe(expectedDate.toUTCString());
 });
 
-
-Given('A date string {string}', (token: string) => {
-    dateStringToken = token;
+Given<CustomWorld>("A date string {string}", function (this, input: string) {
+  dateStringToken = input;
 });
 
-/* DateToken format - 
-Full : '[STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]';
-*/
-When('I parse the date string token', () => {
-    parsedResult2 = TokenDateParser.parseDateStringToken_MonthStartEnd(dateStringToken);
+When<CustomWorld>("I parse the date string token", function (this) {
+  UtilActorMemory.clearError(this);
+  try {
+    const parsed = parser(this).parseDateStringToken(dateStringToken);
+    UtilActorMemory.rememberDate(this, SECONDARY_PARSED_DATE, parsed);
+  } catch (error) {
+    UtilActorMemory.rememberError(this, error);
+  }
 });
 
-Then('the result should be {string}', (expectedDateStr: string) => {
-    const [startYear, startMonth, startDay] = expectedDateStr.split('-').map(Number);
-    const expectedDate = new Date(Date.UTC(startYear, startMonth - 1, startDay, 0, 0, 0, 0));
-
-    console.log(`TOKEN ${dateStringToken} : 
-        PARSED TOKEN DATE ${CommonUtils.toJSONString(parsedResult2)} : 
-        EXPECTED ${CommonUtils.toJSONString(expectedDate)}`);
-    expect(parsedResult2.toUTCString()).toBe(expectedDate.toUTCString());
+Then<CustomWorld>("the result should be {string}", function (this, expectedDateStr: string) {
+  const parsedDate = UtilActorMemory.getRememberedDate(this, SECONDARY_PARSED_DATE);
+  const [year, month, day] = expectedDateStr.split("-").map(Number);
+  const expectedDate = new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0));
+  expect(parsedDate.toUTCString()).toBe(expectedDate.toUTCString());
 });
 
-let dateRangeTokenString: string;
-let resultRange: DateRange;
-
-Given('A date range string {string}', (input: string) => {
-    dateRangeTokenString = input;
+Given<CustomWorld>("A date range string {string}", function (this, input: string) {
+  dateRangeTokenString = input;
 });
 
-/* DateToken format - 
-DateRange : '[MONTHENDSTART][MONTH][YEAR]<->[MONTHENDSTART][MONTH][YEAR]';
-*/
-When('I parse the date range string', () => {
-    resultRange = TokenDateParser.parseDateStringToken_DateRange(dateRangeTokenString);
+When<CustomWorld>("I parse the date range string", function (this) {
+  UtilActorMemory.clearError(this);
+  try {
+    const range = parser(this).parseDateRangeToken(dateRangeTokenString);
+    UtilActorMemory.rememberRange(this, range);
+  } catch (error) {
+    UtilActorMemory.rememberError(this, error);
+  }
 });
 
-Then('the start date should be {string} and the end date should be {string}', (StartDate: string, EndDate: string) => {
-    const [startYear, startMonth, startDay] = StartDate.split('-').map(Number);
-    const [endYear, endMonth, endDay] = EndDate.split('-').map(Number);
-    const expectedStartDate = new Date(Date.UTC(startYear, startMonth - 1, startDay, 0, 0, 0, 0));
-    const expectedEndDate = new Date(Date.UTC(endYear, endMonth - 1, endDay, 0, 0, 0, 0));  
+Then<CustomWorld>("the start date should be {string} and the end date should be {string}", function (
+  this,
+  startDate: string,
+  endDate: string
+) {
+  const range = UtilActorMemory.getRange(this);
+  const [startYear, startMonth, startDay] = startDate.split("-").map(Number);
+  const [endYear, endMonth, endDay] = endDate.split("-").map(Number);
+  const expectedStart = new Date(Date.UTC(startYear, startMonth - 1, startDay, 0, 0, 0, 0));
+  const expectedEnd = new Date(Date.UTC(endYear, endMonth - 1, endDay, 0, 0, 0, 0));
 
-
-    console.log(`TOKEN DATE RANGE ${dateRangeTokenString}: ${CommonUtils.toJSONString(resultRange)} : 
-    EXPECTED START ${CommonUtils.toJSONString(expectedStartDate)} : 
-    EXPECTED END ${CommonUtils.toJSONString(expectedEndDate)}`);
-
-    expect(resultRange.Start.toUTCString()).toBe(expectedStartDate.toUTCString());
-    expect(resultRange.End.toUTCString()).toBe(expectedEndDate.toUTCString());
+  expect(range.Start.toUTCString()).toBe(expectedStart.toUTCString());
+  expect(range.End.toUTCString()).toBe(expectedEnd.toUTCString());
 });

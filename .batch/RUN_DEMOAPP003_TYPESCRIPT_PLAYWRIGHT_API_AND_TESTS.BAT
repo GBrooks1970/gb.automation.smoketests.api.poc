@@ -16,7 +16,9 @@ for /f %%I in ('powershell -NoProfile -Command "(Get-Date).ToUniversalTime().ToS
 set "RESULT_FILE=%ROOT_DIR%\.results\demoapp003_typescript_playwright_%UTC_TIMESTAMP%.txt"
 
 call "%SCRIPT_DIR%env_utils.bat" is_port_in_use %SERVER_PORT% PORT_IN_USE
-if "%PORT_IN_USE%"=="1" (
+if "%SKIP_API_START%"=="1" (
+    echo SKIP_API_START set. Skipping DEMOAPP003 API start.
+) else if "%PORT_IN_USE%"=="1" (
     echo Port %SERVER_PORT% already in use. Assuming DEMOAPP003 API is running.
 ) else (
     for /f %%I in ('powershell -NoProfile -Command "$p = Start-Process -FilePath 'npm' -ArgumentList 'run','start' -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"') do set "API_PID=%%I"
@@ -54,8 +56,12 @@ goto cleanup
 set "TEST_EXIT=1"
 
 :cleanup
-if defined API_PID (
-    powershell -NoProfile -Command "try { Stop-Process -Id %API_PID% -Force -ErrorAction SilentlyContinue } catch {}" >nul 2>&1
+if "%SKIP_API_START%"=="1" (
+    set "API_PID="
+) else (
+    if defined API_PID (
+        powershell -NoProfile -Command "try { Stop-Process -Id %API_PID% -Force -ErrorAction SilentlyContinue } catch {}" >nul 2>&1
+    )
 )
 
 if defined TEST_EXIT (

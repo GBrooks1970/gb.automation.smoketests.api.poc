@@ -5,10 +5,12 @@
   "main": "server.ts",
   "scripts": {
     "start": "tsx src/server.ts",
-    "test": "cypress open",
-    "test:bdd": "cypress run",
+    "dev": "tsx watch src/server.ts",
     "ts:check": "tsc --noEmit",
+    "test:bdd": "cypress run",
+    "test": "npm run test:bdd",
     "verify": "npm run ts:check && npm run test:bdd",
+    "cy:test": "cypress open",
     "postinstall": "npx cypress verify"
   },
   "keywords": [],
