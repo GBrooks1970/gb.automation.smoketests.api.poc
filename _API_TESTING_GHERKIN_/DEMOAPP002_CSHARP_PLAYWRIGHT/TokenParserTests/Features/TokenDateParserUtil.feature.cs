@@ -78,14 +78,29 @@ namespace TokenParserTests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Parsing today - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPA" +
-            "RT]")]
-        public void ParsingToday_STARTDATEVe_VeDATEPARTVe_VeDATEPARTVe_VeDATEPART()
+        [NUnit.Framework.DescriptionAttribute("Parsing relative date tokens - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][" +
+            "+ve/-ve][DATEPART]")]
+        [NUnit.Framework.TestCaseAttribute("[TODAY]", "0", "0", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("[TOMORROW]", "0", "0", "1", null)]
+        [NUnit.Framework.TestCaseAttribute("[YESTERDAY]", "0", "0", "-1", null)]
+        [NUnit.Framework.TestCaseAttribute("[TODAY-2YEAR-4MONTH]", "-2", "-4", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("[TODAY-1YEAR-1MONTH]", "-1", "-1", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("[TODAY-1YEAR-2MONTH-3DAY]", "-1", "-2", "-3", null)]
+        [NUnit.Framework.TestCaseAttribute("[TODAY+1YEAR-1MONTH+1DAY]", "1", "-1", "1", null)]
+        [NUnit.Framework.TestCaseAttribute("[TODAY+2YEAR]", "2", "0", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("[TODAY+5MONTH]", "0", "5", "0", null)]
+        [NUnit.Framework.TestCaseAttribute("[TOMORROW+5MONTH]", "0", "5", "1", null)]
+        [NUnit.Framework.TestCaseAttribute("[YESTERDAY+5MONTH-1YEAR]", "-1", "5", "-1", null)]
+        public void ParsingRelativeDateTokens_STARTDATEVe_VeDATEPARTVe_VeDATEPARTVe_VeDATEPART(string token, string years, string months, string days, string[] exampleTags)
         {
-            string[] tagsOfScenario = ((string[])(null));
+            string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Parsing today - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPA" +
-                    "RT]", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            argumentsOfScenario.Add("token", token);
+            argumentsOfScenario.Add("years", years);
+            argumentsOfScenario.Add("months", months);
+            argumentsOfScenario.Add("days", days);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Parsing relative date tokens - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][" +
+                    "+ve/-ve][DATEPART]", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 8
     this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -97,334 +112,13 @@ namespace TokenParserTests.Features
             {
                 this.ScenarioStart();
 #line 9
-        testRunner.Given("A date token \"[TODAY]\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+        testRunner.Given(string.Format("A date token \"{0}\"", token), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 10
         testRunner.When("I parse the token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 11
-        testRunner.Then("the result should be today\'s date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Parsing tomorrow - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DAT" +
-            "EPART]")]
-        public void ParsingTomorrow_STARTDATEVe_VeDATEPARTVe_VeDATEPARTVe_VeDATEPART()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Parsing tomorrow - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DAT" +
-                    "EPART]", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 13
-    this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-#line 14
-        testRunner.Given("A date token \"[TOMORROW]\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 15
-        testRunner.When("I parse the token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 16
-        testRunner.Then("the result should be tomorrow\'s date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Parsing yesterday - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DA" +
-            "TEPART]")]
-        public void ParsingYesterday_STARTDATEVe_VeDATEPARTVe_VeDATEPARTVe_VeDATEPART()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Parsing yesterday - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DA" +
-                    "TEPART]", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 18
-    this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-#line 19
-        testRunner.Given("A date token \"[YESTERDAY]\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 20
-        testRunner.When("I parse the token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 21
-        testRunner.Then("the result should be yesterday\'s date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Parsing today minus two year and four month - [STARTDATE][+ve/-ve][DATEPART][+ve/" +
-            "-ve][DATEPART][+ve/-ve][DATEPART]")]
-        public void ParsingTodayMinusTwoYearAndFourMonth_STARTDATEVe_VeDATEPARTVe_VeDATEPARTVe_VeDATEPART()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Parsing today minus two year and four month - [STARTDATE][+ve/-ve][DATEPART][+ve/" +
-                    "-ve][DATEPART][+ve/-ve][DATEPART]", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 23
-    this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-#line 24
-        testRunner.Given("A date token \"[TODAY-2YEAR-4MONTH]\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 25
-        testRunner.When("I parse the token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 26
-        testRunner.Then("the result should be today\'s date minus two year and four month", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Parsing today minus one year and one month - [STARTDATE][+ve/-ve][DATEPART][+ve/-" +
-            "ve][DATEPART][+ve/-ve][DATEPART]")]
-        public void ParsingTodayMinusOneYearAndOneMonth_STARTDATEVe_VeDATEPARTVe_VeDATEPARTVe_VeDATEPART()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Parsing today minus one year and one month - [STARTDATE][+ve/-ve][DATEPART][+ve/-" +
-                    "ve][DATEPART][+ve/-ve][DATEPART]", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 28
-    this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-#line 29
-        testRunner.Given("A date token \"[TODAY-1YEAR-1MONTH]\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 30
-        testRunner.When("I parse the token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 31
-        testRunner.Then("the result should be today\'s date minus one year and one month", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Parsing today minus one year, two months, and three days - [STARTDATE][+ve/-ve][D" +
-            "ATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]")]
-        public void ParsingTodayMinusOneYearTwoMonthsAndThreeDays_STARTDATEVe_VeDATEPARTVe_VeDATEPARTVe_VeDATEPART()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Parsing today minus one year, two months, and three days - [STARTDATE][+ve/-ve][D" +
-                    "ATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 33
-    this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-#line 34
-        testRunner.Given("A date token \"[TODAY-1YEAR-2MONTH-3DAY]\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 35
-        testRunner.When("I parse the token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 36
-        testRunner.Then("the result should be today\'s date minus one year, two months, and three days", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Parsing today plus one year, minus one month, and plus one day - [STARTDATE][+ve/" +
-            "-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]")]
-        public void ParsingTodayPlusOneYearMinusOneMonthAndPlusOneDay_STARTDATEVe_VeDATEPARTVe_VeDATEPARTVe_VeDATEPART()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Parsing today plus one year, minus one month, and plus one day - [STARTDATE][+ve/" +
-                    "-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 38
-    this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-#line 39
-        testRunner.Given("A date token \"[TODAY+1YEAR-1MONTH+1DAY]\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 40
-        testRunner.When("I parse the token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 41
-        testRunner.Then("the result should be today\'s date plus one year, minus one month, and plus one da" +
-                        "y", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Parsing today plus two years - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][" +
-            "+ve/-ve][DATEPART]")]
-        public void ParsingTodayPlusTwoYears_STARTDATEVe_VeDATEPARTVe_VeDATEPARTVe_VeDATEPART()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Parsing today plus two years - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][" +
-                    "+ve/-ve][DATEPART]", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 43
-    this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-#line 44
-        testRunner.Given("A date token \"[TODAY+2YEAR]\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 45
-        testRunner.When("I parse the token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 46
-        testRunner.Then("the result should be today\'s date plus two years", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Parsing today plus five months - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART" +
-            "][+ve/-ve][DATEPART]")]
-        public void ParsingTodayPlusFiveMonths_STARTDATEVe_VeDATEPARTVe_VeDATEPARTVe_VeDATEPART()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Parsing today plus five months - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART" +
-                    "][+ve/-ve][DATEPART]", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 48
-    this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-#line 49
-        testRunner.Given("A date token \"[TODAY+5MONTH]\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 50
-        testRunner.When("I parse the token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 51
-        testRunner.Then("the result should be today\'s date plus five months", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Parsing tomorrow plus five months - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEP" +
-            "ART][+ve/-ve][DATEPART]")]
-        public void ParsingTomorrowPlusFiveMonths_STARTDATEVe_VeDATEPARTVe_VeDATEPARTVe_VeDATEPART()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Parsing tomorrow plus five months - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEP" +
-                    "ART][+ve/-ve][DATEPART]", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 53
-    this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-#line 54
-        testRunner.Given("A date token \"[TOMORROW+5MONTH]\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 55
-        testRunner.When("I parse the token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 56
-        testRunner.Then("the result should be tomorrow\'s date plus five months", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Parsing yesterday plus five months and minus one year - [STARTDATE][+ve/-ve][DATE" +
-            "PART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]")]
-        public void ParsingYesterdayPlusFiveMonthsAndMinusOneYear_STARTDATEVe_VeDATEPARTVe_VeDATEPARTVe_VeDATEPART()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Parsing yesterday plus five months and minus one year - [STARTDATE][+ve/-ve][DATE" +
-                    "PART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 58
-    this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-#line 59
-        testRunner.Given("A date token \"[YESTERDAY+5MONTH-1YEAR]\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 60
-        testRunner.When("I parse the token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 61
-        testRunner.Then("the result should be yesterday\'s date plus five months and minus one year", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+        testRunner.Then(string.Format("the result should equal today plus {0} years {1} months {2} days", years, months, days), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -439,7 +133,7 @@ namespace TokenParserTests.Features
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Handling null or invalid token input - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DA" +
                     "TEPART][+ve/-ve][DATEPART]", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 63
+#line 27
     this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -449,14 +143,93 @@ namespace TokenParserTests.Features
             else
             {
                 this.ScenarioStart();
-#line 64
+#line 28
         testRunner.Given("An invalid date range string \"INVALID-TOKEN\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 65
+#line 29
         testRunner.When("I parse the token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 66
+#line 30
         testRunner.Then("an error should be thrown with message \"Invalid string token format\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Parsing several instances of a second format of date string tokens - [MONTHENDSTA" +
+            "RT][MONTH][YEAR]")]
+        [NUnit.Framework.TestCaseAttribute("[START-JANUARY-2024]", "2024-01-01", null)]
+        [NUnit.Framework.TestCaseAttribute("[END-FEBRUARY-2024]", "2024-02-29", null)]
+        [NUnit.Framework.TestCaseAttribute("[END-FEBRUARY-2022]", "2022-02-28", null)]
+        [NUnit.Framework.TestCaseAttribute("[END-OCTOBER-2020]", "2020-10-31", null)]
+        [NUnit.Framework.TestCaseAttribute("[START-DECEMBER-2000]", "2000-12-01", null)]
+        [NUnit.Framework.TestCaseAttribute("[END-JUNE-2025]", "2025-06-30", null)]
+        public void ParsingSeveralInstancesOfASecondFormatOfDateStringTokens_MONTHENDSTARTMONTHYEAR(string dateStringToken, string expectedDate, string[] exampleTags)
+        {
+            string[] tagsOfScenario = exampleTags;
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("dateStringToken", dateStringToken);
+            argumentsOfScenario.Add("expectedDate", expectedDate);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Parsing several instances of a second format of date string tokens - [MONTHENDSTA" +
+                    "RT][MONTH][YEAR]", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 32
+    this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 33
+        testRunner.Given(string.Format("A date string \"{0}\"", dateStringToken), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 34
+        testRunner.When("I parse the date string token", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 35
+        testRunner.Then(string.Format("the result should be \"{0}\"", expectedDate), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Parsing several instances of date range token strings - [MONTHENDSTART][MONTH][YE" +
+            "AR]<->[MONTHENDSTART][MONTH][YEAR]")]
+        [NUnit.Framework.TestCaseAttribute("[START-JANUARY-2024<->END-FEBRUARY-2024]", "2024-01-01", "2024-02-29", null)]
+        [NUnit.Framework.TestCaseAttribute("[END-OCTOBER-2020<->END-FEBRUARY-2022]", "2020-10-31", "2022-02-28", null)]
+        [NUnit.Framework.TestCaseAttribute("[START-DECEMBER-2021<->END-JUNE-2025]", "2021-12-01", "2025-06-30", null)]
+        [NUnit.Framework.TestCaseAttribute("[START-JULY-2021<->START-MARCH-2023]", "2021-07-01", "2023-03-01", null)]
+        public void ParsingSeveralInstancesOfDateRangeTokenStrings_MONTHENDSTARTMONTHYEAR_MONTHENDSTARTMONTHYEAR(string dateRangeTokenString, string startDate, string endDate, string[] exampleTags)
+        {
+            string[] tagsOfScenario = exampleTags;
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("dateRangeTokenString", dateRangeTokenString);
+            argumentsOfScenario.Add("StartDate", startDate);
+            argumentsOfScenario.Add("EndDate", endDate);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Parsing several instances of date range token strings - [MONTHENDSTART][MONTH][YE" +
+                    "AR]<->[MONTHENDSTART][MONTH][YEAR]", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 46
+    this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 47
+        testRunner.Given(string.Format("A date range string \"{0}\"", dateRangeTokenString), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 48
+        testRunner.When("I parse the date range string", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 49
+        testRunner.Then(string.Format("the start date should be \"{0}\" and the end date should be \"{1}\"", startDate, endDate), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

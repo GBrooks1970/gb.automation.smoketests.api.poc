@@ -130,6 +130,17 @@ Then<CustomWorld>("the result should be yesterday's date plus five months and mi
   });
 });
 
+Then<CustomWorld>(
+  "the result should equal today plus {int} years {int} months {int} days",
+  function (this, years: number, months: number, days: number) {
+    compareWithExpected(this, (expected) => {
+      expected.setUTCFullYear(expected.getUTCFullYear() + years);
+      expected.setUTCMonth(expected.getUTCMonth() + months);
+      expected.setUTCDate(expected.getUTCDate() + days);
+    });
+  }
+);
+
 Given<CustomWorld>("A null or invalid date token", function () {
   token = "INVALID";
 });

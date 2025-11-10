@@ -81,5 +81,20 @@ namespace TokenParserTests.Steps
             string formattedDate = expectedDate.ToString("yyyy-MM-dd HH:mm:ssZ", CultureInfo.InvariantCulture);
             Assert.That(actualValue, Is.EqualTo(formattedDate));
         }
+
+        [Then(@"the result should equal today plus (.*) years (.*) months (.*) days")]
+        public void ThenTheResultShouldEqualTodayPlusYearsMonthsDays(int years, int months, int days)
+        {
+            var jsonResponse = JsonDocument.Parse(_responseContent).RootElement;
+            if (!jsonResponse.TryGetProperty("ParsedToken", out var parsedToken))
+            {
+                Assert.Fail("Response does not contain 'ParsedToken'.");
+            }
+
+            var expectedDate = DateTime.Today.AddYears(years).AddMonths(months).AddDays(days);
+            var formattedDate = expectedDate.ToString("yyyy-MM-dd HH:mm:ssZ", CultureInfo.InvariantCulture);
+
+            Assert.That(parsedToken.GetString(), Is.EqualTo(formattedDate));
+        }
     }
 }

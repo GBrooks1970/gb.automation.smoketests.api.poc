@@ -133,6 +133,17 @@ Then("the result should be yesterday's date plus five months and minus one year"
   });
 });
 
+Then(
+  "the result should equal today plus {int} years {int} months {int} days",
+  (years: number, months: number, days: number) => {
+    compareWithExpected((expected) => {
+      expected.setUTCFullYear(expected.getUTCFullYear() + years);
+      expected.setUTCMonth(expected.getUTCMonth() + months);
+      expected.setUTCDate(expected.getUTCDate() + days);
+    });
+  }
+);
+
 Given("A null or invalid date token", () => {
   token = "INVALID";
 });
