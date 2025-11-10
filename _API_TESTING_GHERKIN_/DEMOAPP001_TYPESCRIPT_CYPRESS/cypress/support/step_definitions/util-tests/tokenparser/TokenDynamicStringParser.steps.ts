@@ -1,77 +1,78 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import { expect } from "chai";
-import { TokenDynamicStringParser } from "../../../../../src/tokenparser/TokenDynamicStringParser";
-import CommonUtils from "../../../../../src/services/common-utils";
+import { utilActor } from "../../../screenplay/util-world";
+import { UseTokenParsersUtils } from "../../../../../src/screenplay/abilities/UseTokenParsersUtils";
+import { UtilActorMemory } from "../../step_utils/UtilActorMemory";
 
-let generatedString: string;
-let token: string;
-let parseError: Error | null;
+let token = "";
 
-Given('a token {string}', (inputToken: string) => {
-    token = inputToken;
+const parser = () => utilActor().abilityTo(UseTokenParsersUtils);
+
+
+Given("a token {string}", (inputToken: string) => {
+  token = inputToken;
 });
 
 When("I parse and generate the string", () => {
-    generatedString = "";
-    parseError = null;
-
-    try {
-        generatedString = TokenDynamicStringParser.parseAndGenerate(token);
-    } catch (error) {
-        parseError = error as Error;
-    }
+  UtilActorMemory.rememberGenerated("");
+  UtilActorMemory.clearError();
+  try {
+    const generated = parser().parseDynamicString(token);
+    UtilActorMemory.rememberGenerated(generated);
+  } catch (error) {
+    UtilActorMemory.rememberError(error);
+  }
 });
 
-Then('the generated string should have a length of {int}', (expectedLength: number) => {
-    expect(parseError).to.be.null;
-    expect(generatedString.replace(/\r\n/g, '').length).to.equal(expectedLength);
+Then("the generated string should have a length of {int}", (expectedLength: number) => {
+  const error = UtilActorMemory.getParseError();
+  expect(error, "Unexpected parser error").to.be.undefined;
+  const generated = UtilActorMemory.getGenerated().replace(/\r\n/g, "");
+  expect(generated.length).to.equal(expectedLength);
 });
 
-Then('the generated string should match the character set {string}', (characterSet: string) => {
-    expect(parseError).to.be.null;
-    let regex: RegExp;
+Then("the generated string should match the character set {string}", (characterSet: string) => {
+  const error = UtilActorMemory.getParseError();
+  expect(error, "Unexpected parser error").to.be.undefined;
+  const generated = UtilActorMemory.getGenerated();
+
+  const regex = (() => {
     switch (characterSet) {
-        case 'ALPHA':
-            regex = /^[A-Za-z\r\n]+$/;
-            break;
-        case 'NUMERIC':
-            regex = /^[0-9\r\n]+$/;
-            break;
-        case 'ALPHA_NUMERIC':
-            regex = /^[A-Za-z0-9\r\n]+$/;
-            break;
-        case 'ALPHA_NUMERIC_PUNCTUATION':
-            regex = /^[A-Za-z0-9.,!?;:\r\n]+$/;
-            break;
-        case 'SPECIAL':
-            regex = /^[!@#$%^&*()_+\[\]{}|;:,.<>?\r\n]+$/;
-            break;
-        case 'ALPHA_PUNCTUATION':
-            regex = /^[A-Za-z.,!?;:\r\n]+$/;
-            break;
-        case 'PUNCTUATION':
-            regex = /^[.,!?;:\r\n]+$/;
-            break;
-        case 'SPECIAL_PUNCTUATION':
-            regex = /^[!@#$%^&*()_+\[\]{}|;:,.<>?.,!?;:\r\n]+$/;
-            break;
-        case 'ALPHA_NUMERIC_SPECIAL':
-            regex = /^[A-Za-z0-9!@#$%^&*()_+\[\]{}|;:,.<>?\r\n]+$/;
-            break;
-        default:
-            throw new Error(`Unknown character set: ${characterSet}`);
+      case "ALPHA":
+        return /^[A-Za-z\r\n]+$/;
+      case "NUMERIC":
+        return /^[0-9\r\n]+$/;
+      case "ALPHA_NUMERIC":
+        return /^[A-Za-z0-9\r\n]+$/;
+      case "ALPHA_NUMERIC_PUNCTUATION":
+        return /^[A-Za-z0-9.,!?;:\r\n]+$/;
+      case "SPECIAL":
+        return /^[!@#$%^&*()_+\[\]{}|;:,.<>?\r\n]+$/;
+      case "ALPHA_PUNCTUATION":
+        return /^[A-Za-z.,!?;:\r\n]+$/;
+      case "PUNCTUATION":
+        return /^[.,!?;:\r\n]+$/;
+      case "SPECIAL_PUNCTUATION":
+        return /^[!@#$%^&*()_+\[\]{}|;:,.<>?.,!?;:\r\n]+$/;
+      case "ALPHA_NUMERIC_SPECIAL":
+        return /^[A-Za-z0-9!@#$%^&*()_+\[\]{}|;:,.<>?\r\n]+$/;
+      default:
+        throw new Error(`Unknown character set: ${characterSet}`);
     }
-    expect(generatedString).to.match(regex);
+  })();
+
+  expect(generated).to.match(regex);
 });
 
-Then('the generated string should have {int} lines', (expectedLines: number) => {
-    expect(parseError).to.be.null;
-    const lines = generatedString.split('\r\n');
-    expect(lines).to.have.length(expectedLines);
+Then("the generated string should have {int} lines", (expectedLines: number) => {
+  const error = UtilActorMemory.getParseError();
+  expect(error, "Unexpected parser error").to.be.undefined;
+  const lines = UtilActorMemory.getGenerated().split("\r\n");
+  expect(lines).to.have.length(expectedLines);
 });
 
-Then('a dynamic string parser error should be thrown with message {string}', (expectedMessage: string) => {
-    expect(parseError).to.not.be.null;
-    expect(parseError?.message ?? "").to.contain(expectedMessage);
+Then("a dynamic string parser error should be thrown with message {string}", (expectedMessage: string) => {
+  const error = UtilActorMemory.getParseError();
+  expect(error, "Expected parsing to fail").to.exist;
+  expect(error?.message ?? "").to.contain(expectedMessage);
 });
-

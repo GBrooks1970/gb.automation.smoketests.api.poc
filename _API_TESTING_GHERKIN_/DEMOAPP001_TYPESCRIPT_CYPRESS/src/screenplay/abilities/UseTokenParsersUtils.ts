@@ -2,7 +2,7 @@ import type { Ability } from "../core/types";
 import { TokenDateParser, DateRange } from "../../tokenparser/TokenDateParser";
 import { TokenDynamicStringParser } from "../../tokenparser/TokenDynamicStringParser";
 
-export class UseTokenParsers implements Ability {
+export class UseTokenParsersUtils implements Ability {
   get description(): string {
     return "Use token parsing utilities";
   }

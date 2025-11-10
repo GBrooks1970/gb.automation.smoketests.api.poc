@@ -1,19 +1,11 @@
-import { Before, Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
+import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import { expect } from "chai";
-import { Actor } from "../../../../../src/screenplay/actors/Actor";
-import { CallAnApi } from "../../../../../src/screenplay/abilities/CallAnApi";
 import { SendGetRequest } from "../../../../../src/screenplay/tasks/SendGetRequest";
 import { ResponseStatus } from "../../../../../src/screenplay/questions/ResponseStatus";
 import { ResponseBody } from "../../../../../src/screenplay/questions/ResponseBody";
+import { apiActor } from "../../../screenplay/api-world";
 
-const apiBaseUrl = (): string => Cypress.env("API_BASE_URL") ?? Cypress.config("baseUrl") ?? "http://localhost:3000";
-
-let actor: Actor;
 let token = "";
-
-Before(() => {
-  actor = Actor.named("Cypress Dynamic String Tester").whoCan(CallAnApi.at(apiBaseUrl()));
-});
 
 Given("the DynamicStringParser endpoint is running", () => {
   // Batch scripts ensure availability; no-op placeholder for readability.
@@ -21,7 +13,7 @@ Given("the DynamicStringParser endpoint is running", () => {
 
 When("A request with dynamic string token {string} to the DynamicStringParser endpoint", (inputToken: string) => {
   token = inputToken;
-  return actor.attemptsTo(
+  return apiActor().attemptsTo(
     SendGetRequest.to("/parse-dynamic-string-token", {
       qs: { token },
       failOnStatusCode: false,
@@ -32,13 +24,13 @@ When("A request with dynamic string token {string} to the DynamicStringParser en
 Then(
   "the API response should return a status code of {int} for the DynamicStringParser endpoint",
   (statusCode: number) => {
-    const actualStatus = actor.answer(ResponseStatus.code());
+    const actualStatus = apiActor().answer(ResponseStatus.code());
     expect(actualStatus).to.equal(statusCode);
   }
 );
 
 Then("the response should contain {string} with the value {string}", (propertyName: string, expected: string) => {
-  const body = actor.answer(ResponseBody.json());
+  const body = apiActor().answer(ResponseBody.json());
   const propertyKey = propertyName.charAt(0).toUpperCase() + propertyName.slice(1);
   const parsedToken = body[propertyName] ?? body[propertyKey];
 

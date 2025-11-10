@@ -95,13 +95,13 @@ The stack currently relies on direct console output from Express and the token p
 
 | Layer | Current State (DEMOAPP001) | Action Plan |
 | --- | --- | --- |
-| Actor/World setup | Screenplay helpers exist under `src/screenplay/**`, but Cypress step definitions still instantiate helpers directly. | Introduce a lightweight “Cypress World” helper that creates an Actor/Abilities per scenario (likely via `beforeEach`) and export it for all step files. |
-| Abilities | `CallAnApi` and `UseTokenParsers` abilities are implemented but not widely used in step definitions. | Update API step definitions to acquire abilities through the Actor rather than importing `CommonUtils` or using `cy.request` directly. |
-| Tasks | `SendGetRequest` task is available (mirrors Playwright), yet steps invoke `cy.request`. | Replace imperative HTTP calls with `actor.attemptsTo(SendGetRequest...)`. Add additional tasks for multi-step flows as needed. |
-| Questions | `ResponseStatus`/`ResponseJson` exist but assertions often parse the response manually. | Convert assertions to use `actor.answer(ResponseStatus.code())` / `ResponseJson.body()` to ensure parity with DEMOAPP003. |
-| Memory | Actor memory is present but not consistently leveraged; global variables persist between steps. | Migrate shared state (response payloads, tokens) into Actor memory to avoid flaky global state. |
+| Actor/World setup | API scenarios now share a central Screenplay actor via `cypress/support/screenplay/api-world.ts`; util tests still bootstrap helpers manually. | Extend the world helper with `UseTokenParsers` and migrate util step definitions to the same Screenplay lifecycle. |
+| Abilities | `CallAnApi` is automatically applied for API steps; util steps continue to reach directly into `CommonUtils`. | When moving util flows, fetch abilities from the actor instead of importing parser modules. |
+| Tasks | API HTTP steps invoke `SendGetRequest`; util scenarios still use imperative helpers. | Port util-level flows to Screenplay tasks (e.g., token parsing tasks) for parity. |
+| Questions | `ResponseStatus`/`ResponseBody` power API assertions, but util steps parse responses manually. | Introduce question helpers for util flows and adopt them across the token tests. |
+| Memory | Actor memory stores API responses; util tests rely on globals/module scope. | Shift util shared state (tokens, parser outputs) into actor memory to avoid leakage across steps. |
 
 **Milestones**
-1. Wrap all API step definitions in Screenplay (`Given`/`When` use tasks, `Then` uses questions).
-2. Update util step definitions to use Actor memory/abilities.
-3. Document the rollout status in this section and keep the table up to date as coverage improves.
+1. ✅ Wrap all API step definitions in Screenplay (`Given`/`When` use tasks, `Then` use questions). (Completed 2025-11-08)
+2. ✅ Update util step definitions to use Actor memory/abilities. (Completed 2025-11-08)
+3. Keep this table and the corresponding Playwright/SpecFlow docs updated as remaining Screenplay helpers roll out.
