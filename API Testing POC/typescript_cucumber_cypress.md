@@ -85,7 +85,7 @@ The stack currently relies on direct console output from Express and the token p
 ## References
 
 - Main README: `README.md`
-- Playwright stack: `API Testing POC/typescript_playwright_cucumber.md`
+- Playwright stack: `API Testing POC/typescript_cucumber_playwright.md`
 - C# stack: `API Testing POC/csharp_specflow_playwright.md`
 - Token contract: `API Testing POC/tokenparser_api_contract.md`
 

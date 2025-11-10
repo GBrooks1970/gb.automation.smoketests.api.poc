@@ -93,7 +93,7 @@ Generated content under `*/bin`, `*/obj`, `.playwright/`, and `node_modules/` is
 ## Additional Documentation
 
 - API Testing POC/typescript_cucumber_cypress.md - Full breakdown of the Cypress stack
-- API Testing POC/typescript_playwright_cucumber.md - Full breakdown of the TypeScript + Playwright stack
+- API Testing POC/typescript_cucumber_playwright.md - Full breakdown of the TypeScript + Playwright stack
 - API Testing POC/csharp_specflow_playwright.md - Full breakdown of the C# + Playwright stack
 - API Testing POC/testing_guidelines_3_a.md - Process and testing guidance
 - API Testing POC/api_testing_comparison.md - Cross-stack comparisons and rationale

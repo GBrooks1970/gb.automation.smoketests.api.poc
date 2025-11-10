@@ -84,7 +84,7 @@ Logging level is controlled via `TokenParser:Logging:Level` (appsettings) or the
 
 - Main README: `README.md`
 - Cypress stack: `API Testing POC/typescript_cucumber_cypress.md`
-- Playwright TypeScript stack: `API Testing POC/typescript_playwright_cucumber.md`
+- Playwright TypeScript stack: `API Testing POC/typescript_cucumber_playwright.md`
 - Token contract: `API Testing POC/tokenparser_api_contract.md`
 
 ---
