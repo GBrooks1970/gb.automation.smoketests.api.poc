@@ -23,7 +23,7 @@ namespace TokenParserTests.Steps
             //Assert.That(_requestContext, Is.Not.Null, "API context is not initialized");
         }
 
-        [When(@"a request with dynamic string token '(.*)' is made to the DynamicStringParser endpoint")]
+        [When(@"a request with dynamic string token '(.*)' is made to the ParseDynamicStringToken endpoint")]
         public async Task WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint(string token)
         {
             var endpoint = "/parse-dynamic-string-token";
@@ -40,7 +40,7 @@ namespace TokenParserTests.Steps
         }
 
 
-        [Then(@"the API response should return a status code of (.*) for the DynamicStringParser endpoint")]
+        [Then(@"the API response should return a status code of (.*) for the ParseDynamicStringToken endpoint")]
         public void ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(int statusCode)
         {
             requestHelper.ValidateStatusCode(_response, statusCode);
@@ -49,55 +49,43 @@ namespace TokenParserTests.Steps
         [Then(@"the response should contain ""(.*)"" with the value ""(.*)""")]
         public async Task ThenTheResponseShouldContainWithTheValue(string key, string expectedValue)
         {
-            // Parse the JSON response
-            var jsonResponse01 = requestHelper.ParseJsonResponse(_responseContent);
             var jsonResponse = JsonDocument.Parse(_responseContent).RootElement;
 
-            if (jsonResponse.TryGetProperty(key, out var actualValue))
-            {
-                var actualString = actualValue.GetString()?.Trim();
-                var actulLength = actualString?.Length;
-
-                // Handle dynamic verification for the different expected values
-                if (expectedValue == "An alpha-numeric string of length 5")
-                {
-                    int expectedLength = 5;
-                    Assert.That(expectedLength, Is.EqualTo(actulLength), $"Expected generated string: {actualString} to be of length: {expectedLength}, but got: {actulLength}");
-                    Assert.That(actualString?.Trim(), Does.Match(@"^[A-Za-z0-9]+$"), $"Expected generated string: {actualString} to be a combination of alpha and numeric characters, but it is not");
-
-                }
-                else if (expectedValue == "A string of punctuation characters of length 3")
-                {
-                    int expectedLength = 3;
-                    Assert.That(expectedLength, Is.EqualTo(actulLength), $"Expected generated string: {actualString} to be of length: {expectedLength}, but got: {actulLength}");
-                    Assert.That(actualString?.Trim(), Does.Match(@"^[\.\,\!\?\;\:]+$"), $"Expected generated string: {actualString} to only contain punctuation characters .,!?;:, but it is not");
-                }
-                else if (expectedValue == "2 lines of strings with each line containing 10 alpha-numeric-punctuation characters")
-                {
-
-                    int lineCount = 2;
-                    int charPerLine = 10;
-                    var lines = actualString?.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-                    var actullineCount = lines?.Length; // Last line might be empty due to line break
-                    Assert.That(lineCount, Is.EqualTo(actullineCount), $"Expected generated string: {actualString} to be of lineCount: {lineCount}, but got: {actullineCount}");
-
-                    foreach (var line in lines)
-                    {
-                        if (line.Length > 0)
-                        {
-                            Assert.That(charPerLine, Is.EqualTo(line.Length), $"Expected generated string line: {line} to be of length: {charPerLine}, but got: {line.Length}");
-                            Assert.That(line.Trim(), Does.Match(@"^[A-Za-z0-9\.\,\!\?\;\:]+$"), $"Expected generated string line: {line} to be a combination of alpha, numeric, and punctuation characters, but it is not");
-                        }
-                    }
-                }
-                else
-                {
-                    Assert.That(actualValue.GetString(), Is.EqualTo(expectedValue));
-                }
-            }
-            else
+            if (!jsonResponse.TryGetProperty(key, out var actualValue))
             {
                 Assert.Fail($"Response does not contain '{key}'.");
+            }
+
+            var actualString = actualValue.GetString()?.Trim() ?? string.Empty;
+            var actualLength = actualString.Length;
+
+            switch (expectedValue)
+            {
+                case "An alpha-numeric string of length 5":
+                    Assert.That(actualLength, Is.EqualTo(5), $"Expected generated string: {actualString} to be length 5");
+                    Assert.That(actualString, Does.Match(@"^[A-Za-z0-9]+$"), $"Expected alpha-numeric string, got {actualString}");
+                    break;
+
+                case "A string of punctuation characters of length 3":
+                    Assert.That(actualLength, Is.EqualTo(3), $"Expected generated string: {actualString} to be length 3");
+                    Assert.That(actualString, Does.Match(@"^[\.\,\!\?\;\:]+$"), $"Expected punctuation characters .,!?;:, got {actualString}");
+                    break;
+
+                case "2 lines of strings with each line containing 10 alpha-numeric-punctuation characters":
+                    const int lineCount = 2;
+                    const int charsPerLine = 10;
+                    var lines = actualString.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                    Assert.That(lines.Length, Is.EqualTo(lineCount), $"Expected {lineCount} lines, got {lines.Length}");
+                    foreach (var line in lines.Where(l => l.Length > 0))
+                    {
+                        Assert.That(line.Length, Is.EqualTo(charsPerLine), $"Line {line} length mismatch");
+                        Assert.That(line, Does.Match(@"^[A-Za-z0-9\.\,\!\?\;\:]+$"), $"Line {line} must contain alpha-numeric-punctuation");
+                    }
+                    break;
+
+                default:
+                    Assert.That(actualValue.GetString(), Is.EqualTo(expectedValue));
+                    break;
             }
         }
     }

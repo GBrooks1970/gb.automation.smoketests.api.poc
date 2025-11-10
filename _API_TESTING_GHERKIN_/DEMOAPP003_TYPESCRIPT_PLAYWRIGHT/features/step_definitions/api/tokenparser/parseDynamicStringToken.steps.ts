@@ -7,18 +7,18 @@ import type { CustomWorld } from "../../../../screenplay/support/custom-world";
 
 let token = "";
 
-Given<CustomWorld>('the DynamicStringParser endpoint is running', function () {
+Given<CustomWorld>('the ParseDynamicStringToken endpoint is running', function () {
   // Endpoint availability is ensured by the API server bootstrap (handled in batch script).
 });
 
-When<CustomWorld>('A request with dynamic string token {string} to the DynamicStringParser endpoint', async function (this, inputToken: string) {
+When<CustomWorld>('A request with dynamic string token {string} to the ParseDynamicStringToken endpoint', async function (this, inputToken: string) {
   token = inputToken;
   await this.actor.attemptsTo(
     SendGetRequest.to('/parse-dynamic-string-token', { token })
   );
 });
 
-Then<CustomWorld>('the API response should return a status code of {int} for the DynamicStringParser endpoint', async function (this, statusCode: number) {
+Then<CustomWorld>('the API response should return a status code of {int} for the ParseDynamicStringToken endpoint', async function (this, statusCode: number) {
   const status = await this.actor.answer(ResponseStatus.code());
   expect(status).toBe(statusCode);
 });

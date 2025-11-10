@@ -7,11 +7,11 @@ import { apiActor } from "../../../screenplay/api-world";
 
 let token = "";
 
-Given("the DynamicStringParser endpoint is running", () => {
+Given("the ParseDynamicStringToken endpoint is running", () => {
   // Batch scripts ensure availability; no-op placeholder for readability.
 });
 
-When("A request with dynamic string token {string} to the DynamicStringParser endpoint", (inputToken: string) => {
+When("A request with dynamic string token {string} to the ParseDynamicStringToken endpoint", (inputToken: string) => {
   token = inputToken;
   return apiActor().attemptsTo(
     SendGetRequest.to("/parse-dynamic-string-token", {
@@ -22,7 +22,7 @@ When("A request with dynamic string token {string} to the DynamicStringParser en
 });
 
 Then(
-  "the API response should return a status code of {int} for the DynamicStringParser endpoint",
+  "the API response should return a status code of {int} for the ParseDynamicStringToken endpoint",
   (statusCode: number) => {
     const actualStatus = apiActor().answer(ResponseStatus.code());
     expect(actualStatus).to.equal(statusCode);

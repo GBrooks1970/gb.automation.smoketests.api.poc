@@ -4,9 +4,9 @@ Feature: Dynamic String Parser Endpoint
     So that the correct type of string is returned based on the input token in the API response.
 
     Scenario Outline: Parse dynamic string tokens
-        Given the DynamicStringParser endpoint is running
-        When A request with dynamic string token "<token>" to the DynamicStringParser endpoint
-        Then the API response should return a status code of <statusCode> for the DynamicStringParser endpoint
+        Given the ParseDynamicStringToken endpoint is running
+        When A request with dynamic string token "<token>" to the ParseDynamicStringToken endpoint
+        Then the API response should return a status code of <statusCode> for the ParseDynamicStringToken endpoint
         And the response should contain "<key>" with the value "<expectedValue>"
 
         Examples:

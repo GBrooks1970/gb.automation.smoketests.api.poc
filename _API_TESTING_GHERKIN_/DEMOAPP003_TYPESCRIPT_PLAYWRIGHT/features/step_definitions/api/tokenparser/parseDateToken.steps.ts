@@ -20,13 +20,13 @@ Given<CustomWorld>('a valid or invalid date token {string}', function (this, inp
   tokenString = inputToken;
 });
 
-When<CustomWorld>('a GET request is made to the DateTokenParser Endpoint', async function (this) {
+When<CustomWorld>('a GET request is made to the ParseDateToken Endpoint', async function (this) {
   await this.actor.attemptsTo(
     SendGetRequest.to('/parse-date-token', { token: tokenString })
   );
 });
 
-Then<CustomWorld>('the API response for the DateTokenParser Endpoint should return a status code of {int}', async function (this, statusCode: number) {
+Then<CustomWorld>('the API response for the ParseDateToken Endpoint should return a status code of {int}', async function (this, statusCode: number) {
   const status = await this.actor.answer(ResponseStatus.code());
   expect(status).toBe(statusCode);
 });

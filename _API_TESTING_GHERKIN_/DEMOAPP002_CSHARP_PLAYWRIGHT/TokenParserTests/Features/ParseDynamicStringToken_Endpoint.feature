@@ -5,8 +5,8 @@ Feature: Dynamic String Parser Endpoint 01
 
   Scenario Outline: Parse dynamic string tokens
     Given the TokenParser API is available
-    When a request with dynamic string token '<token>' is made to the DynamicStringParser endpoint
-    Then the API response should return a status code of <statusCode> for the DynamicStringParser endpoint
+    When a request with dynamic string token '<token>' is made to the ParseDynamicStringToken endpoint
+    Then the API response should return a status code of <statusCode> for the ParseDynamicStringToken endpoint
     And the response should contain "<key>" with the value "<expectedValue>"
 
     Examples:

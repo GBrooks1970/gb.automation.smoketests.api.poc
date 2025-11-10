@@ -5,8 +5,8 @@ Feature: Token Date Parser Endpoint
 
 Scenario Outline: Parse a date token
     Given a valid or invalid date token "<token>"
-    When a GET request is made to the DateTokenParser Endpoint
-    Then the API response for the DateTokenParser Endpoint should return a status code of <statusCode>
+    When a GET request is made to the ParseDateToken Endpoint
+    Then the API response for the ParseDateToken Endpoint should return a status code of <statusCode>
     And the response body should contain "<key>" with the value "<expectedValue>"
 
     Examples:

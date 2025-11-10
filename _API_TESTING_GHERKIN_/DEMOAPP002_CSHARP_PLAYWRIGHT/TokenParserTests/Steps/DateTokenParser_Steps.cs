@@ -25,7 +25,7 @@ namespace TokenParserTests.Steps
             _Token = token;
         }
 
-        [When(@"a GET request is made to the DateTokenParser Endpoint")]
+        [When(@"a GET request is made to the ParseDateToken Endpoint")]
         public async Task WhenISendARequestWithTokenToTheParsedTokenAPI()
         {
             string endpoint = "/parse-date-token";
@@ -40,7 +40,7 @@ namespace TokenParserTests.Steps
             _responseContent = await requestHelper.GetResponseString(_response);
 
         }
-        [Then(@"the API response for the DateTokenParser Endpoint should return a status code of (.*)")]
+        [Then(@"the API response for the ParseDateToken Endpoint should return a status code of (.*)")]
         public void ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(int statusCode)
         {
             requestHelper.ValidateStatusCode(_response, statusCode);
@@ -49,42 +49,37 @@ namespace TokenParserTests.Steps
         [Then(@"the response body should contain ""(.*)"" with the value ""(.*)""")]
         public async Task ThenTheResponseBodyShouldContainWithTheValue(string key, string expectedValue)
         {
-            // Parse the JSON response
-            var jsonResponse01 = requestHelper.ParseJsonResponse(_responseContent);
             var jsonResponse = JsonDocument.Parse(_responseContent).RootElement;
 
-            if (jsonResponse.TryGetProperty(key, out var actualValue))
-            { // Handle relative date parsing logic for tokens like "[TODAY-1YEAR-1MONTH]"
-                DateTime today = DateTime.Today;
-                DateTime expectedDate = today;
-
-                if (expectedValue.Contains("ago") || expectedValue.Contains("ahead") || expectedValue.Equals("today"))
-                {
-                   
-                    //Adjust date according to expected outcome
-                    if (expectedValue == "one year and one month ago from today")
-                    {
-                        expectedDate = today.AddYears(-1).AddMonths(-1);
-                    }
-                    else if (expectedValue == "one year ahead and two months ago from today")
-                    {
-                        expectedDate = today.AddYears(1).AddMonths(-2);
-                    }
-
-                    string formattedDate = expectedDate.ToString("yyyy-MM-dd HH:mm:ssZ", CultureInfo.InvariantCulture);
-
-                    Assert.That(actualValue.GetString(), Is.EqualTo(formattedDate));
-                }
-                else
-                {           
-                    //Specific value expected
-                    Assert.That(actualValue.GetString(), Is.EqualTo(expectedValue));
-                }
-            }
-            else
-            {                
+            if (!jsonResponse.TryGetProperty(key, out var actualValue))
+            {
                 Assert.That(jsonResponse.TryGetProperty(key, out _), Is.True, $"Response does not contain '{key}'.");
+                return;
             }
+
+            var actualString = actualValue.GetString();
+            switch (expectedValue)
+            {
+                case "today":
+                    AssertRelativeDate(actualString, 0, 0);
+                    break;
+                case "one year and one month ago from today":
+                    AssertRelativeDate(actualString, -1, -1);
+                    break;
+                case "one year ahead and two months ago from today":
+                    AssertRelativeDate(actualString, 1, -2);
+                    break;
+                default:
+                    Assert.That(actualString, Is.EqualTo(expectedValue));
+                    break;
+            }
+        }
+
+        private static void AssertRelativeDate(string? actualValue, int yearsOffset, int monthsOffset)
+        {
+            DateTime expectedDate = DateTime.Today.AddYears(yearsOffset).AddMonths(monthsOffset);
+            string formattedDate = expectedDate.ToString("yyyy-MM-dd HH:mm:ssZ", CultureInfo.InvariantCulture);
+            Assert.That(actualValue, Is.EqualTo(formattedDate));
         }
     }
 }

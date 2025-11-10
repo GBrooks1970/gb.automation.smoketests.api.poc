@@ -20,7 +20,7 @@ Given("a valid or invalid date token {string}", (inputToken: string) => {
   tokenString = inputToken;
 });
 
-When("a GET request is made to the DateTokenParser Endpoint", () => {
+When("a GET request is made to the ParseDateToken Endpoint", () => {
   return apiActor().attemptsTo(
     SendGetRequest.to("/parse-date-token", {
       qs: { token: tokenString },
@@ -29,7 +29,7 @@ When("a GET request is made to the DateTokenParser Endpoint", () => {
   );
 });
 
-Then("the API response for the DateTokenParser Endpoint should return a status code of {int}", (statusCode: number) => {
+Then("the API response for the ParseDateToken Endpoint should return a status code of {int}", (statusCode: number) => {
   const actualStatus = apiActor().answer(ResponseStatus.code());
   expect(actualStatus).to.equal(statusCode);
 });

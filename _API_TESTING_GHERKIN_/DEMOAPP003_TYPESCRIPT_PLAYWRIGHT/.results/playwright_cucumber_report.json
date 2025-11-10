@@ -124,7 +124,7 @@
             "arguments": [],
             "keyword": "When ",
             "line": 8,
-            "name": "a GET request is made to the DateTokenParser Endpoint",
+            "name": "a GET request is made to the ParseDateToken Endpoint",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:23"
             },
@@ -137,7 +137,7 @@
             "arguments": [],
             "keyword": "Then ",
             "line": 9,
-            "name": "the API response for the DateTokenParser Endpoint should return a status code of 400",
+            "name": "the API response for the ParseDateToken Endpoint should return a status code of 400",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:29"
             },
@@ -203,7 +203,7 @@
             "arguments": [],
             "keyword": "When ",
             "line": 8,
-            "name": "a GET request is made to the DateTokenParser Endpoint",
+            "name": "a GET request is made to the ParseDateToken Endpoint",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:23"
             },
@@ -216,7 +216,7 @@
             "arguments": [],
             "keyword": "Then ",
             "line": 9,
-            "name": "the API response for the DateTokenParser Endpoint should return a status code of 200",
+            "name": "the API response for the ParseDateToken Endpoint should return a status code of 200",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:29"
             },
@@ -282,7 +282,7 @@
             "arguments": [],
             "keyword": "When ",
             "line": 8,
-            "name": "a GET request is made to the DateTokenParser Endpoint",
+            "name": "a GET request is made to the ParseDateToken Endpoint",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:23"
             },
@@ -295,7 +295,7 @@
             "arguments": [],
             "keyword": "Then ",
             "line": 9,
-            "name": "the API response for the DateTokenParser Endpoint should return a status code of 200",
+            "name": "the API response for the ParseDateToken Endpoint should return a status code of 200",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:29"
             },
@@ -361,7 +361,7 @@
             "arguments": [],
             "keyword": "When ",
             "line": 8,
-            "name": "a GET request is made to the DateTokenParser Endpoint",
+            "name": "a GET request is made to the ParseDateToken Endpoint",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:23"
             },
@@ -374,7 +374,7 @@
             "arguments": [],
             "keyword": "Then ",
             "line": 9,
-            "name": "the API response for the DateTokenParser Endpoint should return a status code of 200",
+            "name": "the API response for the ParseDateToken Endpoint should return a status code of 200",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:29"
             },
@@ -438,7 +438,7 @@
             "arguments": [],
             "keyword": "Given ",
             "line": 7,
-            "name": "the DynamicStringParser endpoint is running",
+            "name": "the ParseDynamicStringToken endpoint is running",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:10"
             },
@@ -451,7 +451,7 @@
             "arguments": [],
             "keyword": "When ",
             "line": 8,
-            "name": "A request with dynamic string token \"INVALIDTOKEN\" to the DynamicStringParser endpoint",
+            "name": "A request with dynamic string token \"INVALIDTOKEN\" to the ParseDynamicStringToken endpoint",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:14"
             },
@@ -464,7 +464,7 @@
             "arguments": [],
             "keyword": "Then ",
             "line": 9,
-            "name": "the API response should return a status code of 400 for the DynamicStringParser endpoint",
+            "name": "the API response should return a status code of 400 for the ParseDynamicStringToken endpoint",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:21"
             },
@@ -517,7 +517,7 @@
             "arguments": [],
             "keyword": "Given ",
             "line": 7,
-            "name": "the DynamicStringParser endpoint is running",
+            "name": "the ParseDynamicStringToken endpoint is running",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:10"
             },
@@ -530,7 +530,7 @@
             "arguments": [],
             "keyword": "When ",
             "line": 8,
-            "name": "A request with dynamic string token \"[ALPHA-NUMERIC-5]\" to the DynamicStringParser endpoint",
+            "name": "A request with dynamic string token \"[ALPHA-NUMERIC-5]\" to the ParseDynamicStringToken endpoint",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:14"
             },
@@ -543,7 +543,7 @@
             "arguments": [],
             "keyword": "Then ",
             "line": 9,
-            "name": "the API response should return a status code of 200 for the DynamicStringParser endpoint",
+            "name": "the API response should return a status code of 200 for the ParseDynamicStringToken endpoint",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:21"
             },
@@ -596,7 +596,7 @@
             "arguments": [],
             "keyword": "Given ",
             "line": 7,
-            "name": "the DynamicStringParser endpoint is running",
+            "name": "the ParseDynamicStringToken endpoint is running",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:10"
             },
@@ -609,7 +609,7 @@
             "arguments": [],
             "keyword": "When ",
             "line": 8,
-            "name": "A request with dynamic string token \"[PUNCTUATION-3]\" to the DynamicStringParser endpoint",
+            "name": "A request with dynamic string token \"[PUNCTUATION-3]\" to the ParseDynamicStringToken endpoint",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:14"
             },
@@ -622,7 +622,7 @@
             "arguments": [],
             "keyword": "Then ",
             "line": 9,
-            "name": "the API response should return a status code of 200 for the DynamicStringParser endpoint",
+            "name": "the API response should return a status code of 200 for the ParseDynamicStringToken endpoint",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:21"
             },
@@ -675,7 +675,7 @@
             "arguments": [],
             "keyword": "Given ",
             "line": 7,
-            "name": "the DynamicStringParser endpoint is running",
+            "name": "the ParseDynamicStringToken endpoint is running",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:10"
             },
@@ -688,7 +688,7 @@
             "arguments": [],
             "keyword": "When ",
             "line": 8,
-            "name": "A request with dynamic string token \"[ALPHA-NUMERIC-PUNCTUATION-10-LINES-2]\" to the DynamicStringParser endpoint",
+            "name": "A request with dynamic string token \"[ALPHA-NUMERIC-PUNCTUATION-10-LINES-2]\" to the ParseDynamicStringToken endpoint",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:14"
             },
@@ -701,7 +701,7 @@
             "arguments": [],
             "keyword": "Then ",
             "line": 9,
-            "name": "the API response should return a status code of 200 for the DynamicStringParser endpoint",
+            "name": "the API response should return a status code of 200 for the ParseDynamicStringToken endpoint",
             "match": {
               "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:21"
             },
