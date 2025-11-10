@@ -1,8 +1,8 @@
 import { world } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
-import { CustomWorld } from "screenplay/support/custom-world";
-import { LAST_GENERATED_STRING, LAST_PARSE_ERROR, LAST_PARSED_DATE, LAST_PARSED_RANGE, SECONDARY_PARSED_DATE } from "screenplay/support/memory-keys";
-import { DateRange } from "src/tokenparser/TokenDateParser";
+import { CustomWorld } from "../../../screenplay/support/custom-world";
+import { LAST_GENERATED_STRING, LAST_PARSE_ERROR, LAST_PARSED_DATE, LAST_PARSED_RANGE, SECONDARY_PARSED_DATE } from "../../../screenplay/support/memory-keys";
+import { DateRange } from "../../../src/tokenparser/TokenDateParser";
 
 
 export class UtilActorMemory {

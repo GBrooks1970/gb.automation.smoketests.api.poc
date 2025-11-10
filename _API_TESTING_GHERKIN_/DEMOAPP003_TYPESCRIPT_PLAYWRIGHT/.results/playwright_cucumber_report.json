@@ -14,7 +14,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 30451700
+              "duration": 28026800
             }
           },
           {
@@ -27,7 +27,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 73938699
+              "duration": 66640699
             }
           },
           {
@@ -40,7 +40,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 5699200
+              "duration": 5299799
             }
           },
           {
@@ -53,7 +53,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 1598799
+              "duration": 1521999
             }
           },
           {
@@ -66,7 +66,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 5607799
+              "duration": 4471499
             }
           },
           {
@@ -74,7 +74,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 2274199
+              "duration": 2186999
             }
           }
         ],
@@ -104,7 +104,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1967300
+              "duration": 1636599
             }
           },
           {
@@ -117,7 +117,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 4524500
+              "duration": 3330799
             }
           },
           {
@@ -130,7 +130,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 15490799
+              "duration": 12880599
             }
           },
           {
@@ -143,7 +143,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 4234000
+              "duration": 3658000
             }
           },
           {
@@ -156,7 +156,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 8670799
+              "duration": 6663999
             }
           },
           {
@@ -164,7 +164,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 2686000
+              "duration": 1479599
             }
           }
         ],
@@ -183,7 +183,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 2497699
+              "duration": 2066399
             }
           },
           {
@@ -196,7 +196,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 590199
+              "duration": 515699
             }
           },
           {
@@ -209,7 +209,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 9987999
+              "duration": 10020099
             }
           },
           {
@@ -222,7 +222,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 1156299
+              "duration": 688900
             }
           },
           {
@@ -235,7 +235,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 10194499
+              "duration": 6334399
             }
           },
           {
@@ -243,7 +243,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 2293300
+              "duration": 1694499
             }
           }
         ],
@@ -262,7 +262,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 2542699
+              "duration": 1281199
             }
           },
           {
@@ -275,7 +275,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 185800
+              "duration": 106500
             }
           },
           {
@@ -288,7 +288,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 9799500
+              "duration": 9094100
             }
           },
           {
@@ -301,7 +301,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 639700
+              "duration": 368699
             }
           },
           {
@@ -314,7 +314,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 5113600
+              "duration": 2810899
             }
           },
           {
@@ -322,7 +322,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1632899
+              "duration": 836400
             }
           }
         ],
@@ -341,7 +341,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 2159299
+              "duration": 1089100
             }
           },
           {
@@ -354,7 +354,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 150200
+              "duration": 74099
             }
           },
           {
@@ -367,7 +367,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 11714200
+              "duration": 9021200
             }
           },
           {
@@ -380,7 +380,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 840400
+              "duration": 439599
             }
           },
           {
@@ -393,7 +393,7 @@
             },
             "result": {
               "status": "passed",
-              "duration": 4868400
+              "duration": 2385199
             }
           },
           {
@@ -401,7 +401,244 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 6996799
+              "duration": 902500
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "parse-date-token-endpoint;parse-a-date-token",
+        "keyword": "Scenario Outline",
+        "line": 18,
+        "name": "Parse a date token",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 959300
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "a valid or invalid date token \"[TOMORROW+3DAY]\"",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:19"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 65300
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 8,
+            "name": "a GET request is made to the ParseDateToken Endpoint",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:23"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 6431700
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 9,
+            "name": "the API response for the ParseDateToken Endpoint should return a status code of 200",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:29"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 503999
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "the response body should contain \"ParsedToken\" with the value \"tomorrow plus three days (four days from today)\"",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:34"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3293099
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 904199
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "parse-date-token-endpoint;parse-a-date-token",
+        "keyword": "Scenario Outline",
+        "line": 19,
+        "name": "Parse a date token",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 992699
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "a valid or invalid date token \"[YESTERDAY-2DAY]\"",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:19"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 66300
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 8,
+            "name": "a GET request is made to the ParseDateToken Endpoint",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:23"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 6640000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 9,
+            "name": "the API response for the ParseDateToken Endpoint should return a status code of 200",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:29"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 308899
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "the response body should contain \"ParsedToken\" with the value \"yesterday minus two days (three days ago)\"",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:34"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2847700
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 1314300
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "parse-date-token-endpoint;parse-a-date-token",
+        "keyword": "Scenario Outline",
+        "line": 20,
+        "name": "Parse a date token",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 3347700
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "a valid or invalid date token \"[TODAY+2YEAR+6MONTH-15DAY]\"",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:19"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 70600
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 8,
+            "name": "a GET request is made to the ParseDateToken Endpoint",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:23"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 7552499
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 9,
+            "name": "the API response for the ParseDateToken Endpoint should return a status code of 200",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:29"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 508700
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "the response body should contain \"ParsedToken\" with the value \"two years and six months ahead of today minus 15 days\"",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDateToken.steps.ts:34"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2451199
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 689999
             }
           }
         ],
@@ -431,7 +668,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 4018000
+              "duration": 1192600
             }
           },
           {
@@ -440,11 +677,11 @@
             "line": 7,
             "name": "the ParseDynamicStringToken endpoint is running",
             "match": {
-              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:10"
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:27"
             },
             "result": {
               "status": "passed",
-              "duration": 1754300
+              "duration": 787900
             }
           },
           {
@@ -453,11 +690,11 @@
             "line": 8,
             "name": "A request with dynamic string token \"INVALIDTOKEN\" to the ParseDynamicStringToken endpoint",
             "match": {
-              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:14"
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:31"
             },
             "result": {
               "status": "passed",
-              "duration": 12286900
+              "duration": 5034999
             }
           },
           {
@@ -466,11 +703,11 @@
             "line": 9,
             "name": "the API response should return a status code of 400 for the ParseDynamicStringToken endpoint",
             "match": {
-              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:21"
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:38"
             },
             "result": {
               "status": "passed",
-              "duration": 5355000
+              "duration": 1581600
             }
           },
           {
@@ -479,11 +716,11 @@
             "line": 10,
             "name": "the response should contain \"Error\" with the value \"Invalid string token format\"",
             "match": {
-              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:26"
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:43"
             },
             "result": {
               "status": "passed",
-              "duration": 9615399
+              "duration": 3341900
             }
           },
           {
@@ -491,7 +728,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 2253999
+              "duration": 1100199
             }
           }
         ],
@@ -510,7 +747,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 2755899
+              "duration": 2294899
             }
           },
           {
@@ -519,11 +756,11 @@
             "line": 7,
             "name": "the ParseDynamicStringToken endpoint is running",
             "match": {
-              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:10"
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:27"
             },
             "result": {
               "status": "passed",
-              "duration": 125399
+              "duration": 66799
             }
           },
           {
@@ -532,11 +769,11 @@
             "line": 8,
             "name": "A request with dynamic string token \"[ALPHA-NUMERIC-5]\" to the ParseDynamicStringToken endpoint",
             "match": {
-              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:14"
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:31"
             },
             "result": {
               "status": "passed",
-              "duration": 10682600
+              "duration": 5866899
             }
           },
           {
@@ -545,11 +782,11 @@
             "line": 9,
             "name": "the API response should return a status code of 200 for the ParseDynamicStringToken endpoint",
             "match": {
-              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:21"
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:38"
             },
             "result": {
               "status": "passed",
-              "duration": 1323900
+              "duration": 926400
             }
           },
           {
@@ -558,11 +795,11 @@
             "line": 10,
             "name": "the response should contain \"ParsedToken\" with the value \"An alpha-numeric string of length 5\"",
             "match": {
-              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:26"
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:43"
             },
             "result": {
               "status": "passed",
-              "duration": 4828800
+              "duration": 3814900
             }
           },
           {
@@ -570,7 +807,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 2212599
+              "duration": 1706400
             }
           }
         ],
@@ -589,7 +826,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 16745199
+              "duration": 2185699
             }
           },
           {
@@ -598,11 +835,11 @@
             "line": 7,
             "name": "the ParseDynamicStringToken endpoint is running",
             "match": {
-              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:10"
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:27"
             },
             "result": {
               "status": "passed",
-              "duration": 120700
+              "duration": 88299
             }
           },
           {
@@ -611,11 +848,11 @@
             "line": 8,
             "name": "A request with dynamic string token \"[PUNCTUATION-3]\" to the ParseDynamicStringToken endpoint",
             "match": {
-              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:14"
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:31"
             },
             "result": {
               "status": "passed",
-              "duration": 8416200
+              "duration": 5230400
             }
           },
           {
@@ -624,11 +861,11 @@
             "line": 9,
             "name": "the API response should return a status code of 200 for the ParseDynamicStringToken endpoint",
             "match": {
-              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:21"
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:38"
             },
             "result": {
               "status": "passed",
-              "duration": 580199
+              "duration": 760199
             }
           },
           {
@@ -637,11 +874,11 @@
             "line": 10,
             "name": "the response should contain \"ParsedToken\" with the value \"A string of punctuation characters of length 3\"",
             "match": {
-              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:26"
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:43"
             },
             "result": {
               "status": "passed",
-              "duration": 2703199
+              "duration": 3079700
             }
           },
           {
@@ -649,7 +886,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 2168200
+              "duration": 1563000
             }
           }
         ],
@@ -668,7 +905,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 3414899
+              "duration": 1804699
             }
           },
           {
@@ -677,11 +914,11 @@
             "line": 7,
             "name": "the ParseDynamicStringToken endpoint is running",
             "match": {
-              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:10"
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:27"
             },
             "result": {
               "status": "passed",
-              "duration": 98899
+              "duration": 81200
             }
           },
           {
@@ -690,11 +927,11 @@
             "line": 8,
             "name": "A request with dynamic string token \"[ALPHA-NUMERIC-PUNCTUATION-10-LINES-2]\" to the ParseDynamicStringToken endpoint",
             "match": {
-              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:14"
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:31"
             },
             "result": {
               "status": "passed",
-              "duration": 9175299
+              "duration": 6316700
             }
           },
           {
@@ -703,11 +940,11 @@
             "line": 9,
             "name": "the API response should return a status code of 200 for the ParseDynamicStringToken endpoint",
             "match": {
-              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:21"
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:38"
             },
             "result": {
               "status": "passed",
-              "duration": 528299
+              "duration": 784300
             }
           },
           {
@@ -716,11 +953,11 @@
             "line": 10,
             "name": "the response should contain \"ParsedToken\" with the value \"2 lines of strings with each line containing 10 alpha-numeric-punctuation characters\"",
             "match": {
-              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:26"
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:43"
             },
             "result": {
               "status": "passed",
-              "duration": 2997699
+              "duration": 4399599
             }
           },
           {
@@ -728,7 +965,244 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1140300
+              "duration": 1628200
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "dynamic-string-parser-endpoint;parse-dynamic-string-tokens",
+        "keyword": "Scenario Outline",
+        "line": 18,
+        "name": "Parse dynamic string tokens",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 7274599
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "the ParseDynamicStringToken endpoint is running",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:27"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 100800
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 8,
+            "name": "A request with dynamic string token \"[NUMERIC-8]\" to the ParseDynamicStringToken endpoint",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:31"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5564499
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 9,
+            "name": "the API response should return a status code of 200 for the ParseDynamicStringToken endpoint",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:38"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 460100
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "the response should contain \"ParsedToken\" with the value \"A numeric string of length 8\"",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:43"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2160899
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 1201000
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "dynamic-string-parser-endpoint;parse-dynamic-string-tokens",
+        "keyword": "Scenario Outline",
+        "line": 19,
+        "name": "Parse dynamic string tokens",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 1400500
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "the ParseDynamicStringToken endpoint is running",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:27"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 64300
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 8,
+            "name": "A request with dynamic string token \"[SPECIAL-5-LINES-3]\" to the ParseDynamicStringToken endpoint",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:31"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 5235099
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 9,
+            "name": "the API response should return a status code of 200 for the ParseDynamicStringToken endpoint",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:38"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 304499
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "the response should contain \"ParsedToken\" with the value \"3 lines of strings with each line containing 5 special characters\"",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:43"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2323100
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 773200
+            }
+          }
+        ],
+        "tags": [],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "dynamic-string-parser-endpoint;parse-dynamic-string-tokens",
+        "keyword": "Scenario Outline",
+        "line": 20,
+        "name": "Parse dynamic string tokens",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 899800
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 7,
+            "name": "the ParseDynamicStringToken endpoint is running",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:27"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 46800
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 8,
+            "name": "A request with dynamic string token \"[ALPHA-NUMERIC-SPECIAL-12]\" to the ParseDynamicStringToken endpoint",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:31"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 4575600
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 9,
+            "name": "the API response should return a status code of 200 for the ParseDynamicStringToken endpoint",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:38"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 303999
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "the response should contain \"ParsedToken\" with the value \"A mixed alpha, numeric, and special character string of length 12\"",
+            "match": {
+              "location": "features\\step_definitions\\api\\tokenparser\\parseDynamicStringToken.steps.ts:43"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 1671099
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 1037699
             }
           }
         ],
@@ -758,7 +1232,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1851300
+              "duration": 1039899
             }
           },
           {
@@ -767,11 +1241,11 @@
             "line": 9,
             "name": "a token \"[ALPHA-5]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:10"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 859099
+              "duration": 760000
             }
           },
           {
@@ -780,11 +1254,11 @@
             "line": 10,
             "name": "I parse and generate the string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:14"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:19"
             },
             "result": {
               "status": "passed",
-              "duration": 1291700
+              "duration": 1499800
             }
           },
           {
@@ -793,11 +1267,11 @@
             "line": 11,
             "name": "the generated string should have a length of 5",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
             },
             "result": {
               "status": "passed",
-              "duration": 1516899
+              "duration": 1177300
             }
           },
           {
@@ -806,11 +1280,11 @@
             "line": 12,
             "name": "the generated string should match the character set \"ALPHA\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 3090100
+              "duration": 1456199
             }
           },
           {
@@ -819,11 +1293,11 @@
             "line": 13,
             "name": "the generated string should have 1 lines",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:67"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:70"
             },
             "result": {
               "status": "passed",
-              "duration": 2215100
+              "duration": 893399
             }
           },
           {
@@ -831,7 +1305,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1464399
+              "duration": 794100
             }
           }
         ],
@@ -855,7 +1329,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1907400
+              "duration": 963999
             }
           },
           {
@@ -864,11 +1338,11 @@
             "line": 9,
             "name": "a token \"[NUMERIC-5]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:10"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 294899
+              "duration": 169799
             }
           },
           {
@@ -877,11 +1351,11 @@
             "line": 10,
             "name": "I parse and generate the string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:14"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:19"
             },
             "result": {
               "status": "passed",
-              "duration": 827900
+              "duration": 491100
             }
           },
           {
@@ -890,11 +1364,11 @@
             "line": 11,
             "name": "the generated string should have a length of 5",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
             },
             "result": {
               "status": "passed",
-              "duration": 648700
+              "duration": 421599
             }
           },
           {
@@ -903,11 +1377,11 @@
             "line": 12,
             "name": "the generated string should match the character set \"NUMERIC\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 829400
+              "duration": 444999
             }
           },
           {
@@ -916,11 +1390,11 @@
             "line": 13,
             "name": "the generated string should have 1 lines",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:67"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:70"
             },
             "result": {
               "status": "passed",
-              "duration": 726700
+              "duration": 364000
             }
           },
           {
@@ -928,7 +1402,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 2010000
+              "duration": 732899
             }
           }
         ],
@@ -952,7 +1426,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 2644699
+              "duration": 952199
             }
           },
           {
@@ -961,11 +1435,11 @@
             "line": 9,
             "name": "a token \"[ALPHA-NUMERIC-10]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:10"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 107100
+              "duration": 64300
             }
           },
           {
@@ -974,11 +1448,11 @@
             "line": 10,
             "name": "I parse and generate the string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:14"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:19"
             },
             "result": {
               "status": "passed",
-              "duration": 693900
+              "duration": 422100
             }
           },
           {
@@ -987,11 +1461,11 @@
             "line": 11,
             "name": "the generated string should have a length of 10",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
             },
             "result": {
               "status": "passed",
-              "duration": 624300
+              "duration": 378200
             }
           },
           {
@@ -1000,11 +1474,11 @@
             "line": 12,
             "name": "the generated string should match the character set \"ALPHA_NUMERIC\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 626100
+              "duration": 359200
             }
           },
           {
@@ -1013,11 +1487,11 @@
             "line": 13,
             "name": "the generated string should have 1 lines",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:67"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:70"
             },
             "result": {
               "status": "passed",
-              "duration": 529799
+              "duration": 300199
             }
           },
           {
@@ -1025,7 +1499,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1404999
+              "duration": 886400
             }
           }
         ],
@@ -1049,7 +1523,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1471499
+              "duration": 812200
             }
           },
           {
@@ -1058,11 +1532,11 @@
             "line": 9,
             "name": "a token \"[NUMERIC-ALPHA-20]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:10"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 99199
+              "duration": 59900
             }
           },
           {
@@ -1071,11 +1545,11 @@
             "line": 10,
             "name": "I parse and generate the string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:14"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:19"
             },
             "result": {
               "status": "passed",
-              "duration": 573900
+              "duration": 373700
             }
           },
           {
@@ -1084,11 +1558,11 @@
             "line": 11,
             "name": "the generated string should have a length of 20",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
             },
             "result": {
               "status": "passed",
-              "duration": 499899
+              "duration": 351300
             }
           },
           {
@@ -1097,11 +1571,11 @@
             "line": 12,
             "name": "the generated string should match the character set \"ALPHA_NUMERIC\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 492599
+              "duration": 360200
             }
           },
           {
@@ -1110,11 +1584,11 @@
             "line": 13,
             "name": "the generated string should have 1 lines",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:67"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:70"
             },
             "result": {
               "status": "passed",
-              "duration": 481800
+              "duration": 301800
             }
           },
           {
@@ -1122,7 +1596,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1048700
+              "duration": 694700
             }
           }
         ],
@@ -1146,7 +1620,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1712099
+              "duration": 780199
             }
           },
           {
@@ -1155,11 +1629,11 @@
             "line": 9,
             "name": "a token \"[ALPHA-NUMERIC-PUNCTUATION-12]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:10"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 103799
+              "duration": 53100
             }
           },
           {
@@ -1168,11 +1642,11 @@
             "line": 10,
             "name": "I parse and generate the string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:14"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:19"
             },
             "result": {
               "status": "passed",
-              "duration": 721899
+              "duration": 362399
             }
           },
           {
@@ -1181,11 +1655,11 @@
             "line": 11,
             "name": "the generated string should have a length of 12",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
             },
             "result": {
               "status": "passed",
-              "duration": 493500
+              "duration": 324300
             }
           },
           {
@@ -1194,11 +1668,11 @@
             "line": 12,
             "name": "the generated string should match the character set \"ALPHA_NUMERIC_PUNCTUATION\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 641500
+              "duration": 364400
             }
           },
           {
@@ -1207,11 +1681,11 @@
             "line": 13,
             "name": "the generated string should have 1 lines",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:67"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:70"
             },
             "result": {
               "status": "passed",
-              "duration": 547700
+              "duration": 285499
             }
           },
           {
@@ -1219,7 +1693,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1918999
+              "duration": 1972099
             }
           }
         ],
@@ -1243,7 +1717,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1807200
+              "duration": 961699
             }
           },
           {
@@ -1252,11 +1726,11 @@
             "line": 9,
             "name": "a token \"[SPECIAL-6]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:10"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 109599
+              "duration": 63000
             }
           },
           {
@@ -1265,11 +1739,11 @@
             "line": 10,
             "name": "I parse and generate the string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:14"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:19"
             },
             "result": {
               "status": "passed",
-              "duration": 630400
+              "duration": 404099
             }
           },
           {
@@ -1278,11 +1752,11 @@
             "line": 11,
             "name": "the generated string should have a length of 6",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
             },
             "result": {
               "status": "passed",
-              "duration": 526399
+              "duration": 345699
             }
           },
           {
@@ -1291,11 +1765,11 @@
             "line": 12,
             "name": "the generated string should match the character set \"SPECIAL\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 533999
+              "duration": 364400
             }
           },
           {
@@ -1304,11 +1778,11 @@
             "line": 13,
             "name": "the generated string should have 1 lines",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:67"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:70"
             },
             "result": {
               "status": "passed",
-              "duration": 492200
+              "duration": 326600
             }
           },
           {
@@ -1316,7 +1790,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 2508899
+              "duration": 745399
             }
           }
         ],
@@ -1340,7 +1814,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1234699
+              "duration": 853899
             }
           },
           {
@@ -1349,11 +1823,11 @@
             "line": 9,
             "name": "a token \"[ALPHA-PUNCTUATION-8]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:10"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 113299
+              "duration": 61099
             }
           },
           {
@@ -1362,11 +1836,11 @@
             "line": 10,
             "name": "I parse and generate the string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:14"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:19"
             },
             "result": {
               "status": "passed",
-              "duration": 734899
+              "duration": 486800
             }
           },
           {
@@ -1375,11 +1849,11 @@
             "line": 11,
             "name": "the generated string should have a length of 8",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
             },
             "result": {
               "status": "passed",
-              "duration": 473100
+              "duration": 331399
             }
           },
           {
@@ -1388,11 +1862,11 @@
             "line": 12,
             "name": "the generated string should match the character set \"ALPHA_PUNCTUATION\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 569000
+              "duration": 347600
             }
           },
           {
@@ -1401,11 +1875,11 @@
             "line": 13,
             "name": "the generated string should have 1 lines",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:67"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:70"
             },
             "result": {
               "status": "passed",
-              "duration": 512499
+              "duration": 284099
             }
           },
           {
@@ -1413,7 +1887,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1121599
+              "duration": 674500
             }
           }
         ],
@@ -1437,7 +1911,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1066500
+              "duration": 828300
             }
           },
           {
@@ -1446,11 +1920,11 @@
             "line": 9,
             "name": "a token \"[PUNCTUATION-ALPHA-123]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:10"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 70900
+              "duration": 58999
             }
           },
           {
@@ -1459,11 +1933,11 @@
             "line": 10,
             "name": "I parse and generate the string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:14"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:19"
             },
             "result": {
               "status": "passed",
-              "duration": 543499
+              "duration": 384000
             }
           },
           {
@@ -1472,11 +1946,11 @@
             "line": 11,
             "name": "the generated string should have a length of 123",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
             },
             "result": {
               "status": "passed",
-              "duration": 391800
+              "duration": 326699
             }
           },
           {
@@ -1485,11 +1959,11 @@
             "line": 12,
             "name": "the generated string should match the character set \"ALPHA_PUNCTUATION\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 551800
+              "duration": 355499
             }
           },
           {
@@ -1498,11 +1972,11 @@
             "line": 13,
             "name": "the generated string should have 1 lines",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:67"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:70"
             },
             "result": {
               "status": "passed",
-              "duration": 400499
+              "duration": 286700
             }
           },
           {
@@ -1510,7 +1984,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1089399
+              "duration": 722999
             }
           }
         ],
@@ -1534,7 +2008,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1074499
+              "duration": 1251500
             }
           },
           {
@@ -1543,11 +2017,11 @@
             "line": 9,
             "name": "a token \"[ALPHA-NUMERIC-SPECIAL-15]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:10"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 82000
+              "duration": 81699
             }
           },
           {
@@ -1556,11 +2030,11 @@
             "line": 10,
             "name": "I parse and generate the string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:14"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:19"
             },
             "result": {
               "status": "passed",
-              "duration": 465299
+              "duration": 411199
             }
           },
           {
@@ -1569,11 +2043,11 @@
             "line": 11,
             "name": "the generated string should have a length of 15",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
             },
             "result": {
               "status": "passed",
-              "duration": 655499
+              "duration": 413999
             }
           },
           {
@@ -1582,11 +2056,11 @@
             "line": 12,
             "name": "the generated string should match the character set \"ALPHA_NUMERIC_SPECIAL\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 685699
+              "duration": 363299
             }
           },
           {
@@ -1595,11 +2069,11 @@
             "line": 13,
             "name": "the generated string should have 1 lines",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:67"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:70"
             },
             "result": {
               "status": "passed",
-              "duration": 603500
+              "duration": 290399
             }
           },
           {
@@ -1607,7 +2081,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1384000
+              "duration": 754699
             }
           }
         ],
@@ -1631,7 +2105,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1141999
+              "duration": 844999
             }
           },
           {
@@ -1640,11 +2114,11 @@
             "line": 9,
             "name": "a token \"[ALPHA-5-LINES-3]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:10"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 75799
+              "duration": 59999
             }
           },
           {
@@ -1653,11 +2127,11 @@
             "line": 10,
             "name": "I parse and generate the string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:14"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:19"
             },
             "result": {
               "status": "passed",
-              "duration": 478100
+              "duration": 453400
             }
           },
           {
@@ -1666,11 +2140,11 @@
             "line": 11,
             "name": "the generated string should have a length of 15",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
             },
             "result": {
               "status": "passed",
-              "duration": 425199
+              "duration": 354299
             }
           },
           {
@@ -1679,11 +2153,11 @@
             "line": 12,
             "name": "the generated string should match the character set \"ALPHA\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 414699
+              "duration": 451000
             }
           },
           {
@@ -1692,11 +2166,11 @@
             "line": 13,
             "name": "the generated string should have 3 lines",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:67"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:70"
             },
             "result": {
               "status": "passed",
-              "duration": 495700
+              "duration": 309299
             }
           },
           {
@@ -1704,7 +2178,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1055600
+              "duration": 744599
             }
           }
         ],
@@ -1728,7 +2202,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 987399
+              "duration": 795599
             }
           },
           {
@@ -1737,11 +2211,11 @@
             "line": 9,
             "name": "a token \"[NUMERIC-4-LINES-4]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:10"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 71000
+              "duration": 58199
             }
           },
           {
@@ -1750,11 +2224,11 @@
             "line": 10,
             "name": "I parse and generate the string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:14"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:19"
             },
             "result": {
               "status": "passed",
-              "duration": 502099
+              "duration": 514799
             }
           },
           {
@@ -1763,11 +2237,11 @@
             "line": 11,
             "name": "the generated string should have a length of 16",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
             },
             "result": {
               "status": "passed",
-              "duration": 395599
+              "duration": 326000
             }
           },
           {
@@ -1776,11 +2250,11 @@
             "line": 12,
             "name": "the generated string should match the character set \"NUMERIC\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 400599
+              "duration": 341999
             }
           },
           {
@@ -1789,11 +2263,11 @@
             "line": 13,
             "name": "the generated string should have 4 lines",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:67"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:70"
             },
             "result": {
               "status": "passed",
-              "duration": 414399
+              "duration": 285499
             }
           },
           {
@@ -1801,7 +2275,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 900999
+              "duration": 661999
             }
           }
         ],
@@ -1825,7 +2299,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1742999
+              "duration": 780700
             }
           },
           {
@@ -1834,11 +2308,11 @@
             "line": 9,
             "name": "a token \"[ALPHA-NUMERIC-5-LINES-2]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:10"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 111200
+              "duration": 56799
             }
           },
           {
@@ -1847,11 +2321,11 @@
             "line": 10,
             "name": "I parse and generate the string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:14"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:19"
             },
             "result": {
               "status": "passed",
-              "duration": 521700
+              "duration": 366500
             }
           },
           {
@@ -1860,11 +2334,11 @@
             "line": 11,
             "name": "the generated string should have a length of 10",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
             },
             "result": {
               "status": "passed",
-              "duration": 412999
+              "duration": 328799
             }
           },
           {
@@ -1873,11 +2347,11 @@
             "line": 12,
             "name": "the generated string should match the character set \"ALPHA_NUMERIC\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 355099
+              "duration": 302800
             }
           },
           {
@@ -1886,11 +2360,11 @@
             "line": 13,
             "name": "the generated string should have 2 lines",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:67"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:70"
             },
             "result": {
               "status": "passed",
-              "duration": 344299
+              "duration": 285100
             }
           },
           {
@@ -1898,7 +2372,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 911399
+              "duration": 642300
             }
           }
         ],
@@ -1922,7 +2396,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1600499
+              "duration": 779499
             }
           },
           {
@@ -1931,11 +2405,11 @@
             "line": 9,
             "name": "a token \"[SPECIAL-ALL]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:10"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 82100
+              "duration": 56300
             }
           },
           {
@@ -1944,11 +2418,11 @@
             "line": 10,
             "name": "I parse and generate the string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:14"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:19"
             },
             "result": {
               "status": "passed",
-              "duration": 450499
+              "duration": 371900
             }
           },
           {
@@ -1957,11 +2431,11 @@
             "line": 11,
             "name": "the generated string should have a length of 24",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
             },
             "result": {
               "status": "passed",
-              "duration": 395999
+              "duration": 321200
             }
           },
           {
@@ -1970,11 +2444,11 @@
             "line": 12,
             "name": "the generated string should match the character set \"SPECIAL\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 466099
+              "duration": 358700
             }
           },
           {
@@ -1983,11 +2457,11 @@
             "line": 13,
             "name": "the generated string should have 1 lines",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:67"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:70"
             },
             "result": {
               "status": "passed",
-              "duration": 499399
+              "duration": 331199
             }
           },
           {
@@ -1995,7 +2469,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1059500
+              "duration": 2228000
             }
           }
         ],
@@ -2019,7 +2493,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1039800
+              "duration": 900299
             }
           },
           {
@@ -2028,11 +2502,11 @@
             "line": 9,
             "name": "a token \"[PUNCTUATION-ALL]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:10"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 72400
+              "duration": 65999
             }
           },
           {
@@ -2041,11 +2515,11 @@
             "line": 10,
             "name": "I parse and generate the string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:14"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:19"
             },
             "result": {
               "status": "passed",
-              "duration": 515599
+              "duration": 402500
             }
           },
           {
@@ -2054,11 +2528,11 @@
             "line": 11,
             "name": "the generated string should have a length of 6",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
             },
             "result": {
               "status": "passed",
-              "duration": 384400
+              "duration": 336199
             }
           },
           {
@@ -2067,11 +2541,11 @@
             "line": 12,
             "name": "the generated string should match the character set \"PUNCTUATION\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 493299
+              "duration": 357999
             }
           },
           {
@@ -2080,11 +2554,11 @@
             "line": 13,
             "name": "the generated string should have 1 lines",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:67"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:70"
             },
             "result": {
               "status": "passed",
-              "duration": 599100
+              "duration": 289099
             }
           },
           {
@@ -2092,7 +2566,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 3156399
+              "duration": 684999
             }
           }
         ],
@@ -2116,7 +2590,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1516299
+              "duration": 739099
             }
           },
           {
@@ -2125,11 +2599,11 @@
             "line": 9,
             "name": "a token \"[SPECIAL-PUNCTUATION-ALL]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:10"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 103699
+              "duration": 54199
             }
           },
           {
@@ -2138,11 +2612,11 @@
             "line": 10,
             "name": "I parse and generate the string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:14"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:19"
             },
             "result": {
               "status": "passed",
-              "duration": 808899
+              "duration": 394599
             }
           },
           {
@@ -2151,11 +2625,11 @@
             "line": 11,
             "name": "the generated string should have a length of 30",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
             },
             "result": {
               "status": "passed",
-              "duration": 624600
+              "duration": 313600
             }
           },
           {
@@ -2164,11 +2638,11 @@
             "line": 12,
             "name": "the generated string should match the character set \"SPECIAL_PUNCTUATION\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:30"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:37"
             },
             "result": {
               "status": "passed",
-              "duration": 554500
+              "duration": 352299
             }
           },
           {
@@ -2177,11 +2651,11 @@
             "line": 13,
             "name": "the generated string should have 1 lines",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:67"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:70"
             },
             "result": {
               "status": "passed",
-              "duration": 441700
+              "duration": 284900
             }
           },
           {
@@ -2189,7 +2663,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1267700
+              "duration": 650999
             }
           }
         ],
@@ -2213,7 +2687,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1044100
+              "duration": 748899
             }
           },
           {
@@ -2222,11 +2696,11 @@
             "line": 34,
             "name": "a token \"[ALPHA-5-LINES-0]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:10"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 74800
+              "duration": 52599
             }
           },
           {
@@ -2235,11 +2709,11 @@
             "line": 35,
             "name": "I parse and generate the string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:14"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:19"
             },
             "result": {
               "status": "passed",
-              "duration": 389799
+              "duration": 369999
             }
           },
           {
@@ -2248,11 +2722,11 @@
             "line": 36,
             "name": "a dynamic string parser error should be thrown with message \"Invalid line count in token\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:73"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:77"
             },
             "result": {
               "status": "passed",
-              "duration": 1986299
+              "duration": 1341800
             }
           },
           {
@@ -2260,7 +2734,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1340999
+              "duration": 720299
             }
           }
         ],
@@ -2284,7 +2758,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1292199
+              "duration": 761700
             }
           },
           {
@@ -2293,11 +2767,11 @@
             "line": 34,
             "name": "a token \"[ALPHA-5-LINES-XYZ]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:10"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 109600
+              "duration": 54399
             }
           },
           {
@@ -2306,11 +2780,11 @@
             "line": 35,
             "name": "I parse and generate the string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:14"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:19"
             },
             "result": {
               "status": "passed",
-              "duration": 117899
+              "duration": 64800
             }
           },
           {
@@ -2319,11 +2793,11 @@
             "line": 36,
             "name": "a dynamic string parser error should be thrown with message \"Invalid string token format\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:73"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:77"
             },
             "result": {
               "status": "passed",
-              "duration": 800000
+              "duration": 467799
             }
           },
           {
@@ -2331,7 +2805,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1008499
+              "duration": 696500
             }
           }
         ],
@@ -2355,7 +2829,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1217700
+              "duration": 819999
             }
           },
           {
@@ -2364,11 +2838,11 @@
             "line": 34,
             "name": "a token \"[ALPHA-0]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:10"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:15"
             },
             "result": {
               "status": "passed",
-              "duration": 84600
+              "duration": 65800
             }
           },
           {
@@ -2377,11 +2851,11 @@
             "line": 35,
             "name": "I parse and generate the string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:14"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:19"
             },
             "result": {
               "status": "passed",
-              "duration": 78199
+              "duration": 105299
             }
           },
           {
@@ -2390,11 +2864,11 @@
             "line": 36,
             "name": "a dynamic string parser error should be thrown with message \"Invalid string token format\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:73"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\TokenDynamicStringParser.steps.ts:77"
             },
             "result": {
               "status": "passed",
-              "duration": 451399
+              "duration": 356600
             }
           },
           {
@@ -2402,7 +2876,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 844399
+              "duration": 719199
             }
           }
         ],
@@ -2432,17 +2906,17 @@
     "elements": [
       {
         "description": "",
-        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-today---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
-        "keyword": "Scenario",
-        "line": 8,
-        "name": "Parsing today - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
+        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-relative-date-tokens---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
+        "keyword": "Scenario Outline",
+        "line": 15,
+        "name": "Parsing relative date tokens - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1182600
+              "duration": 803699
             }
           },
           {
@@ -2451,11 +2925,11 @@
             "line": 9,
             "name": "A date token \"[TODAY]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:38"
             },
             "result": {
               "status": "passed",
-              "duration": 899800
+              "duration": 702499
             }
           },
           {
@@ -2464,450 +2938,24 @@
             "line": 10,
             "name": "I parse the token",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:37"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:47"
             },
             "result": {
               "status": "passed",
-              "duration": 797400
+              "duration": 675299
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
             "line": 11,
-            "name": "the result should be today's date",
-            "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:77"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 925400
-            }
-          },
-          {
-            "keyword": "After",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 911599
-            }
-          }
-        ],
-        "tags": [
-          {
-            "name": "@UTILTEST",
-            "line": 1
-          }
-        ],
-        "type": "scenario"
-      },
-      {
-        "description": "",
-        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-tomorrow---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
-        "keyword": "Scenario",
-        "line": 13,
-        "name": "Parsing tomorrow - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
-        "steps": [
-          {
-            "keyword": "Before",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 1569399
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "line": 14,
-            "name": "A date token \"[TOMORROW]\"",
-            "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:25"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 277099
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 15,
-            "name": "I parse the token",
-            "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:37"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 735199
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 16,
-            "name": "the result should be tomorrow's date",
-            "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:87"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 1213799
-            }
-          },
-          {
-            "keyword": "After",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 1243600
-            }
-          }
-        ],
-        "tags": [
-          {
-            "name": "@UTILTEST",
-            "line": 1
-          }
-        ],
-        "type": "scenario"
-      },
-      {
-        "description": "",
-        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-yesterday---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
-        "keyword": "Scenario",
-        "line": 18,
-        "name": "Parsing yesterday - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
-        "steps": [
-          {
-            "keyword": "Before",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 1391599
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "line": 19,
-            "name": "A date token \"[YESTERDAY]\"",
-            "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:25"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 89299
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 20,
-            "name": "I parse the token",
-            "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:37"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 530000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 21,
-            "name": "the result should be yesterday's date",
-            "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:98"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 1088200
-            }
-          },
-          {
-            "keyword": "After",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 1111499
-            }
-          }
-        ],
-        "tags": [
-          {
-            "name": "@UTILTEST",
-            "line": 1
-          }
-        ],
-        "type": "scenario"
-      },
-      {
-        "description": "",
-        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-today-minus-two-year-and-four-month---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
-        "keyword": "Scenario",
-        "line": 23,
-        "name": "Parsing today minus two year and four month - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
-        "steps": [
-          {
-            "keyword": "Before",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 1317200
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "line": 24,
-            "name": "A date token \"[TODAY-2YEAR-4MONTH]\"",
-            "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:25"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 93699
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 25,
-            "name": "I parse the token",
-            "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:37"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 932700
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 26,
-            "name": "the result should be today's date minus two year and four month",
-            "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:55"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 1262900
-            }
-          },
-          {
-            "keyword": "After",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 964399
-            }
-          }
-        ],
-        "tags": [
-          {
-            "name": "@UTILTEST",
-            "line": 1
-          }
-        ],
-        "type": "scenario"
-      },
-      {
-        "description": "",
-        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-today-minus-one-year-and-one-month---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
-        "keyword": "Scenario",
-        "line": 28,
-        "name": "Parsing today minus one year and one month - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
-        "steps": [
-          {
-            "keyword": "Before",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 1287600
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "line": 29,
-            "name": "A date token \"[TODAY-1YEAR-1MONTH]\"",
-            "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:25"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 82000
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 30,
-            "name": "I parse the token",
-            "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:37"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 782900
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 31,
-            "name": "the result should be today's date minus one year and one month",
-            "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:66"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 1140999
-            }
-          },
-          {
-            "keyword": "After",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 1037400
-            }
-          }
-        ],
-        "tags": [
-          {
-            "name": "@UTILTEST",
-            "line": 1
-          }
-        ],
-        "type": "scenario"
-      },
-      {
-        "description": "",
-        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-today-minus-one-year,-two-months,-and-three-days---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
-        "keyword": "Scenario",
-        "line": 33,
-        "name": "Parsing today minus one year, two months, and three days - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
-        "steps": [
-          {
-            "keyword": "Before",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 947900
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "line": 34,
-            "name": "A date token \"[TODAY-1YEAR-2MONTH-3DAY]\"",
-            "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:25"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 72500
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 35,
-            "name": "I parse the token",
-            "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:37"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 1351899
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 36,
-            "name": "the result should be today's date minus one year, two months, and three days",
-            "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:120"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 1631400
-            }
-          },
-          {
-            "keyword": "After",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 1367299
-            }
-          }
-        ],
-        "tags": [
-          {
-            "name": "@UTILTEST",
-            "line": 1
-          }
-        ],
-        "type": "scenario"
-      },
-      {
-        "description": "",
-        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-today-plus-one-year,-minus-one-month,-and-plus-one-day---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
-        "keyword": "Scenario",
-        "line": 38,
-        "name": "Parsing today plus one year, minus one month, and plus one day - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
-        "steps": [
-          {
-            "keyword": "Before",
-            "hidden": true,
-            "result": {
-              "status": "passed",
-              "duration": 1581899
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Given ",
-            "line": 39,
-            "name": "A date token \"[TODAY+1YEAR-1MONTH+1DAY]\"",
-            "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:25"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 112200
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "When ",
-            "line": 40,
-            "name": "I parse the token",
-            "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:37"
-            },
-            "result": {
-              "status": "passed",
-              "duration": 1162299
-            }
-          },
-          {
-            "arguments": [],
-            "keyword": "Then ",
-            "line": 41,
-            "name": "the result should be today's date plus one year, minus one month, and plus one day",
+            "name": "the result should equal today plus 0 years 0 months 0 days",
             "match": {
               "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:133"
             },
             "result": {
               "status": "passed",
-              "duration": 1791299
+              "duration": 1414399
             }
           },
           {
@@ -2915,7 +2963,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 890599
+              "duration": 687700
             }
           }
         ],
@@ -2929,56 +2977,269 @@
       },
       {
         "description": "",
-        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-today-minus-one-year-and-one-month-with-regex---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
-        "keyword": "Scenario",
-        "line": 43,
-        "name": "Parsing today minus one year and one month with regex - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
+        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-relative-date-tokens---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
+        "keyword": "Scenario Outline",
+        "line": 16,
+        "name": "Parsing relative date tokens - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 999899
+              "duration": 776299
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 44,
+            "line": 9,
+            "name": "A date token \"[TOMORROW]\"",
+            "match": {
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:38"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 165699
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 10,
+            "name": "I parse the token",
+            "match": {
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:47"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 499399
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 11,
+            "name": "the result should equal today plus 0 years 0 months 1 days",
+            "match": {
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:133"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 442300
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 661399
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@UTILTEST",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-relative-date-tokens---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
+        "keyword": "Scenario Outline",
+        "line": 17,
+        "name": "Parsing relative date tokens - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 766399
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "A date token \"[YESTERDAY]\"",
+            "match": {
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:38"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 58500
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 10,
+            "name": "I parse the token",
+            "match": {
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:47"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 407600
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 11,
+            "name": "the result should equal today plus 0 years 0 months -1 days",
+            "match": {
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:133"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 314399
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 648099
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@UTILTEST",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-relative-date-tokens---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
+        "keyword": "Scenario Outline",
+        "line": 18,
+        "name": "Parsing relative date tokens - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 874099
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "A date token \"[TODAY-2YEAR-4MONTH]\"",
+            "match": {
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:38"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 61800
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 10,
+            "name": "I parse the token",
+            "match": {
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:47"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 630299
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 11,
+            "name": "the result should equal today plus -2 years -4 months 0 days",
+            "match": {
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:133"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 336999
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 714600
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@UTILTEST",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-relative-date-tokens---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
+        "keyword": "Scenario Outline",
+        "line": 19,
+        "name": "Parsing relative date tokens - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 784999
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
             "name": "A date token \"[TODAY-1YEAR-1MONTH]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:38"
             },
             "result": {
               "status": "passed",
-              "duration": 73000
+              "duration": 60699
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 45,
+            "line": 10,
             "name": "I parse the token",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:37"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:47"
             },
             "result": {
               "status": "passed",
-              "duration": 637499
+              "duration": 586800
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 46,
-            "name": "the result should be today's date minus one year and one month",
+            "line": 11,
+            "name": "the result should equal today plus -1 years -1 months 0 days",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:66"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:133"
             },
             "result": {
               "status": "passed",
-              "duration": 420900
+              "duration": 317799
             }
           },
           {
@@ -2986,7 +3247,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 775400
+              "duration": 618899
             }
           }
         ],
@@ -3000,56 +3261,198 @@
       },
       {
         "description": "",
-        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-today-plus-two-years---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
-        "keyword": "Scenario",
-        "line": 48,
-        "name": "Parsing today plus two years - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
+        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-relative-date-tokens---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
+        "keyword": "Scenario Outline",
+        "line": 20,
+        "name": "Parsing relative date tokens - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 995399
+              "duration": 766899
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 49,
+            "line": 9,
+            "name": "A date token \"[TODAY-1YEAR-2MONTH-3DAY]\"",
+            "match": {
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:38"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 59299
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 10,
+            "name": "I parse the token",
+            "match": {
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:47"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 803700
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 11,
+            "name": "the result should equal today plus -1 years -2 months -3 days",
+            "match": {
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:133"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 322699
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 657400
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@UTILTEST",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-relative-date-tokens---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
+        "keyword": "Scenario Outline",
+        "line": 21,
+        "name": "Parsing relative date tokens - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 706900
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "A date token \"[TODAY+1YEAR-1MONTH+1DAY]\"",
+            "match": {
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:38"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 59000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 10,
+            "name": "I parse the token",
+            "match": {
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:47"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 638600
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 11,
+            "name": "the result should equal today plus 1 years -1 months 1 days",
+            "match": {
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:133"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 343399
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 647500
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@UTILTEST",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-relative-date-tokens---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
+        "keyword": "Scenario Outline",
+        "line": 22,
+        "name": "Parsing relative date tokens - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 754700
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
             "name": "A date token \"[TODAY+2YEAR]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:38"
             },
             "result": {
               "status": "passed",
-              "duration": 112799
+              "duration": 62600
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 50,
+            "line": 10,
             "name": "I parse the token",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:37"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:47"
             },
             "result": {
               "status": "passed",
-              "duration": 683700
+              "duration": 497500
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 51,
-            "name": "the result should be today's date plus two years",
+            "line": 11,
+            "name": "the result should equal today plus 2 years 0 months 0 days",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:146"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:133"
             },
             "result": {
               "status": "passed",
-              "duration": 1039600
+              "duration": 364899
             }
           },
           {
@@ -3057,7 +3460,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 835399
+              "duration": 633800
             }
           }
         ],
@@ -3071,56 +3474,56 @@
       },
       {
         "description": "",
-        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-today-plus-five-months---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
-        "keyword": "Scenario",
-        "line": 53,
-        "name": "Parsing today plus five months - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
+        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-relative-date-tokens---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
+        "keyword": "Scenario Outline",
+        "line": 23,
+        "name": "Parsing relative date tokens - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 923999
+              "duration": 744799
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 54,
+            "line": 9,
             "name": "A date token \"[TODAY+5MONTH]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:38"
             },
             "result": {
               "status": "passed",
-              "duration": 97600
+              "duration": 65299
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 55,
+            "line": 10,
             "name": "I parse the token",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:37"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:47"
             },
             "result": {
               "status": "passed",
-              "duration": 708700
+              "duration": 482399
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 56,
-            "name": "the result should be today's date plus five months",
+            "line": 11,
+            "name": "the result should equal today plus 0 years 5 months 0 days",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:157"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:133"
             },
             "result": {
               "status": "passed",
-              "duration": 974599
+              "duration": 470900
             }
           },
           {
@@ -3128,7 +3531,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 2490399
+              "duration": 648699
             }
           }
         ],
@@ -3142,56 +3545,56 @@
       },
       {
         "description": "",
-        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-tomorrow-plus-five-months---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
-        "keyword": "Scenario",
-        "line": 58,
-        "name": "Parsing tomorrow plus five months - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
+        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-relative-date-tokens---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
+        "keyword": "Scenario Outline",
+        "line": 24,
+        "name": "Parsing relative date tokens - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1102199
+              "duration": 717300
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 59,
+            "line": 9,
             "name": "A date token \"[TOMORROW+5MONTH]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:38"
             },
             "result": {
               "status": "passed",
-              "duration": 120700
+              "duration": 59000
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 60,
+            "line": 10,
             "name": "I parse the token",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:37"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:47"
             },
             "result": {
               "status": "passed",
-              "duration": 720000
+              "duration": 490099
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 61,
-            "name": "the result should be tomorrow's date plus five months",
+            "line": 11,
+            "name": "the result should equal today plus 0 years 5 months 1 days",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:168"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:133"
             },
             "result": {
               "status": "passed",
-              "duration": 970800
+              "duration": 384999
             }
           },
           {
@@ -3199,7 +3602,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1018100
+              "duration": 1800799
             }
           }
         ],
@@ -3213,56 +3616,56 @@
       },
       {
         "description": "",
-        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-yesterday-plus-five-months-and-minus-one-year---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
-        "keyword": "Scenario",
-        "line": 63,
-        "name": "Parsing yesterday plus five months and minus one year - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
+        "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-relative-date-tokens---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
+        "keyword": "Scenario Outline",
+        "line": 25,
+        "name": "Parsing relative date tokens - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
         "steps": [
           {
             "keyword": "Before",
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1183100
+              "duration": 777900
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 64,
+            "line": 9,
             "name": "A date token \"[YESTERDAY+5MONTH-1YEAR]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:25"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:38"
             },
             "result": {
               "status": "passed",
-              "duration": 81100
+              "duration": 60199
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 65,
+            "line": 10,
             "name": "I parse the token",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:37"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:47"
             },
             "result": {
               "status": "passed",
-              "duration": 790399
+              "duration": 613299
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 66,
-            "name": "the result should be yesterday's date plus five months and minus one year",
+            "line": 11,
+            "name": "the result should equal today plus -1 years 5 months -1 days",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:180"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:133"
             },
             "result": {
               "status": "passed",
-              "duration": 1425599
+              "duration": 309299
             }
           },
           {
@@ -3270,7 +3673,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1055299
+              "duration": 591400
             }
           }
         ],
@@ -3286,7 +3689,7 @@
         "description": "",
         "id": "parsing-dates-from-token-format-strings-using-tokendateparser;handling-null-or-invalid-token-input---[startdate][+ve/-ve][datepart][+ve/-ve][datepart][+ve/-ve][datepart]",
         "keyword": "Scenario",
-        "line": 68,
+        "line": 27,
         "name": "Handling null or invalid token input - [STARTDATE][+ve/-ve][DATEPART][+ve/-ve][DATEPART][+ve/-ve][DATEPART]",
         "steps": [
           {
@@ -3294,46 +3697,46 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1113500
+              "duration": 673299
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 69,
+            "line": 28,
             "name": "An invalid date range string \"INVALID-TOKEN\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:29"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:42"
             },
             "result": {
               "status": "passed",
-              "duration": 944700
+              "duration": 981800
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 70,
+            "line": 29,
             "name": "I parse the token",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:37"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:47"
             },
             "result": {
               "status": "passed",
-              "duration": 416599
+              "duration": 385699
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 71,
-            "name": "an error should be thrown with message \"Invalid string token format : INVALID-TOKEN\"",
+            "line": 30,
+            "name": "an error should be thrown with message \"Invalid string token format\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:50"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:58"
             },
             "result": {
               "status": "passed",
-              "duration": 1838499
+              "duration": 1168599
             }
           },
           {
@@ -3341,7 +3744,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 920399
+              "duration": 667800
             }
           }
         ],
@@ -3357,7 +3760,7 @@
         "description": "",
         "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-several-instances-of-a-second-format-of-date-string-tokens---[monthendstart][month][year]",
         "keyword": "Scenario Outline",
-        "line": 80,
+        "line": 39,
         "name": "Parsing several instances of a second format of date string tokens - [MONTHENDSTART][MONTH][YEAR]",
         "steps": [
           {
@@ -3365,46 +3768,46 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1049199
+              "duration": 700499
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 74,
+            "line": 33,
             "name": "A date string \"[START-JANUARY-2024]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:211"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:155"
             },
             "result": {
               "status": "passed",
-              "duration": 1010499
+              "duration": 680200
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 75,
+            "line": 34,
             "name": "I parse the date string token",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:218"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:159"
             },
             "result": {
               "status": "passed",
-              "duration": 1186400
+              "duration": 1138400
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 76,
+            "line": 35,
             "name": "the result should be \"2024-01-01\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:222"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:169"
             },
             "result": {
               "status": "passed",
-              "duration": 1484800
+              "duration": 880499
             }
           },
           {
@@ -3412,7 +3815,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1287699
+              "duration": 632000
             }
           }
         ],
@@ -3428,7 +3831,7 @@
         "description": "",
         "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-several-instances-of-a-second-format-of-date-string-tokens---[monthendstart][month][year]",
         "keyword": "Scenario Outline",
-        "line": 81,
+        "line": 40,
         "name": "Parsing several instances of a second format of date string tokens - [MONTHENDSTART][MONTH][YEAR]",
         "steps": [
           {
@@ -3436,46 +3839,46 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1164399
+              "duration": 692100
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 74,
+            "line": 33,
             "name": "A date string \"[END-FEBRUARY-2024]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:211"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:155"
             },
             "result": {
               "status": "passed",
-              "duration": 243399
+              "duration": 158800
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 75,
+            "line": 34,
             "name": "I parse the date string token",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:218"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:159"
             },
             "result": {
               "status": "passed",
-              "duration": 820899
+              "duration": 604599
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 76,
+            "line": 35,
             "name": "the result should be \"2024-02-29\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:222"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:169"
             },
             "result": {
               "status": "passed",
-              "duration": 690200
+              "duration": 333999
             }
           },
           {
@@ -3483,7 +3886,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1224900
+              "duration": 574100
             }
           }
         ],
@@ -3499,7 +3902,7 @@
         "description": "",
         "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-several-instances-of-a-second-format-of-date-string-tokens---[monthendstart][month][year]",
         "keyword": "Scenario Outline",
-        "line": 82,
+        "line": 41,
         "name": "Parsing several instances of a second format of date string tokens - [MONTHENDSTART][MONTH][YEAR]",
         "steps": [
           {
@@ -3507,46 +3910,46 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1287599
+              "duration": 677099
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 74,
+            "line": 33,
             "name": "A date string \"[END-FEBRUARY-2022]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:211"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:155"
             },
             "result": {
               "status": "passed",
-              "duration": 103499
+              "duration": 54000
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 75,
+            "line": 34,
             "name": "I parse the date string token",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:218"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:159"
             },
             "result": {
               "status": "passed",
-              "duration": 505900
+              "duration": 594299
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 76,
+            "line": 35,
             "name": "the result should be \"2022-02-28\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:222"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:169"
             },
             "result": {
               "status": "passed",
-              "duration": 474799
+              "duration": 215600
             }
           },
           {
@@ -3554,7 +3957,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 884900
+              "duration": 562500
             }
           }
         ],
@@ -3570,7 +3973,7 @@
         "description": "",
         "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-several-instances-of-a-second-format-of-date-string-tokens---[monthendstart][month][year]",
         "keyword": "Scenario Outline",
-        "line": 83,
+        "line": 42,
         "name": "Parsing several instances of a second format of date string tokens - [MONTHENDSTART][MONTH][YEAR]",
         "steps": [
           {
@@ -3578,46 +3981,46 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1206400
+              "duration": 719000
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 74,
+            "line": 33,
             "name": "A date string \"[END-OCTOBER-2020]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:211"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:155"
             },
             "result": {
               "status": "passed",
-              "duration": 99299
+              "duration": 54600
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 75,
+            "line": 34,
             "name": "I parse the date string token",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:218"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:159"
             },
             "result": {
               "status": "passed",
-              "duration": 659700
+              "duration": 609099
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 76,
+            "line": 35,
             "name": "the result should be \"2020-10-31\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:222"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:169"
             },
             "result": {
               "status": "passed",
-              "duration": 524699
+              "duration": 224199
             }
           },
           {
@@ -3625,7 +4028,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1262600
+              "duration": 579999
             }
           }
         ],
@@ -3641,7 +4044,7 @@
         "description": "",
         "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-several-instances-of-a-second-format-of-date-string-tokens---[monthendstart][month][year]",
         "keyword": "Scenario Outline",
-        "line": 84,
+        "line": 43,
         "name": "Parsing several instances of a second format of date string tokens - [MONTHENDSTART][MONTH][YEAR]",
         "steps": [
           {
@@ -3649,46 +4052,46 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1416200
+              "duration": 692100
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 74,
+            "line": 33,
             "name": "A date string \"[START-DECEMBER-2000]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:211"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:155"
             },
             "result": {
               "status": "passed",
-              "duration": 85299
+              "duration": 54500
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 75,
+            "line": 34,
             "name": "I parse the date string token",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:218"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:159"
             },
             "result": {
               "status": "passed",
-              "duration": 608100
+              "duration": 593100
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 76,
+            "line": 35,
             "name": "the result should be \"2000-12-01\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:222"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:169"
             },
             "result": {
               "status": "passed",
-              "duration": 383499
+              "duration": 219500
             }
           },
           {
@@ -3696,7 +4099,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 809799
+              "duration": 581900
             }
           }
         ],
@@ -3712,7 +4115,7 @@
         "description": "",
         "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-several-instances-of-a-second-format-of-date-string-tokens---[monthendstart][month][year]",
         "keyword": "Scenario Outline",
-        "line": 85,
+        "line": 44,
         "name": "Parsing several instances of a second format of date string tokens - [MONTHENDSTART][MONTH][YEAR]",
         "steps": [
           {
@@ -3720,46 +4123,46 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 943299
+              "duration": 836900
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 74,
+            "line": 33,
             "name": "A date string \"[END-JUNE-2025]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:211"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:155"
             },
             "result": {
               "status": "passed",
-              "duration": 73100
+              "duration": 63299
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 75,
+            "line": 34,
             "name": "I parse the date string token",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:218"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:159"
             },
             "result": {
               "status": "passed",
-              "duration": 536199
+              "duration": 619399
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 76,
+            "line": 35,
             "name": "the result should be \"2025-06-30\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:222"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:169"
             },
             "result": {
               "status": "passed",
-              "duration": 515500
+              "duration": 238800
             }
           },
           {
@@ -3767,7 +4170,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 836400
+              "duration": 596300
             }
           }
         ],
@@ -3783,7 +4186,7 @@
         "description": "",
         "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-several-instances-of-date-range-token-strings---[monthendstart][month][year]<->[monthendstart][month][year]",
         "keyword": "Scenario Outline",
-        "line": 94,
+        "line": 53,
         "name": "Parsing several instances of date range token strings - [MONTHENDSTART][MONTH][YEAR]<->[MONTHENDSTART][MONTH][YEAR]",
         "steps": [
           {
@@ -3791,46 +4194,46 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1304100
+              "duration": 680200
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 88,
+            "line": 47,
             "name": "A date range string \"[START-JANUARY-2024<->END-FEBRUARY-2024]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:235"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:176"
             },
             "result": {
               "status": "passed",
-              "duration": 1167800
+              "duration": 803799
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 89,
+            "line": 48,
             "name": "I parse the date range string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:242"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:180"
             },
             "result": {
               "status": "passed",
-              "duration": 1816100
+              "duration": 1381200
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 90,
+            "line": 49,
             "name": "the start date should be \"2024-01-01\" and the end date should be \"2024-02-29\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:246"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:190"
             },
             "result": {
               "status": "passed",
-              "duration": 2196100
+              "duration": 1586999
             }
           },
           {
@@ -3838,7 +4241,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 882200
+              "duration": 676699
             }
           }
         ],
@@ -3854,7 +4257,7 @@
         "description": "",
         "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-several-instances-of-date-range-token-strings---[monthendstart][month][year]<->[monthendstart][month][year]",
         "keyword": "Scenario Outline",
-        "line": 95,
+        "line": 54,
         "name": "Parsing several instances of date range token strings - [MONTHENDSTART][MONTH][YEAR]<->[MONTHENDSTART][MONTH][YEAR]",
         "steps": [
           {
@@ -3862,46 +4265,46 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1078199
+              "duration": 1015599
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 88,
+            "line": 47,
             "name": "A date range string \"[END-OCTOBER-2020<->END-FEBRUARY-2022]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:235"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:176"
             },
             "result": {
               "status": "passed",
-              "duration": 214799
+              "duration": 182899
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 89,
+            "line": 48,
             "name": "I parse the date range string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:242"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:180"
             },
             "result": {
               "status": "passed",
-              "duration": 1317500
+              "duration": 979599
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 90,
+            "line": 49,
             "name": "the start date should be \"2020-10-31\" and the end date should be \"2022-02-28\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:246"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:190"
             },
             "result": {
               "status": "passed",
-              "duration": 1493299
+              "duration": 520899
             }
           },
           {
@@ -3909,7 +4312,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1384399
+              "duration": 676000
             }
           }
         ],
@@ -3925,7 +4328,7 @@
         "description": "",
         "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-several-instances-of-date-range-token-strings---[monthendstart][month][year]<->[monthendstart][month][year]",
         "keyword": "Scenario Outline",
-        "line": 96,
+        "line": 55,
         "name": "Parsing several instances of date range token strings - [MONTHENDSTART][MONTH][YEAR]<->[MONTHENDSTART][MONTH][YEAR]",
         "steps": [
           {
@@ -3933,46 +4336,46 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1412400
+              "duration": 726599
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 88,
+            "line": 47,
             "name": "A date range string \"[START-DECEMBER-2021<->END-JUNE-2025]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:235"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:176"
             },
             "result": {
               "status": "passed",
-              "duration": 106699
+              "duration": 61099
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 89,
+            "line": 48,
             "name": "I parse the date range string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:242"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:180"
             },
             "result": {
               "status": "passed",
-              "duration": 1461199
+              "duration": 924200
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 90,
+            "line": 49,
             "name": "the start date should be \"2021-12-01\" and the end date should be \"2025-06-30\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:246"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:190"
             },
             "result": {
               "status": "passed",
-              "duration": 891300
+              "duration": 364199
             }
           },
           {
@@ -3980,7 +4383,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1077999
+              "duration": 725100
             }
           }
         ],
@@ -3996,7 +4399,7 @@
         "description": "",
         "id": "parsing-dates-from-token-format-strings-using-tokendateparser;parsing-several-instances-of-date-range-token-strings---[monthendstart][month][year]<->[monthendstart][month][year]",
         "keyword": "Scenario Outline",
-        "line": 97,
+        "line": 56,
         "name": "Parsing several instances of date range token strings - [MONTHENDSTART][MONTH][YEAR]<->[MONTHENDSTART][MONTH][YEAR]",
         "steps": [
           {
@@ -4004,46 +4407,46 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 1108299
+              "duration": 998199
             }
           },
           {
             "arguments": [],
             "keyword": "Given ",
-            "line": 88,
+            "line": 47,
             "name": "A date range string \"[START-JULY-2021<->START-MARCH-2023]\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:235"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:176"
             },
             "result": {
               "status": "passed",
-              "duration": 88799
+              "duration": 70399
             }
           },
           {
             "arguments": [],
             "keyword": "When ",
-            "line": 89,
+            "line": 48,
             "name": "I parse the date range string",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:242"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:180"
             },
             "result": {
               "status": "passed",
-              "duration": 1210600
+              "duration": 1092599
             }
           },
           {
             "arguments": [],
             "keyword": "Then ",
-            "line": 90,
+            "line": 49,
             "name": "the start date should be \"2021-07-01\" and the end date should be \"2023-03-01\"",
             "match": {
-              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:246"
+              "location": "features\\step_definitions\\util-tests\\tokenparser\\tokenDateParser.steps.ts:190"
             },
             "result": {
               "status": "passed",
-              "duration": 599500
+              "duration": 386000
             }
           },
           {
@@ -4051,7 +4454,7 @@
             "hidden": true,
             "result": {
               "status": "passed",
-              "duration": 888100
+              "duration": 697099
             }
           }
         ],

@@ -10,7 +10,7 @@ import {
 } from "../../../../screenplay/support/memory-keys";
 import type { CustomWorld } from "../../../../screenplay/support/custom-world";
 import { DateRange } from "../../../../src/tokenparser/TokenDateParser";
-import { UtilActorMemory } from "features/step_definitions/step_utils/UtilActorMemory";
+import { UtilActorMemory } from "../../step_utils/UtilActorMemory";
 
 let token = "";
 let dateStringToken = "";

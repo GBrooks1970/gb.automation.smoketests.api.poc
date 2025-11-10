@@ -7,6 +7,23 @@ import { apiActor } from "../../../screenplay/api-world";
 
 let token = "";
 
+const CHARSETS = {
+  alphaNumeric: /^[a-zA-Z0-9]+$/,
+  punctuation: /^[.,!?;:]+$/,
+  special: /^[!@#$%^&*()_+\[\]{}|;:,.<>?]+$/,
+  alphaNumericPunctuation: /^[a-zA-Z0-9.,!?;:]+$/,
+  alphaNumericSpecial: /^[a-zA-Z0-9!@#$%^&*()_+\[\]{}|;:,.<>?]+$/,
+};
+
+const getLines = (value: unknown) => String(value).split(/\r?\n/).filter((line) => line.length > 0);
+const expectMatchesCharset = (value: unknown, charset: RegExp, length?: number) => {
+  const actual = String(value);
+  if (length !== undefined) {
+    expect(actual.length).to.equal(length);
+  }
+  expect(actual).to.match(charset);
+};
+
 Given("the ParseDynamicStringToken endpoint is running", () => {
   // Batch scripts ensure availability; no-op placeholder for readability.
 });
@@ -39,22 +56,34 @@ Then("the response should contain {string} with the value {string}", (propertyNa
       expect(String(body.Error)).to.contain(expected);
       break;
     }
-    case "[ALPHA-NUMERIC-5]": {
-      expect(String(parsedToken)).to.match(/^[a-zA-Z0-9]{5}$/);
+    case "[ALPHA-NUMERIC-5]":
+      expectMatchesCharset(parsedToken, CHARSETS.alphaNumeric, 5);
       break;
-    }
-    case "[PUNCTUATION-3]": {
-      expect(String(parsedToken)).to.match(/^[!@#$%^&*(),.?":;{}|<>]{3}$/);
+    case "[PUNCTUATION-3]":
+      expectMatchesCharset(parsedToken, CHARSETS.punctuation, 3);
       break;
-    }
     case "[ALPHA-NUMERIC-PUNCTUATION-10-LINES-2]": {
-      const lines = String(parsedToken).split(/\r?\n/).filter((line) => line.length > 0);
+      const lines = getLines(parsedToken);
       expect(lines.length).to.equal(2);
       lines.forEach((line) => {
-        expect(line).to.match(/^[a-zA-Z0-9!@#$%^&*(),.?":{}|<>]{10}$/);
+        expectMatchesCharset(line, CHARSETS.alphaNumericPunctuation, 10);
       });
       break;
     }
+    case "[NUMERIC-8]":
+      expectMatchesCharset(parsedToken, /^\d+$/, 8);
+      break;
+    case "[SPECIAL-5-LINES-3]": {
+      const lines = getLines(parsedToken);
+      expect(lines.length).to.equal(3);
+      lines.forEach((line) => {
+        expectMatchesCharset(line, CHARSETS.special, 5);
+      });
+      break;
+    }
+    case "[ALPHA-NUMERIC-SPECIAL-12]":
+      expectMatchesCharset(parsedToken, CHARSETS.alphaNumericSpecial, 12);
+      break;
     default:
       throw new Error(`Unexpected token pattern: ${token}`);
   }

@@ -6,7 +6,7 @@ import {
   LAST_PARSE_ERROR,
 } from "../../../../screenplay/support/memory-keys";
 import type { CustomWorld } from "../../../../screenplay/support/custom-world";
-import { UtilActorMemory } from "features/step_definitions/step_utils/UtilActorMemory";
+import { UtilActorMemory } from "../../step_utils/UtilActorMemory";
 
 let token = "";
 

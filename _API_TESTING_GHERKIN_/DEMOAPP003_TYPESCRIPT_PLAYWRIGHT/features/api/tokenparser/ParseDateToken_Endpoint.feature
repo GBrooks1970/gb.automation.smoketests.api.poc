@@ -10,8 +10,11 @@ Scenario Outline: Parse a date token
     And the response body should contain "<key>" with the value "<expectedValue>"
 
     Examples:
-      | token                | statusCode | key         | expectedValue                                         |
-      | INVALIDTOKEN         | 400        | Error       | Invalid string token format                           |
-      | [TODAY]              | 200        | ParsedToken | today                                                 |
-      | [TODAY-1YEAR-1MONTH] | 200        | ParsedToken | one year and one month ago from today                 |
-      | [TODAY+1YEAR-2MONTH] | 200        | ParsedToken | one year ahead and two months ago from today          |
+      | token                      | statusCode | key         | expectedValue                                         |
+      | INVALIDTOKEN               | 400        | Error       | Invalid string token format                           |
+      | [TODAY]                    | 200        | ParsedToken | today                                                 |
+      | [TODAY-1YEAR-1MONTH]       | 200        | ParsedToken | one year and one month ago from today                 |
+      | [TODAY+1YEAR-2MONTH]       | 200        | ParsedToken | one year ahead and two months ago from today          |
+      | [TOMORROW+3DAY]            | 200        | ParsedToken | tomorrow plus three days (four days from today)       |
+      | [YESTERDAY-2DAY]           | 200        | ParsedToken | yesterday minus two days (three days ago)             |
+      | [TODAY+2YEAR+6MONTH-15DAY] | 200        | ParsedToken | two years and six months ahead of today minus 15 days |

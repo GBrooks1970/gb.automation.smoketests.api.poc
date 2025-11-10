@@ -107,6 +107,13 @@ namespace TokenParserTests.Steps
             AssertRelativeDate(() => DateTime.Today.AddDays(-1).AddMonths(5).AddYears(-1));
         }
 
+        [Then(@"the result should equal today plus (.*) years (.*) months (.*) days")]
+        [Scope(Tag = "utiltests")]
+        public void ThenTheResultShouldEqualOffsets(int years, int months, int days)
+        {
+            AssertRelativeDate(() => DateTime.Today.AddYears(years).AddMonths(months).AddDays(days));
+        }
+
         [Then(@"an error should be thrown with message ""(.*)""")]
         public void ThenAnErrorShouldBeThrownWithMessage(string expectedMessage)
         {

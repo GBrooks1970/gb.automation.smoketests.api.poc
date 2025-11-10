@@ -69,15 +69,24 @@ namespace TokenParserTests.Steps
                 case "one year ahead and two months ago from today":
                     AssertRelativeDate(actualString, 1, -2);
                     break;
+                case "tomorrow plus three days (four days from today)":
+                    AssertRelativeDate(actualString, 0, 0, 4);
+                    break;
+                case "yesterday minus two days (three days ago)":
+                    AssertRelativeDate(actualString, 0, 0, -3);
+                    break;
+                case "two years and six months ahead of today minus 15 days":
+                    AssertRelativeDate(actualString, 2, 6, -15);
+                    break;
                 default:
                     Assert.That(actualString, Is.EqualTo(expectedValue));
                     break;
             }
         }
 
-        private static void AssertRelativeDate(string? actualValue, int yearsOffset, int monthsOffset)
+        private static void AssertRelativeDate(string? actualValue, int yearsOffset, int monthsOffset, int daysOffset = 0)
         {
-            DateTime expectedDate = DateTime.Today.AddYears(yearsOffset).AddMonths(monthsOffset);
+            DateTime expectedDate = DateTime.Today.AddYears(yearsOffset).AddMonths(monthsOffset).AddDays(daysOffset);
             string formattedDate = expectedDate.ToString("yyyy-MM-dd HH:mm:ssZ", CultureInfo.InvariantCulture);
             Assert.That(actualValue, Is.EqualTo(formattedDate));
         }

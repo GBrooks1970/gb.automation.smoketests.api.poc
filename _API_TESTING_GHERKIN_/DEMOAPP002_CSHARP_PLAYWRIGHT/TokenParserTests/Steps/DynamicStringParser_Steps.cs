@@ -82,6 +82,25 @@ namespace TokenParserTests.Steps
                         Assert.That(line, Does.Match(@"^[A-Za-z0-9\.\,\!\?\;\:]+$"), $"Line {line} must contain alpha-numeric-punctuation");
                     }
                     break;
+                case "A numeric string of length 8":
+                    Assert.That(actualLength, Is.EqualTo(8), $"Expected generated string: {actualString} to be length 8");
+                    Assert.That(actualString, Does.Match(@"^\d+$"), $"Expected numeric characters only, got {actualString}");
+                    break;
+                case "3 lines of strings with each line containing 5 special characters":
+                    const int expectedLines = 3;
+                    const int expectedSpecialCharsPerLine = 5;
+                    var specialLines = actualString.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                    Assert.That(specialLines.Length, Is.EqualTo(expectedLines), $"Expected {expectedLines} lines, got {specialLines.Length}");
+                    foreach (var line in specialLines.Where(l => l.Length > 0))
+                    {
+                        Assert.That(line.Length, Is.EqualTo(expectedSpecialCharsPerLine), $"Line {line} length mismatch");
+                        Assert.That(line, Does.Match(@"^[!@#\$%\^&\*\(\)_\+\[\]\{\}\|;:,\.<>\?]+$"), $"Line {line} must contain special characters");
+                    }
+                    break;
+                case "A mixed alpha, numeric, and special character string of length 12":
+                    Assert.That(actualLength, Is.EqualTo(12), $"Expected generated string: {actualString} to be length 12");
+                    Assert.That(actualString, Does.Match(@"^[A-Za-z0-9!@#\$%\^&\*\(\)_\+\[\]\{\}\|;:,\.<>\?]+$"), $"Expected alpha, numeric, and special characters, got {actualString}");
+                    break;
 
                 default:
                     Assert.That(actualValue.GetString(), Is.EqualTo(expectedValue));
