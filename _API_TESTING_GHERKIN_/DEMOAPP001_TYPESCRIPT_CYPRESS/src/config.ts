@@ -15,7 +15,10 @@ const readEnv = (key: string): string | undefined => {
     return process.env[key];
   }
 
-  if (typeof window !== "undefined" && (window as typeof window & { Cypress?: typeof Cypress }).Cypress) {
+  if (
+    typeof window !== "undefined" &&
+    (window as typeof window & { Cypress?: typeof Cypress }).Cypress
+  ) {
     return (window as typeof window & { Cypress?: typeof Cypress }).Cypress?.env(key);
   }
 

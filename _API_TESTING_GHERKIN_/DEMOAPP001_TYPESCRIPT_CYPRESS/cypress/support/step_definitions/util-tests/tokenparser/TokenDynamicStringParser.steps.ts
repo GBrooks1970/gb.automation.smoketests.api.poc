@@ -8,7 +8,6 @@ let token = "";
 
 const parser = () => utilActor().abilityTo(UseTokenParsers);
 
-
 Given("a token {string}", (inputToken: string) => {
   token = inputToken;
 });
@@ -71,8 +70,11 @@ Then("the generated string should have {int} lines", (expectedLines: number) => 
   expect(lines).to.have.length(expectedLines);
 });
 
-Then("a dynamic string parser error should be thrown with message {string}", (expectedMessage: string) => {
-  const error = UtilActorMemory.getParseError();
-  expect(error, "Expected parsing to fail").to.exist;
-  expect(error?.message ?? "").to.contain(expectedMessage);
-});
+Then(
+  "a dynamic string parser error should be thrown with message {string}",
+  (expectedMessage: string) => {
+    const error = UtilActorMemory.getParseError();
+    expect(error, "Expected parsing to fail").to.exist;
+    expect(error?.message ?? "").to.contain(expectedMessage);
+  },
+);

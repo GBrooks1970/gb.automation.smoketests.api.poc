@@ -18,7 +18,10 @@ Then("the API response should return a status code of 200", () => {
   expect(status).to.equal(200);
 });
 
-Then('the Health Check response body should contain "Status" with the value "ALIVE-AND-KICKING"', () => {
-  const body = apiActor().answer(ResponseBody.json());
-  expect(body.Status).to.equal("ALIVE-AND-KICKING");
-});
+Then(
+  'the Health Check response body should contain "Status" with the value "ALIVE-AND-KICKING"',
+  () => {
+    const body = apiActor().answer(ResponseBody.json());
+    expect(body.Status).to.equal("ALIVE-AND-KICKING");
+  },
+);

@@ -1,59 +1,67 @@
 # DEMOAPP003 Playwright Architecture Blueprint
 
-## Stack Overview
-- **Runtime**: Node.js + TypeScript targeting ES2022, driven by Playwright Test runner for low-level fixtures and Cucumber.js for BDD orchestration.
-- **Testing Modes**:
-  - BDD feature execution via `@cucumber/cucumber` sharing World state with Playwright APIRequest/Browser contexts.
-  - Utility-level coverage executed through Cucumber steps leveraging domain parsers (`TokenDateParser`, `TokenDynamicStringParser`).
-- **Pattern**: Screenplay abstraction provides Actors, Abilities, Tasks, Questions, and Shared Notes to keep declarative, business-focused step definitions.
-- **API Host**: Token Parser Express server reused from DEMOAPP001 to provide identical endpoints for parity validation.
+**Version 2 - [12/11/25]**
 
-## Folder Layout
+## Stack Snapshot
+- **Runtime**: Node.js 20 + TypeScript (ES2022) executed via `@cucumber/cucumber` with Playwright `APIRequestContext` fixtures.
+- **Primary Pattern**: Screenplay (Actors, Abilities, Tasks, Questions, Memory notes) to keep BDD steps declarative and parity-aligned with the Cypress stack.
+- **API Host**: Local Express Token Parser (`src/server.ts`) reused across stacks; started automatically by `.batch` harnesses.
+- **Toolchain**: `tsx` for API entrypoints, `ts-node` for step execution, ESLint + Prettier covering `src/`, `screenplay/`, and `features/`, and npm scripts mirrored across TypeScript projects.
+
+## Folder Layout (authoritative)
 ```
-_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT/
+_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT
 |--- docs/
-|   |--- ARCHITECTURE.md
-|   |--- QA_STRATEGY.md              <- risk-based/ISTQB alignment (to be produced)
-|   `--- SCREENPLAY_GUIDE.md         <- usage patterns & conventions (to be produced)
+|    |--- ARCHITECTURE.md
+|    |--- QA_STRATEGY.md
+|    `--- SCREENPLAY_GUIDE.md
 |--- features/
-|   |--- api/
-|   |   |--- healthcheck/
-|   |   `--- tokenparser/
-|   `--- util-tests/
-|--- screenplay/
-|   |--- abilities/
-|   |--- actors/
-|   |--- questions/
-|   |--- tasks/
-|   `--- support/
-|--- src/                            <- domain services shared with Cypress project
+|    |--- api/...
+|    `--- util-tests/...
+|--- screenplay/               <- Screenplay implementation (outside src for parity)
+|--- src/                      <- Express host + domain parsers
 |--- tooling/
-|   |--- cucumber.mjs                <- Cucumber CLI wiring (ESM)
-|   `--- playwright.config.ts        <- Playwright test config & shared fixtures
-|--- package.json
-|--- playwright-report/              <- default Playwright HTML report output
-|--- .env, .env.example              <- deterministic config if needed
-`--- tsconfig.json
+|    |--- run-cucumber-with-summary.cjs
+|    `--- playwright.config.ts
+|--- .eslintrc.cjs / .prettierrc.json
+|--- package.json / package-lock.json
+|--- tsconfig.json             <- path aliases shared with Cypress stack
+`--- .env / .env.example
 ```
 
-## Tooling Decisions
-- **Transpilation**: `ts-node/esm` for Cucumber runtime to load TypeScript step definitions without build step; `tsx` script retained for dev ergonomics.
-- **Linters/Formatters**: Extendable via ESLint/Prettier (placeholders), focusing initial scope on tests & types.
-- **Reporting**: Cucumber JSON + HTML (via `@cucumber/pretty-formatter`) and Playwright HTML reporter for non-BDD suites.
-- **Automation Scripts**: npm scripts & Windows batch files mirror Cypress project semantics for developer parity.
+## Tooling & Automation
+- **npm scripts**:
+  - `npm run start|dev` host the API.
+  - `npm run ts:check` validates types for both Screenplay and step layers.
+  - `npm run lint` / `npm run lint:fix` enforce ESLint rules (tests + types focus per parity requirements).
+  - `npm run format` / `format:fix` gate Prettier conformance.
+  - `npm run test:bdd` executes Cucumber via `tooling/run-cucumber-with-summary.cjs`.
+  - `npm run verify` aggregates type-check + BDD run for CI.
+  - `npm run pw:test` reserved for future browser/UI specs.
+- **Batch integration**:
+  - `.batch/RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` spins up the API (through `env_utils.bat`), runs `npm run verify`, and captures logs under `.results/`.
+  - `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` orchestrates the three demo APIs for cross-stack verification; log noise fixed via recent env utility patch.
+- **Linters/Formatters**: Configured to initially scope tests + Screenplay code, matching the constraint documented in Screenplay parity notes.
 
-## Test Data & Fixtures
-- **Shared Utilities**: `src/tokenparser` & `src/services` consumed directly from tests, mirroring util tests from DEMOAPP001.
-- **Dynamic Config**: Environment variables (e.g., `API_BASE_URL`) surfaced via `process.env` with defaults pointing to local Express host.
+## Screenplay Layers
+- **Actors**: `screenplay/actors/Actor.ts` defines async `Actor` with `remember/recall`.
+- **Abilities**: `CallAnApi` wraps Playwright `APIRequestContext` (auto-disposed in `After` hooks); `UseTokenParsers` exposes shared parsers. Both align 1:1 with the Cypress versions.
+- **Tasks/Questions**: Located under `screenplay/tasks` and `screenplay/questions`, reusing shared memory keys via `screenplay/support/memory-keys.ts`.
+- **Worlds**: `screenplay/core/custom-world.ts` wires a `CustomWorld` per scenario; hooks live in `features/step_definitions/world.ts` to attach abilities before tests.
+
+## Configuration & Fixtures
+- **Environment Variables**: Managed through `.env`/`.env.example`, surfaced via `env_utils.bat`. Key vars: `API_BASE_URL`, `PORT`, `CUCUMBER_TIMEOUT`.
+- **Shared Domain Code**: `src/tokenparser` and `src/services/symbol-consts.ts` originate from the Cypress stack and importable via tsconfig path aliases.
+- **Results**: Playwright HTML output stored in `.results/playwright_cucumber_report.json` plus Playwright report folder when UI specs run.
 
 ## Quality Gates
-1. **Type Safety**: `npm run ts:check` ensures Screenplay layer and steps compile.
-2. **BDD Execution**: `npm run test:bdd` orchestrates API + util feature suites.
-3. **Smoke Harness**: `RUN_PLAYWRIGHT_API_AND_TESTS.BAT` (pending creation) launches API server then executes BDD suite, logging to `.results`.
-4. **CI Hooks**: `npm run verify` aggregates type-check + tests for pipeline integration.
+1. **Static**: `npm run lint` + `npm run format` run locally and in CI (warnings tolerated temporarily but tracked).
+2. **Types**: `npm run ts:check`.
+3. **Behavioural**: `npm run test:bdd` (API + util tags). Utilises Screenplay tasks for deterministic assertions.
+4. **Batch Harness**: `.batch/RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` for one-click smoke; `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` validates all servers start/stop cleanly.
 
-## Next Actions
-- Scaffold Screenplay core classes and Cucumber world helpers.
-- Port feature files & step definitions from DEMOAPP001 with Playwright adaptations.
-- Implement npm/batch scripts for local+CI runs and document QA strategy/ISTQB mapping.
+## References
+- Screenplay parity overview: `API Testing POC/screenplay_parity_typescript.md`.
+- Cypress counterpart docs: `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/docs`.
+- Automation tooling: `.batch/env_utils.bat`, `.batch/RUN_*`.
 

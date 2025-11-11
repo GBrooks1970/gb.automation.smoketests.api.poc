@@ -26,7 +26,9 @@ export class Actor {
   }
 
   attemptsTo(...tasks: Task[]): Cypress.Chainable<unknown> {
-    let chain: Cypress.Chainable<unknown> = cy.wrap(null, { log: false }) as Cypress.Chainable<unknown>;
+    let chain: Cypress.Chainable<unknown> = cy.wrap(null, {
+      log: false,
+    }) as Cypress.Chainable<unknown>;
     tasks.forEach((task) => {
       chain = chain.then(() => task.performAs(this));
     });

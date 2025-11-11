@@ -1,5 +1,7 @@
 # QA Strategy for DEMOAPP003 (Playwright + TypeScript)
 
+**Version 2 - [12/11/25]**
+
 ## Purpose
 This strategy governs quality activities for the Playwright-based automation suite that validates the Token Parser API surface and supporting utilities. It aligns with ISTQB test management principles while elevating critical practices (risk-based prioritisation, modern observability, and shift-left automation).
 
@@ -37,9 +39,15 @@ This strategy governs quality activities for the Playwright-based automation sui
 - Environment variables: `API_BASE_URL`, `APP_BASE_URL`, `CUCUMBER_TIMEOUT`, `PLAYWRIGHT_*` for per-environment tuning.
 
 ## Execution & Reporting
-- **Local** - `npm run verify` (type safety + BDD). Use `npm run pw:test` for future UI specs.
-- **CI** - `verify` in pull-request pipeline; nightly job attaches Cucumber JSON to artefacts and publishes Playwright HTML report.
-- **Batch Harness** - `RUN_PLAYWRIGHT_API_AND_TESTS.BAT` (see scripts section) writes logs to `.results` and mirrors Cypress workflow to ease adoption.
+- **Local workflow**:
+  - `npm run lint` / `npm run format` guard style gates (scoped to tests + Screenplay per tooling decision).
+  - `npm run verify` combines `ts:check` + BDD run before commits.
+- **CI**:
+  - Pull requests call `npm run lint`, `npm run format`, and `npm run verify`.
+  - Nightly job archives `playwright-report/` and `.results/playwright_cucumber_report.json`.
+- **Batch Harness**:
+  - `.batch/RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` bootstraps env vars via `env_utils.bat`, starts the API, runs `npm run verify`, and tears everything down.
+  - `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` is used when validating multi-stack parity; ensure it is re-run after any script changes.
 
 ## Quality Metrics
 - **Automation Rate**: % of critical scenarios automated (target 80%+).
@@ -60,7 +68,7 @@ This strategy governs quality activities for the Playwright-based automation sui
 - Test Management emphasises traceability: feature files reference business flows, step definitions map to reusable Screenplay tasks.
 
 ## Next Iterations
-1. Introduce contract tests against Swagger schema using Zod validation (already a dependency).
-2. Add performance probes (Playwright `APIRequestContext`) during nightly runs.
-3. Integrate flaky test tracker summarising rerun counts per scenario.
+1. Backfill contract assertions by parsing Swagger via Zod (dependency already available).
+2. Add lightweight performance probes (avg latency) to nightly `npm run verify` executions.
+3. Publish lint + format status badges so tooling expectations remain visible in READMEs.
 

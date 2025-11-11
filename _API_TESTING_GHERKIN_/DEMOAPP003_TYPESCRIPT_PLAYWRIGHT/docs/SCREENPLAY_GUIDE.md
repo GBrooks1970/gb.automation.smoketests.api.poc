@@ -1,12 +1,14 @@
 # Screenplay Pattern Reference
 
+**Version 2 - [12/11/25]**
+
 ## Actors
 - `Actor` encapsulates abilities and scenario memory. Use `actor.whoCan(...)` to compose behaviours (API calls, parser utilities).
 - `remember/recall` functions store transient data (e.g., last API response). Prefer descriptive keys such as `last-response` or `parsed-date`.
 
 ## Abilities
-- `CallAnApi` - wraps Playwright `APIRequestContext`, centralises base URL management, and disposes context post-scenario.
-- `UseTokenParsers` - exposes `TokenDateParser` and `TokenDynamicStringParser` capabilities for util tests.
+- `CallAnApi` (`screenplay/abilities/CallAnApi.ts`) – wraps Playwright `APIRequestContext`, centralises base URL management, and disposes contexts in `After` hooks (see `features/step_definitions/world.ts`).
+- `UseTokenParsers` (`screenplay/abilities/UseTokenParsers.ts`) – exposes `TokenDateParser` and `TokenDynamicStringParser` with feature-flag friendly extension points.
 
 ### Adding a New Ability
 1. Create class under `screenplay/abilities` implementing `Ability` interface.
@@ -14,20 +16,22 @@
 3. Register ability in `CustomWorld.enableApiAbility()` or in scenario-specific hooks.
 
 ## Tasks
-- `SendGetRequest` - issues GET requests and stores the response under `last-response`.
-- Extend tasks to cover POST/PUT flows. Tasks should never assert; they orchestrate abilities.
+- `SendGetRequest` (`screenplay/tasks/SendGetRequest.ts`) issues GET requests and stores the response under `LAST_RESPONSE`.
+- Parser helpers for util flows currently live beside the relevant step definitions; prefer adding thin Screenplay tasks if reuse expands.
+- Tasks should orchestrate behaviour only—assertions belong in Questions or dedicated step helpers.
 
 ### Task Guidelines
 - Implement `performAs(actor: Actor)` and use `actor.abilityTo(...)` to access abilities.
 - Keep tasks small; chain multiple tasks inside `actor.attemptsTo()` to narrate behaviour.
 
 ## Questions
-- `ResponseStatus` and `ResponseJson` expose response assertions while preserving Screenplay vocabulary.
-- New questions should encapsulate domain logic (e.g., `ParsedTokenDate`). Use inside step definitions via `await actor.answer(question)`.
+- `ResponseStatus`, `ResponseBody`, and JSON helpers (`screenplay/questions/*.ts`) expose assertions while preserving Screenplay vocabulary.
+- When adding new questions (e.g., `ParsedTokenDate`), read shared keys from `screenplay/support/memory-keys.ts` to remain parity-aligned with Cypress.
 
 ## World & Hooks
-- `CustomWorld` (in `screenplay/support`) configures actors before scenarios. Hooks attach API ability and clean up contexts.
-- Update `features/step_definitions/world.ts` if additional worlds/hook modules are introduced.
+- `screenplay/core/custom-world.ts` defines the `CustomWorld` consumed by Cucumber. It instantiates an actor per scenario and stores it on `this.actor`.
+- `features/step_definitions/world.ts` wires `Before`/`After` hooks: attaches `CallAnApi`, injects feature tags (e.g., `@utiltest`), and ensures contexts are disposed.
+- Shared utilities such as `screenplay/support/UtilActorMemory.ts` centralise `remember/recall` helpers; reference them rather than duplicating string literals.
 
 ## Step Definition Style Guide
 - Keep step definitions declarative. Delegate to Screenplay tasks/questions instead of imperative code.
@@ -41,7 +45,7 @@
 4. **Shared State** - prefer explicit Screenplay `remember` keys; avoid global variables to maintain scenario isolation.
 
 ## Troubleshooting Tips
-- If `CallAnApi` fails to resolve base URL, verify `API_BASE_URL` env var or server startup script.
-- For flaky time-based assertions, confirm system clock sync; consider injecting fixed reference date for deterministic tests.
-- When debugging, log via `console.log` within step definitions or extend Actor memory to capture extra telemetry.
+- If `CallAnApi` fails to resolve base URL, confirm `.env` (or `env_utils.bat`) exposes `API_BASE_URL` before scenarios run.
+- For flaky time-based assertions, sync the host clock or inject reference dates via `UseTokenParsers`.
+- When debugging, prefer Screenplay-friendly logging: `actor.remember("debug:last-response", response)` then surface via `UtilActorMemory.dumpLatestResponse()`.
 

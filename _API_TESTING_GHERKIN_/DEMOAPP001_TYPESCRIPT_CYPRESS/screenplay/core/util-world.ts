@@ -14,7 +14,9 @@ After({ tags: "@UTILTEST" }, () => {
 
 export const utilActor = (): Actor => {
   if (!currentActor) {
-    throw new Error("Cypress Util Actor is not initialised. Ensure the @UTILTEST hooks have executed.");
+    throw new Error(
+      "Cypress Util Actor is not initialised. Ensure the @UTILTEST hooks have executed.",
+    );
   }
   return currentActor;
 };

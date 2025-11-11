@@ -22,7 +22,7 @@ export class UseTokenParsers implements Ability {
   parseDynamicString(token: string): string {
     return TokenDynamicStringParser.parseAndGenerate(token);
   }
-  
+
   parseTokenizedStringLines(token: string): string[] {
     const generated = this.parseDynamicString(token);
     return generated.split(/\r?\n/).filter((line) => line.length > 0);

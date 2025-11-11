@@ -3,7 +3,8 @@ import { Before, After } from "@badeball/cypress-cucumber-preprocessor";
 import { Actor } from "../actors/Actor";
 import { CallAnApi } from "../abilities/CallAnApi";
 
-const apiBaseUrl = (): string => Cypress.env("API_BASE_URL") ?? Cypress.config("baseUrl") ?? "http://localhost:3000";
+const apiBaseUrl = (): string =>
+  Cypress.env("API_BASE_URL") ?? Cypress.config("baseUrl") ?? "http://localhost:3000";
 
 let currentActor: Actor | null = null;
 

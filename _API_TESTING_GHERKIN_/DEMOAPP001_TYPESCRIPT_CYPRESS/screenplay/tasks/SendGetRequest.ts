@@ -6,7 +6,7 @@ import { LAST_RESPONSE } from "../support/memory-keys";
 export class SendGetRequest implements Task {
   private constructor(
     private readonly path: string,
-    private readonly options?: Partial<Cypress.RequestOptions>
+    private readonly options?: Partial<Cypress.RequestOptions>,
   ) {}
 
   static to(path: string, options?: Partial<Cypress.RequestOptions>): SendGetRequest {

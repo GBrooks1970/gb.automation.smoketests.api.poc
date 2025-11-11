@@ -4,7 +4,10 @@ import CommonUtils from "../../../../../src/services/common-utils";
 import { utilActor } from "../../../../../screenplay/core/util-world";
 import { UseTokenParsers } from "../../../../../screenplay/abilities/UseTokenParsers";
 import { UtilActorMemory } from "../../../../../screenplay/support/UtilActorMemory";
-import { LAST_PARSED_DATE, SECONDARY_PARSED_DATE } from "../../../../../screenplay/support/memory-keys";
+import {
+  LAST_PARSED_DATE,
+  SECONDARY_PARSED_DATE,
+} from "../../../../../screenplay/support/memory-keys";
 
 let token = "";
 let dateStringToken = "";
@@ -14,7 +17,9 @@ const parser = () => utilActor().abilityTo(UseTokenParsers);
 
 function getStartDateUTC(): Date {
   const now = new Date();
-  const startDateUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0));
+  const startDateUTC = new Date(
+    Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0, 0, 0),
+  );
   console.log(`TEST: StartDateUTC: ${CommonUtils.toJSONString(startDateUTC)}`);
   return startDateUTC;
 }
@@ -50,7 +55,7 @@ const compareWithExpected = (adjuster: (date: Date) => void) => {
   const expectedDate = getStartDateUTC();
   adjuster(expectedDate);
   console.log(
-    `TOKEN ${token} : PARSED ${CommonUtils.toJSONString(result)} : EXPECTED ${CommonUtils.toJSONString(expectedDate)}`
+    `TOKEN ${token} : PARSED ${CommonUtils.toJSONString(result)} : EXPECTED ${CommonUtils.toJSONString(expectedDate)}`,
   );
   expect(result.toUTCString()).to.equal(expectedDate.toUTCString());
 };
@@ -142,7 +147,7 @@ Then(
       expected.setUTCMonth(expected.getUTCMonth() + months);
       expected.setUTCDate(expected.getUTCDate() + days);
     });
-  }
+  },
 );
 
 Given("A null or invalid date token", () => {
@@ -154,7 +159,7 @@ Then("the result should be the Unix zero date", () => {
   const expectedDate = new Date(0);
   expectedDate.setHours(0, 0, 0, 0);
   console.log(
-    `TOKEN ${token} : PARSED ${CommonUtils.toJSONString(result)} : EXPECTED ${CommonUtils.toJSONString(expectedDate)}`
+    `TOKEN ${token} : PARSED ${CommonUtils.toJSONString(result)} : EXPECTED ${CommonUtils.toJSONString(expectedDate)}`,
   );
   expect(result.toUTCString()).to.equal(expectedDate.toUTCString());
 });
@@ -179,8 +184,8 @@ Then("the result should be {string}", (expectedDateStr: string) => {
   const expectedDate = new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0));
   console.log(
     `TOKEN ${dateStringToken} : PARSED ${CommonUtils.toJSONString(parsedDate)} : EXPECTED ${CommonUtils.toJSONString(
-      expectedDate
-    )}`
+      expectedDate,
+    )}`,
   );
   expect(parsedDate.toUTCString()).to.equal(expectedDate.toUTCString());
 });
@@ -199,19 +204,22 @@ When("I parse the date range string", () => {
   }
 });
 
-Then("the start date should be {string} and the end date should be {string}", (startDate: string, endDate: string) => {
-  const range = UtilActorMemory.getRange();
-  const [startYear, startMonth, startDay] = startDate.split("-").map(Number);
-  const [endYear, endMonth, endDay] = endDate.split("-").map(Number);
-  const expectedStart = new Date(Date.UTC(startYear, startMonth - 1, startDay, 0, 0, 0, 0));
-  const expectedEnd = new Date(Date.UTC(endYear, endMonth - 1, endDay, 0, 0, 0, 0));
+Then(
+  "the start date should be {string} and the end date should be {string}",
+  (startDate: string, endDate: string) => {
+    const range = UtilActorMemory.getRange();
+    const [startYear, startMonth, startDay] = startDate.split("-").map(Number);
+    const [endYear, endMonth, endDay] = endDate.split("-").map(Number);
+    const expectedStart = new Date(Date.UTC(startYear, startMonth - 1, startDay, 0, 0, 0, 0));
+    const expectedEnd = new Date(Date.UTC(endYear, endMonth - 1, endDay, 0, 0, 0, 0));
 
-  console.log(
-    `TOKEN RANGE ${dateRangeTokenString} : PARSED ${CommonUtils.toJSONString(range)} : EXPECTED START ${CommonUtils.toJSONString(
-      expectedStart
-    )} : EXPECTED END ${CommonUtils.toJSONString(expectedEnd)}`
-  );
+    console.log(
+      `TOKEN RANGE ${dateRangeTokenString} : PARSED ${CommonUtils.toJSONString(range)} : EXPECTED START ${CommonUtils.toJSONString(
+        expectedStart,
+      )} : EXPECTED END ${CommonUtils.toJSONString(expectedEnd)}`,
+    );
 
-  expect(range.Start.toUTCString()).to.equal(expectedStart.toUTCString());
-  expect(range.End.toUTCString()).to.equal(expectedEnd.toUTCString());
-});
+    expect(range.Start.toUTCString()).to.equal(expectedStart.toUTCString());
+    expect(range.End.toUTCString()).to.equal(expectedEnd.toUTCString());
+  },
+);
