@@ -13,6 +13,19 @@ if not exist ".results" mkdir ".results"
 
 for /f %%I in ('powershell -NoProfile -Command "(Get-Date).ToUniversalTime().ToString(\"yyyyMMddTHHmmZ\")"') do set "UTC_TIMESTAMP=%%I"
 set "RESULT_FILE=%ROOT_DIR%\.results\demoapp001_typescript_cypress_%UTC_TIMESTAMP%.txt"
+set "UTIL_RESULT_FILE=%ROOT_DIR%\.results\demoapp001_typescript_cypress_util_%UTC_TIMESTAMP%.txt"
+
+echo Running Cypress util test suite...
+pushd "%PROJECT_DIR%"
+call npx cypress run --spec "cypress/integration/util-tests/**/*.feature" > "%UTIL_RESULT_FILE%" 2>&1
+set "UTIL_EXIT=%ERRORLEVEL%"
+popd
+
+if not "%UTIL_EXIT%"=="0" (
+    echo DEMOAPP001 util tests failed. See "%UTIL_RESULT_FILE%"
+    set "TEST_EXIT=%UTIL_EXIT%"
+    goto cleanup
+)
 
 call "%SCRIPT_DIR%env_utils.bat" is_port_in_use %SERVER_PORT% PORT_IN_USE
 if "%SKIP_API_START%"=="1" (
@@ -61,10 +74,12 @@ if "%SKIP_API_START%"=="1" (
 
 if defined TEST_EXIT (
     if "%TEST_EXIT%"=="0" (
-echo DEMOAPP001 TypeScript + Cypress tests completed successfully. Results saved to "%RESULT_FILE%"
+        echo(
+        echo DEMOAPP001 TypeScript + Cypress tests completed successfully. Results: "%RESULT_FILE%" ^(API^) / "%UTIL_RESULT_FILE%" ^(util^)
         set "EXIT_CODE=0"
     ) else (
-echo DEMOAPP001 TypeScript + Cypress tests failed. See "%RESULT_FILE%"
+        echo(
+        echo DEMOAPP001 TypeScript + Cypress tests failed. API log: "%RESULT_FILE%". Util log: "%UTIL_RESULT_FILE%"
         set "EXIT_CODE=%TEST_EXIT%"
     )
 ) else (

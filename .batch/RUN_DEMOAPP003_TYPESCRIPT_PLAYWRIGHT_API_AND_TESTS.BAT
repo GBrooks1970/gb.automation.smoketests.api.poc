@@ -12,7 +12,7 @@ set "PORT=%SERVER_PORT%"
 
 if not exist ".results" mkdir ".results"
 
-for /f %%I in ('powershell -NoProfile -Command "(Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmZ')"') do set "UTC_TIMESTAMP=%%I"
+for /f %%I in ('powershell -NoProfile -Command "(Get-Date).ToUniversalTime().ToString(\"yyyyMMddTHHmmZ\")"') do set "UTC_TIMESTAMP=%%I"
 set "RESULT_FILE=%ROOT_DIR%\.results\demoapp003_typescript_playwright_%UTC_TIMESTAMP%.txt"
 
 call "%SCRIPT_DIR%env_utils.bat" is_port_in_use %SERVER_PORT% PORT_IN_USE
