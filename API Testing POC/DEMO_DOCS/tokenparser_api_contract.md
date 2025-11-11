@@ -1,5 +1,7 @@
 # Token Parser API Contract
 
+**Version 8 - [12/11/25]**
+
 _Reference specification for any Token Parser implementation._
 
 ---
@@ -8,7 +10,7 @@ _Reference specification for any Token Parser implementation._
 
 | Property | Value |
 | --- | --- |
-| Base URL | Implementation-defined (must expose the paths below) |
+| Base URL | Implementation-defined (must expose the paths below). Demo stacks run at:<br>• DEMOAPP001 (Cypress API) – `http://localhost:3000`<br>• DEMOAPP003 (Playwright API) – `http://localhost:3001`<br>• DEMOAPP002 (C# API) – `http://localhost:5228` |
 | Version | 1.0.0 |
 | MIME types | `application/json` for requests and responses |
 | Authentication | None |
@@ -222,5 +224,5 @@ Unexpected server faults SHOULD return `500 Internal Server Error` with a body o
 
 ---
 
-Maintain this file as the single source of truth. As of revision v8 the DEMOAPP001, DEMOAPP002, and DEMOAPP003 services conform to the requirements above; deviations MUST be treated as defects unless ratified by a future contract version change.
+Maintain this file as the single source of truth. As of revision v8 the DEMOAPP001, DEMOAPP002, and DEMOAPP003 services (started individually or via `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT`) conform to the requirements above; deviations MUST be treated as defects unless ratified by a future contract version change.
 

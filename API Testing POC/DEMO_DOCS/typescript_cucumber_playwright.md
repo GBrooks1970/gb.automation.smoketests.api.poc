@@ -1,8 +1,8 @@
 # DEMOAPP003 - TypeScript / Express / Playwright BDD
 
-**Version 3 - [10/11/25]**
+**Version 4 - [12/11/25]**
 
-The `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT` project hosts the TOKENPARSER API on `http://localhost:3001`. It mirrors the shared token parsing utilities, exposes Swagger, and is validated through Playwright + Cucumber scenarios implemented with the Screenplay pattern.
+The `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT` project hosts the Token Parser API on `http://localhost:3001`. It mirrors the shared token parsing utilities, exposes Swagger, and is validated through Playwright + Cucumber scenarios implemented with the Screenplay pattern. Documentation for architecture, QA strategy, and Screenplay conventions now lives under `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT/docs`.
 
 ---
 
@@ -36,13 +36,12 @@ The `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT` project hosts the T
 
 ## Stack Highlights
 
-- **Runtime**: Node.js + TypeScript (ES2022 target) served via Express.
-- **Testing**: Playwright APIRequest fixtures orchestrated with `@cucumber/cucumber`; Screenplay pattern models actors, abilities, tasks, and questions.
-- **Configuration**: `.env.example` documents default values including `API_BASE_URL=http://localhost:3001` and `TOKENPARSER_LOG_LEVEL` for verbosity control.
-- **Logging**: Shared logger (`src/services/logger.ts`) gates output by level; defaults to `debug` but can be set to `silent`, `error`, `warn`, or `info`.
-- **Documentation**: `docs/ARCHITECTURE.md`, `docs/QA_STRATEGY.md`, and `docs/SCREENPLAY_GUIDE.md` cover design, risk strategy, and Screenplay conventions.
-- **Parity**: `UseTokenParsers` mirrors the Cypress ability, so both stacks exercise identical parser flows (incl. `parseTokenizedStringLines`).
-- **Linters/Formatters**: ESLint + Prettier run via `npm run lint` / `npm run format`, scoped to `src/`, `screenplay/`, and `features/**` to keep Screenplay tasks/questions in sync with Cypress.
+- **Runtime**: Node.js + TypeScript (ES2022) served via Express with shared parser modules.
+- **Testing**: Playwright `APIRequestContext` fixtures orchestrated with `@cucumber/cucumber`; Screenplay models actors, abilities, tasks, questions, and memory.
+- **Configuration**: `.env.example` documents defaults including `API_BASE_URL=http://localhost:3001`, `PORT`, and logging verbosity controls.
+- **Tooling**: ESLint + Prettier scope `src/`, `screenplay/`, and `features/**`; `npm run lint`, `npm run format`, and `npm run ts:check` form the quality gates before `npm run test:bdd` / `npm run verify`.
+- **Automation**: `.batch/RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` (and `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT`) start/stop the API via `env_utils.bat`, open Swagger, run tests, and append summaries to `.results/`.
+- **Parity**: `UseTokenParsers`, `SendGetRequest`, and Screenplay memory are aligned with DEMOAPP001; `API Testing POC/screenplay_parity_typescript.md` tracks the shared status.
 
 ---
 
@@ -50,30 +49,25 @@ The `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT` project hosts the T
 
 ```
 _API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT/
-- src/
-  - server.ts (Express host + Swagger)
-  - config.ts (centralised configuration)
-  - services/logger.ts (log abstraction)
-  - tokenparser/ (TokenDateParser and TokenDynamicStringParser)
-- features/
-  - api/ (REST BDD features)
-  - util-tests/ (direct parser coverage)
-  - step_definitions/ (Screenplay-driven steps)
-- screenplay/ (Actor, Ability, Task, Question helpers)
-- tooling/ (cucumber.cjs, playwright.config.ts, cucumber-summary.cjs)
-- docs/ (architecture, QA, Screenplay guides)
-- .env.example (environment configuration template)
-- package.json / tsconfig.json / npm scripts
+|--- docs/                     (Architecture, QA, Screenplay guides)
+|--- screenplay/               (Actor, ability, task, question helpers)
+|--- features/                 (api + util feature files and step defs)
+|--- src/                      (Express host + token parsers + services)
+|--- tooling/                  (cucumber runner, playwright config, summary script)
+|--- .results/                 (timestamped batch outputs + cucumber json)
+|--- package.json / tsconfig.json / .eslintrc.cjs / .prettierrc.json
 ```
 
 ---
 
 ## Scripts and Automation
 
-- `npm start` - launches the Express API on port `3001`.
-- `npm test` / `npm run test:bdd` - executes Cucumber features with Playwright fixtures.
-- `npm run verify` - type checks then runs the BDD suite.
-- `.batch/RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` - starts the API, waits for readiness, opens Swagger, runs the BDD suite, appends a scenario summary, and stops the host. Results are written to `.results/demoapp003_typescript_playwright_<UTC_TIMESTAMP>.txt` with a Cucumber JSON report stored at `.results/playwright_cucumber_report.json`.
+- `npm start` / `npm run dev` - launch the Express API on port `3001`.
+- `npm run lint`, `npm run format`, `npm run ts:check` - local quality gates.
+- `npm run test:bdd` / `npm run verify` - execute Playwright + Cucumber suites (`verify` = type-check + test).
+- `npm run pw:test` - reserved for future browser/e2e specs.
+- `.batch/RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` - start API, open Swagger, run `npm run verify`, produce `.results/demoapp003_typescript_playwright_<UTC_TIMESTAMP>.txt`, and persist `playwright_cucumber_report.json`.
+- `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` - start the three demo APIs and stop them cleanly once the session ends.
 
 ---
 
@@ -92,16 +86,17 @@ Set the value in `.env`, CI variables, or the shell environment before running s
 
 ## Testing Notes
 
-- Playwright `APIRequestContext` powers HTTP interactions; no browser session is required.
-- Screenplay memory stores responses for flexible assertions (`ResponseStatus`, `ResponseJson`) and util helpers via `UtilActorMemory`.
-- Utility feature files mirror DEMOAPP001 coverage row-for-row, yielding 55 passing scenarios per run as of 2025-11-10.
-- Batch runs capture deterministic UTC timestamps, open Swagger automatically, and dump a cucumber summary (`.results/playwright_cucumber_report.json`).
+- Playwright `APIRequestContext` powers HTTP interactions; no browser context is required.
+- Screenplay memory stores responses for `ResponseStatus`, `ResponseBody`, and util helpers via `UtilActorMemory`.
+- Utility feature files mirror DEMOAPP001 coverage row-for-row, yielding 55 passing scenarios per run as of 2025‑11‑12.
+- Batch runs capture deterministic UTC timestamps, open Swagger automatically, and dump a cucumber summary plus JSON report.
 
 ---
 
 ## References
 
 - Main README: `README.md`
+- Project docs: `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT/docs`
 - Cypress stack: `API Testing POC/typescript_cucumber_cypress.md`
 - C# stack: `API Testing POC/csharp_specflow_playwright.md`
 - Token contract: `API Testing POC/tokenparser_api_contract.md`
@@ -122,12 +117,12 @@ Set the value in `.env`, CI variables, or the shell environment before running s
 | Layer | DEMOAPP003 (TS+PW) | DEMOAPP001 (TS+Cypress) | DEMOAPP002 (C#+SpecFlow) | Next Step |
 | --- | --- | --- | --- | --- |
 | Actor setup | Complete | Complete | Pending | Introduce a SpecFlow `ScreenplayContext` service. |
-| Abilities | Complete | Complete (Nov 2025) | Pending | Wrap HttpClient + parser access as abilities. |
+| Abilities | Complete | Complete | Pending | Wrap HttpClient + parser access as abilities. |
 | Tasks | Complete (`SendGetRequest` + parser helpers) | Complete (`SendGetRequest` mirrored) | Pending | Implement `SendGetRequestTask` (C#) & migrate steps. |
 | Questions | Complete | Complete | Pending | Add question helpers to SpecFlow bindings. |
 | Memory | Complete | Complete (`UtilActorMemory`) | Pending | Store values in Actor memory or `ScenarioContext`. |
 
 ### Milestones
-1. **SpecFlow Screenplay bootstrap** - add Actor/Ability/Task/Question scaffolding under `TokenParserTests/Screenplay`.  
-2. **Alive endpoint pilot** - migrate the health-check steps to the new abstractions, then expand across token scenarios.  
-3. **Documentation sync** - continue updating this table (and the Cypress/C# docs) as milestones land; add CI lint once SpecFlow catches up.
+1. **SpecFlow Screenplay bootstrap** – add Actor/Ability/Task/Question scaffolding under `TokenParserTests/Screenplay`.  
+2. **Alive endpoint pilot** – migrate the health-check steps to the new abstractions, then expand across token scenarios.  
+3. **Documentation sync** – keep this doc, the Cypress doc, and `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/docs` aligned as milestones land; add CI lint once SpecFlow catches up.

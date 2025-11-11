@@ -1,6 +1,6 @@
 # Using the 3A (Arrange, Act, Assert) Pattern in Testing Guidelines
 
-**Version 1 - [17/07/24]**
+**Version 2 - [12/11/25]**
 
 ---
 
@@ -68,9 +68,9 @@ Feature: Calculator addition
 
 ---
 
-## Practical Example: Integrating AAA with BDD
+## Practical Example: Integrating AAA with BDD (API Tokens)
 
-Here we integrate the AAA pattern with a Gherkin-based BDD framework (e.g., Cucumber.js in TypeScript).
+Here we integrate the AAA pattern with the Gherkin-based Screenplay frameworks used across DEMOAPP001/003 (TypeScript) and DEMOAPP002 (C# plan).
 
 **Gherkin Feature File:**
 
@@ -83,49 +83,48 @@ Feature: Calculator addition
     Then the result should be 8
 ```
 
-**Step Definitions (TypeScript Example):**
+**Step Definitions (TypeScript Screenplay Example):**
 
 ```typescript
 import { Given, When, Then } from "@cucumber/cucumber";
-import assert from "assert";
+import { SendGetRequest } from "../../../screenplay/tasks/SendGetRequest";
+import { ResponseStatus } from "../../../screenplay/questions/ResponseStatus";
+import { ResponseBody } from "../../../screenplay/questions/ResponseBody";
+import { apiActor } from "../../../screenplay/core/api-world";
 
-let calculator: Calculator;
-let result: number;
-
-Given('a calculator', function () {
-  calculator = new Calculator();
+Given("the Token Parser API is running", function () {
+  // Arrange via Screenplay: actor already knows how to call the API.
 });
 
-Given('the numbers {int} and {int}', function (a: number, b: number) {
-  this.a = a;
-  this.b = b;
+When("I request the alive endpoint", async function () {
+  await apiActor().attemptsTo(SendGetRequest.to("/alive"));
 });
 
-When('the numbers are added', function () {
-  result = calculator.add(this.a, this.b);
-});
-
-Then('the result should be {int}', function (expected: number) {
-  assert.strictEqual(result, expected);
+Then("the API should respond with ALIVE-AND-KICKING", function () {
+  const status = apiActor().answer(ResponseStatus.code());
+  const body = apiActor().answer(ResponseBody.json());
+  this.expect(status).to.equal(200);
+  this.expect(body.Status).to.equal("ALIVE-AND-KICKING");
 });
 ```
 
 ---
 
-## Explanation of AAA Alignment with BDD
+## Explanation of AAA Alignment with BDD + Screenplay
 
-- **Given *' Arrange:** Prepares the initial context/environment.
-- **When *' Act:** Executes the functionality under test.
-- **Then *' Assert:** Compares the outcome to the expected result.
+- **Given / Arrange:** Hooks/worlds create actors and attach abilities (e.g., `CallAnApi`, `UseTokenParsers`).
+- **When / Act:** Screenplay tasks (`SendGetRequest`) encapsulate the behaviour under test.
+- **Then / Assert:** Screenplay questions (`ResponseStatus`, `ResponseBody`) provide the assertion data.
+- **Memory:** Actor memory replaces ad-hoc globals, mirroring AAA’s emphasis on controlled setup/teardown.
 
 ---
 
 ## Benefits
 
-- **Organized:** Provides a clear structure.
-- **Readable:** Easy for both technical and non-technical stakeholders.
-- **Maintainable:** Keeps tests simple and effective.
-- **BDD-Friendly:** Directly aligns with Gherkin for seamless integration.
+- **Organized:** Screenplay + AAA keeps Arrange/Act/Assert explicit even when tests are declarative.
+- **Readable:** Gherkin scenarios remain business-friendly while the Screenplay layer handles implementation detail.
+- **Maintainable:** Tasks/questions can be reused across stacks (tracked in `API Testing POC/DEMO_DOCS/screenplay_parity_typescript.md`).
+- **BDD-Friendly:** Aligns with Given/When/Then and the shared contract spec (`API Testing POC/DEMO_DOCS/tokenparser_api_contract.md`).
 
 By following this structured approach, tests remain well-organized, readable, and maintainable, while combining the clarity of BDD with the simplicity of the AAA pattern.
 
