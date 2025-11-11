@@ -4,7 +4,10 @@ import type { Task } from "../core/types";
 import type { Actor } from "../actors/Actor";
 
 export class SendGetRequest implements Task {
-  private constructor(private readonly path: string, private readonly params?: Record<string, string>) {}
+  private constructor(
+    private readonly path: string,
+    private readonly params?: Record<string, string>,
+  ) {}
 
   static to(path: string, params?: Record<string, string>): SendGetRequest {
     return new SendGetRequest(path, params);

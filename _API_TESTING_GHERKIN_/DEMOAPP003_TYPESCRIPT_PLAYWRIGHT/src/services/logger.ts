@@ -20,7 +20,10 @@ const consoleMethodForLevel: Record<Exclude<LogLevel, "silent">, LogMethod> = {
 export class Logger {
   private readonly threshold: number;
 
-  constructor(private readonly category: string, private readonly level: LogLevel) {
+  constructor(
+    private readonly category: string,
+    private readonly level: LogLevel,
+  ) {
     this.threshold = LEVEL_PRIORITY[level];
   }
 
