@@ -45,8 +45,8 @@ set "PROJECT_DIR=%~2"
 set "DEFAULT_PORT=%~3"
 set "PREFIX=%~4"
 
-set "PORT_VAR=%PREFIX%_PORT"
-set "BASE_VAR=%PREFIX%_BASE"
+set "PORT_VAR=%~4_PORT"
+set "BASE_VAR=%~4_BASE"
 call "%SCRIPT_DIR%env_utils.bat" load_env_vars "%PROJECT_DIR%" %DEFAULT_PORT% "http://localhost:%DEFAULT_PORT%" %PORT_VAR% %BASE_VAR%
 
 call set "CURRENT_PORT=%%%PORT_VAR%%%"
@@ -58,13 +58,13 @@ if "%PORT_IN_USE%"=="1" (
     exit /b 0
 )
 
-for /f "usebackq" %%I in (`powershell -NoProfile -Command "$p = Start-Process -FilePath \"npm\" -ArgumentList \"run\",\"start\" -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"`) do set "%PREFIX%_PID=%%I"
-if not defined %PREFIX%_PID (
+for /f "usebackq" %%I in (`powershell -NoProfile -Command "$p = Start-Process -FilePath \"npm\" -ArgumentList \"run\",\"start\" -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"`) do set "%~4_PID=%%I"
+if not defined %~4_PID (
     echo Failed to start %LABEL% API.
     exit /b 1
 )
 
-call set "CURRENT_PID=%%%PREFIX%_PID%%%"
+call set "CURRENT_PID=%%%~4_PID%%%"
 
 echo %LABEL% API started on port %CURRENT_PORT% (PID=%CURRENT_PID%).
 powershell -NoProfile -Command "Start-Process('%CURRENT_BASE%/swagger/v1/json')" >nul 2>&1
@@ -83,13 +83,13 @@ if "%PORT_IN_USE%"=="1" (
     exit /b 0
 )
 
-for /f "usebackq" %%I in (`powershell -NoProfile -Command "$p = Start-Process -FilePath \"dotnet\" -ArgumentList \"run\",\"--no-build\",\"--project\",\"%PROJECT_DIR%\",\"--urls\",\"http://localhost:%PORT%\" -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"`) do set "%PREFIX%_PID=%%I"
-if not defined %PREFIX%_PID (
+for /f "usebackq" %%I in (`powershell -NoProfile -Command "$p = Start-Process -FilePath \"dotnet\" -ArgumentList \"run\",\"--no-build\",\"--project\",\"%PROJECT_DIR%\",\"--urls\",\"http://localhost:%PORT%\" -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"`) do set "%~4_PID=%%I"
+if not defined %~4_PID (
     echo Failed to start %LABEL% API.
     exit /b 1
 )
 
-call set "CURRENT_PID=%%%PREFIX%_PID%%%"
+call set "CURRENT_PID=%%%~4_PID%%%"
 echo %LABEL% API started on port %PORT% (PID=%CURRENT_PID%).
 powershell -NoProfile -Command "Start-Process('http://localhost:%PORT%/swagger/')" >nul 2>&1
 exit /b 0
