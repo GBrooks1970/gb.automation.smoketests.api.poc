@@ -5,8 +5,8 @@ import {
   LAST_GENERATED_STRING,
   LAST_PARSE_ERROR,
 } from "../../../../screenplay/support/memory-keys";
-import type { CustomWorld } from "../../../../screenplay/support/custom-world";
-import { UtilActorMemory } from "../../step_utils/UtilActorMemory";
+import type { CustomWorld } from "../../../../screenplay/core/custom-world";
+import { UtilActorMemory } from "../../../../screenplay/support/UtilActorMemory";
 
 let token = "";
 

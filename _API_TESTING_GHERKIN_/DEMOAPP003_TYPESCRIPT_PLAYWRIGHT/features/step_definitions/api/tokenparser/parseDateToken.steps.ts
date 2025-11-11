@@ -2,9 +2,9 @@ import { Given, When, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 import { SendGetRequest } from "../../../../screenplay/tasks/SendGetRequest";
 import { ResponseStatus } from "../../../../screenplay/questions/ResponseStatus";
-import { ResponseJson } from "../../../../screenplay/questions/ResponseJson";
+import { ResponseBody } from "../../../../screenplay/questions/ResponseBody";
 import { TokenDateParser } from "../../../../src/tokenparser/TokenDateParser";
-import type { CustomWorld } from "../../../../screenplay/support/custom-world";
+import type { CustomWorld } from "../../../../screenplay/core/custom-world";
 
 let tokenString = "";
 
@@ -33,7 +33,7 @@ Then<CustomWorld>('the API response for the ParseDateToken Endpoint should retur
 
 Then<CustomWorld>('the response body should contain {string} with the value {string}', async function (this, propertyName: string, expected: string) {
   const propertyKey = toApiProperty(propertyName);
-  const body = await this.actor.answer(ResponseJson.body());
+  const body = await this.actor.answer(ResponseBody.json());
   expect(body[propertyKey]).toBeDefined();
 
   let expectedValue = expected;

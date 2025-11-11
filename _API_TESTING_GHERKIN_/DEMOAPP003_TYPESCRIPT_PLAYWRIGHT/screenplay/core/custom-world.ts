@@ -13,8 +13,7 @@ export class CustomWorld {
   private apiAbility?: CallAnApi;
 
   constructor(_: IWorldOptions) {
-    this.actor = new Actor("Playwright API Tester");
-    this.actor.whoCan(new UseTokenParsers());
+    this.actor = Actor.named("Playwright API Tester").whoCan(new UseTokenParsers());
   }
 
   get apiBaseUrl(): string {
@@ -22,7 +21,7 @@ export class CustomWorld {
   }
 
   async enableApiAbility(): Promise<void> {
-    this.apiAbility = await CallAnApi.create(this.apiBaseUrl);
+    this.apiAbility = await CallAnApi.at(this.apiBaseUrl);
     this.actor.whoCan(this.apiAbility);
   }
 

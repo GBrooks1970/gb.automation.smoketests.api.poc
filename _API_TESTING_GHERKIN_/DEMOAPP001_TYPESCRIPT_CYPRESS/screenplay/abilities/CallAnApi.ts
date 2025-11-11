@@ -21,4 +21,8 @@ export class CallAnApi implements Ability {
 
     return cy.request(requestOptions);
   }
+
+  dispose(): void {
+    // Cypress uses a shared browser process; nothing to tear down currently.
+  }
 }

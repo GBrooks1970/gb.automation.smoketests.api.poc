@@ -1,6 +1,6 @@
-import { LAST_PARSED_DATE, SECONDARY_PARSED_DATE, LAST_PARSED_RANGE, LAST_PARSE_ERROR, LAST_GENERATED_STRING } from "../../../../src/screenplay/support/memory-keys";
-import { DateRange } from "../../../../src/tokenparser/TokenDateParser";
-import { utilActor } from "../../screenplay/util-world";
+import { LAST_PARSED_DATE, SECONDARY_PARSED_DATE, LAST_PARSED_RANGE, LAST_PARSE_ERROR, LAST_GENERATED_STRING } from "./memory-keys";
+import { DateRange } from "../../src/tokenparser/TokenDateParser";
+import { utilActor } from "../core/util-world";
 
 export class UtilActorMemory {
     static rememberPrimaryDate = (value: Date) => utilActor().remember(LAST_PARSED_DATE, value);

@@ -33,6 +33,10 @@ export class Actor {
     return chain;
   }
 
+  answer<TAnswer>(question: Question<TAnswer>): TAnswer {
+    return question.answeredBy(this);
+  }
+
   remember<TValue>(key: string, value: TValue): void {
     this.memory.set(key, value);
   }
@@ -43,9 +47,5 @@ export class Actor {
 
   forget(key: string): void {
     this.memory.delete(key);
-  }
-
-  answer<TAnswer>(question: Question<TAnswer>): TAnswer {
-    return question.answeredBy(this);
   }
 }

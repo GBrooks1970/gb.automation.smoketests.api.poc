@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import { Before, After } from "@badeball/cypress-cucumber-preprocessor";
-import { Actor } from "../../../src/screenplay/actors/Actor";
-import { CallAnApi } from "../../../src/screenplay/abilities/CallAnApi";
+import { Actor } from "../actors/Actor";
+import { CallAnApi } from "../abilities/CallAnApi";
 
 const apiBaseUrl = (): string => Cypress.env("API_BASE_URL") ?? Cypress.config("baseUrl") ?? "http://localhost:3000";
 
@@ -12,6 +12,14 @@ Before(() => {
 });
 
 After(() => {
+  if (currentActor) {
+    try {
+      currentActor.abilityTo(CallAnApi).dispose();
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.warn("Failed to dispose CallAnApi ability:", error);
+    }
+  }
   currentActor = null;
 });
 

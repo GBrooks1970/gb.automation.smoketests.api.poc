@@ -1,6 +1,6 @@
 import type { APIResponse } from "@playwright/test";
 import { CallAnApi } from "../abilities/CallAnApi";
-import type { Task } from "../support/types";
+import type { Task } from "../core/types";
 import type { Actor } from "../actors/Actor";
 
 export class SendGetRequest implements Task {

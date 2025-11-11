@@ -2,8 +2,8 @@ import { Given, When, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 import { SendGetRequest } from "../../../../screenplay/tasks/SendGetRequest";
 import { ResponseStatus } from "../../../../screenplay/questions/ResponseStatus";
-import { ResponseJson } from "../../../../screenplay/questions/ResponseJson";
-import type { CustomWorld } from "../../../../screenplay/support/custom-world";
+import { ResponseBody } from "../../../../screenplay/questions/ResponseBody";
+import type { CustomWorld } from "../../../../screenplay/core/custom-world";
 
 let token = "";
 
@@ -41,7 +41,7 @@ Then<CustomWorld>('the API response should return a status code of {int} for the
 });
 
 Then<CustomWorld>('the response should contain {string} with the value {string}', async function (this, propertyName: string, expected: string) {
-  const body = await this.actor.answer(ResponseJson.body());
+  const body = await this.actor.answer(ResponseBody.json());
   const parsedToken = body[propertyName] ?? body[propertyName.charAt(0).toUpperCase() + propertyName.slice(1)];
 
   switch (token) {

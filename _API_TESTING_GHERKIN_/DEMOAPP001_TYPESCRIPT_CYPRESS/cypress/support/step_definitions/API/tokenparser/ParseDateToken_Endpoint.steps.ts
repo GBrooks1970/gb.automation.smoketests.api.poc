@@ -1,10 +1,10 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import { expect } from "chai";
 import { TokenDateParser } from "../../../../../src/tokenparser/TokenDateParser";
-import { SendGetRequest } from "../../../../../src/screenplay/tasks/SendGetRequest";
-import { ResponseStatus } from "../../../../../src/screenplay/questions/ResponseStatus";
-import { ResponseBody } from "../../../../../src/screenplay/questions/ResponseBody";
-import { apiActor } from "../../../screenplay/api-world";
+import { SendGetRequest } from "../../../../../screenplay/tasks/SendGetRequest";
+import { ResponseStatus } from "../../../../../screenplay/questions/ResponseStatus";
+import { ResponseBody } from "../../../../../screenplay/questions/ResponseBody";
+import { apiActor } from "../../../../../screenplay/core/api-world";
 
 const toApiProperty = (propertyName: string): string =>
   propertyName ? propertyName.charAt(0).toUpperCase() + propertyName.slice(1) : propertyName;

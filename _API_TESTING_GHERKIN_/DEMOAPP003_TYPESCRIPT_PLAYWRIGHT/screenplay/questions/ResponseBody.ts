@@ -1,14 +1,15 @@
-import type { Question } from "../support/types";
+import type { Question } from "../core/types";
 import type { Actor } from "../actors/Actor";
+import { LAST_RESPONSE } from "screenplay/support/memory-keys";
 import type { APIResponse } from "@playwright/test";
 
-export class ResponseJson implements Question<Record<string, unknown>> {
-  static body(): ResponseJson {
-    return new ResponseJson();
+export class ResponseBody implements Question<Record<string, unknown>> {
+  static json(): ResponseBody {
+    return new ResponseBody();
   }
 
   async answeredBy(actor: Actor): Promise<Record<string, unknown>> {
-    const response = actor.recall<APIResponse>("last-response");
+    const response = actor.recall<APIResponse>(LAST_RESPONSE);
     if (!response) {
       throw new Error("No response available for body assertion");
     }

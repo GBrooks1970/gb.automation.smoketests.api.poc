@@ -1,10 +1,14 @@
-import { Ability, AbilityType, Question, Task } from "../support/types";
+import { Ability, AbilityType, Question, Task } from "../core/types";
 
 export class Actor {
   private readonly abilities = new Map<AbilityType<Ability>, Ability>();
   private readonly memory = new Map<string, unknown>();
 
   constructor(public readonly name: string) {}
+
+  static named(name: string): Actor {
+    return new Actor(name);
+  }
 
   whoCan(...abilities: Ability[]): this {
     abilities.forEach((ability) => {

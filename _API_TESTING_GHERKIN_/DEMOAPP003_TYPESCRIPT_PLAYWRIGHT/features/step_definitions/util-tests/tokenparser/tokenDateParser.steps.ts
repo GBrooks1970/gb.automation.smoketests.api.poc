@@ -8,9 +8,9 @@ import {
   SECONDARY_PARSED_DATE,
   LAST_PARSED_RANGE,
 } from "../../../../screenplay/support/memory-keys";
-import type { CustomWorld } from "../../../../screenplay/support/custom-world";
+import type { CustomWorld } from "../../../../screenplay/core/custom-world";
 import { DateRange } from "../../../../src/tokenparser/TokenDateParser";
-import { UtilActorMemory } from "../../step_utils/UtilActorMemory";
+import { UtilActorMemory } from "../../../../screenplay/support/UtilActorMemory";
 
 let token = "";
 let dateStringToken = "";

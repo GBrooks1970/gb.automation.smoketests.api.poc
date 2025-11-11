@@ -1,9 +1,9 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import { expect } from "chai";
-import { SendGetRequest } from "../../../../src/screenplay/tasks/SendGetRequest";
-import { ResponseStatus } from "../../../../src/screenplay/questions/ResponseStatus";
-import { ResponseBody } from "../../../../src/screenplay/questions/ResponseBody";
-import { apiActor } from "../../screenplay/api-world";
+import { SendGetRequest } from "../../../../screenplay/tasks/SendGetRequest";
+import { ResponseStatus } from "../../../../screenplay/questions/ResponseStatus";
+import { ResponseBody } from "../../../../screenplay/questions/ResponseBody";
+import { apiActor } from "../../../../screenplay/core/api-world";
 
 Given("the API is available", () => {
   return apiActor().attemptsTo(SendGetRequest.to("/alive"));

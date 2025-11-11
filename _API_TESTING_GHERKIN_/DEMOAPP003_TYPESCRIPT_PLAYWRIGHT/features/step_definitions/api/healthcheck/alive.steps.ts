@@ -2,8 +2,8 @@ import { Given, When, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 import { SendGetRequest } from "../../../../screenplay/tasks/SendGetRequest";
 import { ResponseStatus } from "../../../../screenplay/questions/ResponseStatus";
-import { ResponseJson } from "../../../../screenplay/questions/ResponseJson";
-import type { CustomWorld } from "../../../../screenplay/support/custom-world";
+import { ResponseBody } from "../../../../screenplay/questions/ResponseBody";
+import type { CustomWorld } from "../../../../screenplay/core/custom-world";
 
 Given<CustomWorld>('the API is available', async function (this) {
   await this.actor.attemptsTo(SendGetRequest.to('/alive'));
@@ -21,7 +21,7 @@ Then<CustomWorld>('the API response should return a status code of 200', async f
 });
 
 Then<CustomWorld>('the Health Check response body should contain "Status" with the value "ALIVE-AND-KICKING"', async function (this) {
-  const body = await this.actor.answer(ResponseJson.body());
+  const body = await this.actor.answer(ResponseBody.json());
   expect(body.Status).toBe('ALIVE-AND-KICKING');
 });
 

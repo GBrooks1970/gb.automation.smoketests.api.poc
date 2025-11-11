@@ -1,6 +1,6 @@
 import { Before, After } from "@badeball/cypress-cucumber-preprocessor";
-import { Actor } from "../../../src/screenplay/actors/Actor";
-import { UseTokenParsers } from "../../../src/screenplay/abilities/UseTokenParsers";
+import { Actor } from "../actors/Actor";
+import { UseTokenParsers } from "../abilities/UseTokenParsers";
 
 let currentActor: Actor | null = null;
 

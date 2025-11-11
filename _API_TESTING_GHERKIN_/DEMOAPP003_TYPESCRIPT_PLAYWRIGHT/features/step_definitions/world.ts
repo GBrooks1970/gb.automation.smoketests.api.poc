@@ -1,1 +1,1 @@
-import "../../screenplay/support/custom-world";
+import "../../screenplay/core/custom-world";

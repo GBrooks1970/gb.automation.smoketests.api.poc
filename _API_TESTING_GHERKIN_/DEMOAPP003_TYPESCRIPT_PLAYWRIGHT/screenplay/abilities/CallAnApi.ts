@@ -1,13 +1,13 @@
 import { APIRequestContext, APIResponse, request } from "@playwright/test";
-import type { Ability } from "../support/types";
+import type { Ability } from "../core/types";
 
 export class CallAnApi implements Ability {
-  static async create(baseURL: string): Promise<CallAnApi> {
+   constructor(private readonly context: APIRequestContext, public readonly baseURL: string) {}
+
+static async at(baseURL: string): Promise<CallAnApi> {
     const context = await request.newContext({ baseURL });
     return new CallAnApi(context, baseURL);
   }
-
-  constructor(private readonly context: APIRequestContext, public readonly baseURL: string) {}
 
   get description(): string {
     return `Call API at ${this.baseURL}`;
