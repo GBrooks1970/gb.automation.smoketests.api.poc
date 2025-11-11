@@ -18,6 +18,21 @@ const formatDateUtc = (date: Date): string => {
     return `${iso.slice(0, 19).replace('T', ' ')}Z`; // Trim milliseconds and keep trailing Z
 };
 
+const CONTRACT_ERROR_MESSAGE = "Invalid string token format";
+
+const contractErrorMessage = (reason?: string): string => {
+    if (!reason) {
+        return CONTRACT_ERROR_MESSAGE;
+    }
+    const trimmedReason = reason.trim();
+    return trimmedReason.startsWith(CONTRACT_ERROR_MESSAGE)
+        ? trimmedReason
+        : `${CONTRACT_ERROR_MESSAGE}: ${trimmedReason}`;
+};
+
+const respondWithContractError = (res: Response, reason?: string) =>
+    res.status(400).json({ Error: contractErrorMessage(reason) });
+
 const swaggerOptions = {
     swaggerDefinition: {
         openapi: '3.0.0',
@@ -109,9 +124,9 @@ app.get('/alive', (req, res) => {
  *                   example: Invalid string token format
  */
 app.get('/parse-date-token', (req: Request, res: Response) => {
-    const tokenString = req.query.token as string;
-    if (!tokenString) {
-        return res.status(400).json({ Error: 'Token date is required' });
+    const tokenString = (req.query.token as string) ?? '';
+    if (!tokenString.trim()) {
+        return respondWithContractError(res, 'token is required');
     }
 
     try {
@@ -120,7 +135,7 @@ app.get('/parse-date-token', (req: Request, res: Response) => {
         const formattedDate = formatDateUtc(parsedDate);
         return res.status(200).json({ ParsedToken: formattedDate });
     } catch (e) {
-        return res.status(400).json({ Error: (e as Error).message });
+        return respondWithContractError(res, (e as Error).message);
     }
 });
 
@@ -160,16 +175,16 @@ app.get('/parse-date-token', (req: Request, res: Response) => {
  *                   example: Invalid string token format
  */
 app.get('/parse-dynamic-string-token', (req: Request, res: Response) => {
-    const tokenString = req.query.token as string;
-    if (!tokenString) {
-      return res.status(400).json({ Error: 'Token string is required' });
+    const tokenString = (req.query.token as string) ?? '';
+    if (!tokenString.trim()) {
+      return respondWithContractError(res, 'token is required');
     }
   
     try {
       const generatedString = TokenDynamicStringParser.parseAndGenerate(tokenString);
       return res.status(200).json({ ParsedToken: generatedString });
     } catch (e) {
-        return res.status(400).json({ Error: (e as Error).message });
+        return respondWithContractError(res, (e as Error).message);
     }
   });
 

@@ -8,7 +8,7 @@ export class UseTokenParsers implements Ability {
   }
 
   parseDateToken(token: string): Date {
-    return TokenDateParser.parseDateStringToken_Full(token);
+    return TokenDateParser.parseDateStringToken(token);
   }
 
   parseDateStringToken(token: string): Date {

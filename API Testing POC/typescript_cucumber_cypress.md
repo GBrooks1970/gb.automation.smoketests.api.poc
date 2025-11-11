@@ -1,6 +1,6 @@
 # DEMOAPP001 - TypeScript / Express / Cypress
 
-**Version 2 - [06/11/25]**
+**Version 3 - [10/11/25]**
 
 The `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS` project hosts the TOKENPARSER API on `http://localhost:3000`. Swagger UI is enabled and the service is validated with Cypress + Cucumber BDD tests running against the shared token parsing utilities.
 
@@ -15,12 +15,12 @@ The `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS` project hosts the TOKE
 2. **GET `/parse-dynamic-string-token`**
    - Query: `token` (string, required) in the `[TYPE-LIST]-LEN-<length>[-LINES-<count>]` format.
    - Success (200): `{ "ParsedToken": "<generated string>" }`
-   - Error (400): `{ "Error": "TokenDynamicStringParser : Invalid string token format : <token>" }`
+   - Error (400): `{ "Error": "Invalid string token format" }`
 
 3. **GET `/parse-date-token`**
    - Query: `token` (string, required) describing anchor dates and adjustments.
    - Success (200): `{ "ParsedToken": "yyyy-MM-dd HH:mm:ssZ" }`
-   - Error (400): `{ "Error": "TokenDateParser.parseDateStringToken : Invalid string token format : <token>" }`
+   - Error (400): `{ "Error": "Invalid string token format" }`
 
 ---
 
@@ -35,10 +35,10 @@ The `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS` project hosts the TOKE
 ## Stack Highlights
 
 - **Runtime**: Node.js + TypeScript served via Express with Swagger integration.
-- **Testing**: Cypress 13 with the Badeball Cucumber preprocessor for Gherkin support.
+- **Testing**: Cypress 13 with the Badeball Cucumber preprocessor; both API and util suites share identical seven-row Scenario Outlines.
 - **Token Utilities**: Shared `TokenDateParser` and `TokenDynamicStringParser` modules consumed by the API and tests.
-- **Screenplay**: Cypress step definitions now use Actors, Abilities, Tasks, and Questions to mirror the Playwright harness.
-- **Automation**: `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` orchestrates start-up, Swagger launch, Cypress execution, and teardown.
+- **Screenplay**: API and util step definitions now share a single Actor equipped with `CallAnApi` and `UseTokenParsers`, mirroring the Playwright harness.
+- **Automation**: `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` orchestrates start-up, Swagger launch, Cypress execution, and teardown while checking port usage with `env_utils.bat`.
 
 ---
 
@@ -76,9 +76,10 @@ The stack currently relies on direct console output from Express and the token p
 
 ## Testing Notes
 
-- Feature files under `cypress/integration` mirror the REST contract and utility scenarios.
-- Assertions use UTC-normalised timestamps to avoid timezone drift across environments.
-- Batch runs include automatic Swagger launch for quick manual inspection.
+- Feature files under `cypress/integration` mirror the REST contract and util scenarios 1-for-1 with Playwright and SpecFlow (55 tests per run as of 2025-11-10).
+- Assertions rely on UTC-normalised timestamps and Screenplay questions (`ResponseStatus`, `ResponseBody`, util memory helpers) to avoid timezone drift.
+- Utility scenarios exercise the parsers through `UseTokenParsers`, so Cypress no longer imports parser modules directly.
+- Batch runs open Swagger automatically, capture deterministic UTC timestamps, and leave artefacts under `.results/`.
 
 ---
 
@@ -93,15 +94,14 @@ The stack currently relies on direct console output from Express and the token p
 
 ## Screenplay Parity Status
 
-| Layer | Current State (DEMOAPP001) | Action Plan |
+| Layer | Status | Notes |
 | --- | --- | --- |
-| Actor/World setup | API scenarios now share a central Screenplay actor via `cypress/support/screenplay/api-world.ts`; util tests still bootstrap helpers manually. | Extend the world helper with `UseTokenParsers` and migrate util step definitions to the same Screenplay lifecycle. |
-| Abilities | `CallAnApi` is automatically applied for API steps; util steps continue to reach directly into `CommonUtils`. | When moving util flows, fetch abilities from the actor instead of importing parser modules. |
-| Tasks | API HTTP steps invoke `SendGetRequest`; util scenarios still use imperative helpers. | Port util-level flows to Screenplay tasks (e.g., token parsing tasks) for parity. |
-| Questions | `ResponseStatus`/`ResponseBody` power API assertions, but util steps parse responses manually. | Introduce question helpers for util flows and adopt them across the token tests. |
-| Memory | Actor memory stores API responses; util tests rely on globals/module scope. | Shift util shared state (tokens, parser outputs) into actor memory to avoid leakage across steps. |
+| Actor/World setup | Complete | `api-world.ts` and `util-world.ts` now provide the same Actor per scenario. |
+| Abilities | Complete | `CallAnApi` + `UseTokenParsers` attach automatically; util steps no longer import parser modules. |
+| Tasks | Complete | `SendGetRequest` drives API calls and parser interactions are modeled as Screenplay tasks. |
+| Questions | Complete | Assertions use `ResponseStatus`, `ResponseBody`, and util memory helpers. |
+| Memory | Complete | `UtilActorMemory` stores parsed tokens/errors instead of relying on module scope. |
 
-**Milestones**
-1. ✅ Wrap all API step definitions in Screenplay (`Given`/`When` use tasks, `Then` use questions). (Completed 2025-11-08)
-2. ✅ Update util step definitions to use Actor memory/abilities. (Completed 2025-11-08)
-3. Keep this table and the corresponding Playwright/SpecFlow docs updated as remaining Screenplay helpers roll out.
+**Ongoing Work**
+- Keep this table (and the Playwright/SpecFlow docs) synchronised as new helpers land.
+- Mirror the Cypress design back into DEMOAPP002 once Screenplay scaffolding for SpecFlow is ready.

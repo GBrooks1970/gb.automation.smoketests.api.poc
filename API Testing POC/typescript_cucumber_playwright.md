@@ -1,6 +1,6 @@
 # DEMOAPP003 - TypeScript / Express / Playwright BDD
 
-**Version 2 - [06/11/25]**
+**Version 3 - [10/11/25]**
 
 The `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT` project hosts the TOKENPARSER API on `http://localhost:3001`. It mirrors the shared token parsing utilities, exposes Swagger, and is validated through Playwright + Cucumber scenarios implemented with the Screenplay pattern.
 
@@ -15,12 +15,12 @@ The `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT` project hosts the T
 2. **GET `/parse-dynamic-string-token`**
    - Query: `token` (string, required) in the `[TYPE-LIST]-<LENGTH>[-LINES-<COUNT>]` format.
    - Success (200): `{ "ParsedToken": "<generated string>" }`
-   - Error (400): `{ "Error": "TokenDynamicStringParser : Invalid string token format : <token>" }`
+   - Error (400): `{ "Error": "Invalid string token format" }`
 
 3. **GET `/parse-date-token`**
    - Query: `token` (string, required) describing anchor dates and adjustments.
    - Success (200): `{ "ParsedToken": "yyyy-MM-dd HH:mm:ssZ" }`
-   - Error (400): `{ "Error": "TokenDateParser.parseDateStringToken : Invalid string token format : <token>" }`
+   - Error (400): `{ "Error": "Invalid string token format" }`
 
 ---
 
@@ -41,6 +41,7 @@ The `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT` project hosts the T
 - **Configuration**: `.env.example` documents default values including `API_BASE_URL=http://localhost:3001` and `TOKENPARSER_LOG_LEVEL` for verbosity control.
 - **Logging**: Shared logger (`src/services/logger.ts`) gates output by level; defaults to `debug` but can be set to `silent`, `error`, `warn`, or `info`.
 - **Documentation**: `docs/ARCHITECTURE.md`, `docs/QA_STRATEGY.md`, and `docs/SCREENPLAY_GUIDE.md` cover design, risk strategy, and Screenplay conventions.
+- **Parity**: `UseTokenParsers` mirrors the Cypress ability, so both stacks exercise identical parser flows (incl. `parseTokenizedStringLines`).
 
 ---
 
@@ -90,10 +91,10 @@ Set the value in `.env`, CI variables, or the shell environment before running s
 
 ## Testing Notes
 
-- Playwright APIRequestContext powers HTTP interactions; no browser session is required.
-- Screenplay memory stores responses for flexible assertions (`ResponseStatus`, `ResponseJson`).
-- Utility feature files mirror DEMOAPP001 coverage to ensure parser parity across stacks.
-- Batch runs capture deterministic timestamps in UTC to avoid timezone drift.
+- Playwright `APIRequestContext` powers HTTP interactions; no browser session is required.
+- Screenplay memory stores responses for flexible assertions (`ResponseStatus`, `ResponseJson`) and util helpers via `UtilActorMemory`.
+- Utility feature files mirror DEMOAPP001 coverage row-for-row, yielding 55 passing scenarios per run as of 2025-11-10.
+- Batch runs capture deterministic UTC timestamps, open Swagger automatically, and dump a cucumber summary (`.results/playwright_cucumber_report.json`).
 
 ---
 
@@ -109,24 +110,23 @@ Set the value in `.env`, CI variables, or the shell environment before running s
 ## Screenplay Mapping & Parity Plan
 
 ### DEMOAPP003 (TypeScript + Playwright) Mapping
-- **Actors** – `screenplay/actors/Actor.ts` instantiated via `screenplay/support/custom-world.ts`. Each scenario’s world provides a dedicated actor.
-- **Abilities** – `CallAnApi` wraps Playwright’s `APIRequestContext`; `UseTokenParsers` exposes direct util access.
-- **Tasks** – `screenplay/tasks/SendGetRequest.ts` encapsulates GET calls; more tasks can be added for POST/PUT.
-- **Questions** – `screenplay/questions/ResponseStatus.ts` / `ResponseJson.ts` expose response assertions.
-- **Memory** – Actor’s `remember`/`answer` stores the latest API response.
+- **Actors** - `screenplay/actors/Actor.ts` instantiated via `screenplay/support/custom-world.ts`. Each scenario's world provides a dedicated actor.
+- **Abilities** - `CallAnApi` wraps Playwright's `APIRequestContext`; `UseTokenParsers` exposes direct util access.
+- **Tasks** - `screenplay/tasks/SendGetRequest.ts` encapsulates GET calls; more tasks can be added for POST/PUT.
+- **Questions** - `screenplay/questions/ResponseStatus.ts` / `ResponseJson.ts` expose response assertions.
+- **Memory** - Actor's `remember`/`answer` stores the latest API response.
 
 ### Parity Plan
 
-| Layer | DEMOAPP003 (TS+PW) | DEMOAPP001 (TS+Cypress) | DEMOAPP002 (C#+SpecFlow) | Planned Actions |
+| Layer | DEMOAPP003 (TS+PW) | DEMOAPP001 (TS+Cypress) | DEMOAPP002 (C#+SpecFlow) | Next Step |
 | --- | --- | --- | --- | --- |
-| Actor setup | Custom Cucumber world instantiates `Actor` + abilities | Screenplay helpers exist in `src/screenplay/**` but step defs still use raw helpers | No Screenplay abstraction | Create a Cypress “world” helper that instantiates an Actor per scenario and injects abilities; plan equivalent `ScreenplayContext` for SpecFlow. |
-| Abilities | `CallAnApi`, `UseTokenParsers` | Steps call `cy.request` or import `CommonUtils` | `RequestHelper`/`HttpClient` used directly | Rework Cypress steps to call `actor.attemptsTo(...)`. In SpecFlow, wrap HttpClient + parsers as abilities so steps stay declarative. |
-| Tasks | `SendGetRequest` | None (imperative requests) | `RequestHelper.GetAsync...` methods | Port `SendGetRequest` to Cypress (using `cy.task` or `cy.request` internally). Introduce C# task classes (e.g., `SendGetRequestTask`) consumed by steps. |
-| Questions | `ResponseStatus`, `ResponseJson` | Assertions inspect local variables | Steps parse JSON via `JsonDocument` | Expose question helpers for Cypress and SpecFlow so assertions use the same semantics (status/question). |
-| Notes/Memory | Actor stores responses by key | Globals/module scope store last response | `_response` fields per step class | Adopt a shared “Memory” helper for Cypress and create a SpecFlow `ScenarioContext` extension to mimic Actor memory. |
+| Actor setup | Complete | Complete | Pending | Introduce a SpecFlow `ScreenplayContext` service. |
+| Abilities | Complete | Complete (Nov 2025) | Pending | Wrap HttpClient + parser access as abilities. |
+| Tasks | Complete (`SendGetRequest` + parser helpers) | Complete (`SendGetRequest` mirrored) | Pending | Implement `SendGetRequestTask` (C#) & migrate steps. |
+| Questions | Complete | Complete | Pending | Add question helpers to SpecFlow bindings. |
+| Memory | Complete | Complete (`UtilActorMemory`) | Pending | Store values in Actor memory or `ScenarioContext`. |
 
 ### Milestones
-1. **Cypress** – Introduce a wrapper around `cy.session`/`cy.log` that instantiates Actors; update API step definitions to use Screenplay tasks & questions.
-2. **SpecFlow** – Add `ScreenplayContext` service registered via `ScenarioDependencies`. Gradually migrate step classes to call tasks/questions instead of raw helpers.
-3. **Documentation** – Mirror this section (mapping + parity table) in `API Testing POC/typescript_cucumber_cypress.md` and `API Testing POC/csharp_specflow_playwright.md` with implementation progress indicators.
-4. **CI Enforcement** – Add lint/check scripts that scan step definitions for direct `cy.request`/`RequestHelper` usage and warn when Screenplay abstractions are bypassed.
+1. **SpecFlow Screenplay bootstrap** - add Actor/Ability/Task/Question scaffolding under `TokenParserTests/Screenplay`.  
+2. **Alive endpoint pilot** - migrate the health-check steps to the new abstractions, then expand across token scenarios.  
+3. **Documentation sync** - continue updating this table (and the Cypress/C# docs) as milestones land; add CI lint once SpecFlow catches up.

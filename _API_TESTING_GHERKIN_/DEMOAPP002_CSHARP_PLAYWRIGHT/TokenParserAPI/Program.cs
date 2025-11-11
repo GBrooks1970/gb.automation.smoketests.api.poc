@@ -93,7 +93,7 @@ app.MapGet("/parse-date-token", (
 {
     if (string.IsNullOrWhiteSpace(token))
     {
-        return Results.BadRequest(new TokenParserApiErrorResponse { Error = "Token date is required" });
+        return Results.BadRequest(new TokenParserApiErrorResponse { Error = ContractError("token is required") });
     }
 
     try
@@ -104,7 +104,7 @@ app.MapGet("/parse-date-token", (
     }
     catch (ArgumentException ex)
     {
-        return Results.BadRequest(new TokenParserApiErrorResponse { Error = ex.Message });
+        return Results.BadRequest(new TokenParserApiErrorResponse { Error = ContractError(ex.Message) });
     }
 })
 .Produces<TokenParserApiResponse>(StatusCodes.Status200OK, "application/json")
@@ -155,7 +155,7 @@ app.MapGet("/parse-dynamic-string-token", (
 {
     if (string.IsNullOrWhiteSpace(token))
     {
-        return Results.BadRequest(new TokenParserApiErrorResponse { Error = "Token string is required" });
+        return Results.BadRequest(new TokenParserApiErrorResponse { Error = ContractError("token is required") });
     }
 
     try
@@ -166,7 +166,7 @@ app.MapGet("/parse-dynamic-string-token", (
     }
     catch (ArgumentException ex)
     {
-        return Results.BadRequest(new TokenParserApiErrorResponse { Error = ex.Message });
+        return Results.BadRequest(new TokenParserApiErrorResponse { Error = ContractError(ex.Message) });
     }
 })
 .Produces<TokenParserApiResponse>(StatusCodes.Status200OK, "application/json")
@@ -212,3 +212,16 @@ app.MapGet("/parse-dynamic-string-token", (
 });
 
 app.Run();
+static string ContractError(string? reason = null)
+{
+    const string canonical = "Invalid string token format";
+    if (string.IsNullOrWhiteSpace(reason))
+    {
+        return canonical;
+    }
+
+    var trimmed = reason.Trim();
+    return trimmed.StartsWith(canonical, StringComparison.OrdinalIgnoreCase)
+        ? trimmed
+        : $"{canonical}: {trimmed}";
+}
