@@ -42,6 +42,7 @@ The `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT` project hosts the T
 - **Logging**: Shared logger (`src/services/logger.ts`) gates output by level; defaults to `debug` but can be set to `silent`, `error`, `warn`, or `info`.
 - **Documentation**: `docs/ARCHITECTURE.md`, `docs/QA_STRATEGY.md`, and `docs/SCREENPLAY_GUIDE.md` cover design, risk strategy, and Screenplay conventions.
 - **Parity**: `UseTokenParsers` mirrors the Cypress ability, so both stacks exercise identical parser flows (incl. `parseTokenizedStringLines`).
+- **Linters/Formatters**: ESLint + Prettier run via `npm run lint` / `npm run format`, scoped to `src/`, `screenplay/`, and `features/**` to keep Screenplay tasks/questions in sync with Cypress.
 
 ---
 

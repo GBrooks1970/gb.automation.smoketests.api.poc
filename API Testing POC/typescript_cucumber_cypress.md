@@ -39,6 +39,7 @@ The `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS` project hosts the TOKE
 - **Token Utilities**: Shared `TokenDateParser` and `TokenDynamicStringParser` modules consumed by the API and tests.
 - **Screenplay**: API and util step definitions now share a single Actor equipped with `CallAnApi` and `UseTokenParsers`, mirroring the Playwright harness.
 - **Automation**: `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` orchestrates start-up, Swagger launch, Cypress execution, and teardown while checking port usage with `env_utils.bat`.
+- **Linters/Formatters**: ESLint + Prettier cover `src/`, `screenplay/`, and Cypress step definitions via the root config (`package.json` scripts `lint`/`format`), keeping Screenplay helpers and tests aligned.
 
 ---
 

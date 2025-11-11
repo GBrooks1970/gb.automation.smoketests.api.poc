@@ -4,6 +4,7 @@ import CommonUtils from "../../../../../src/services/common-utils";
 import { utilActor } from "../../../../../screenplay/core/util-world";
 import { UseTokenParsers } from "../../../../../screenplay/abilities/UseTokenParsers";
 import { UtilActorMemory } from "../../../../../screenplay/support/UtilActorMemory";
+import { LAST_PARSED_DATE, SECONDARY_PARSED_DATE } from "../../../../../screenplay/support/memory-keys";
 
 let token = "";
 let dateStringToken = "";
@@ -28,11 +29,11 @@ Given("An invalid date range string {string}", (inputToken: string) => {
 });
 
 When("I parse the token", () => {
-  UtilActorMemory.rememberPrimaryDate(new Date(0));
+  UtilActorMemory.rememberDate(LAST_PARSED_DATE, new Date(0));
   UtilActorMemory.clearError();
   try {
     const parsed = parser().parseDateToken(token);
-    UtilActorMemory.rememberPrimaryDate(parsed);
+    UtilActorMemory.rememberDate(LAST_PARSED_DATE, parsed);
   } catch (error) {
     UtilActorMemory.rememberError(error);
   }
@@ -45,7 +46,7 @@ Then("an error should be thrown with message {string}", (expectedMessage: string
 });
 
 const compareWithExpected = (adjuster: (date: Date) => void) => {
-  const result = UtilActorMemory.getPrimaryDate();
+  const result = UtilActorMemory.getRememberedDate(LAST_PARSED_DATE);
   const expectedDate = getStartDateUTC();
   adjuster(expectedDate);
   console.log(
@@ -149,7 +150,7 @@ Given("A null or invalid date token", () => {
 });
 
 Then("the result should be the Unix zero date", () => {
-  const result = UtilActorMemory.getPrimaryDate();
+  const result = UtilActorMemory.getRememberedDate(LAST_PARSED_DATE);
   const expectedDate = new Date(0);
   expectedDate.setHours(0, 0, 0, 0);
   console.log(
@@ -166,14 +167,14 @@ When("I parse the date string token", () => {
   UtilActorMemory.clearError();
   try {
     const parsed = parser().parseDateStringToken(dateStringToken);
-    UtilActorMemory.rememberSecondaryDate(parsed);
+    UtilActorMemory.rememberDate(SECONDARY_PARSED_DATE, parsed);
   } catch (error) {
     UtilActorMemory.rememberError(error);
   }
 });
 
 Then("the result should be {string}", (expectedDateStr: string) => {
-  const parsedDate = UtilActorMemory.getSecondaryDate();
+  const parsedDate = UtilActorMemory.getRememberedDate(SECONDARY_PARSED_DATE);
   const [year, month, day] = expectedDateStr.split("-").map(Number);
   const expectedDate = new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0));
   console.log(

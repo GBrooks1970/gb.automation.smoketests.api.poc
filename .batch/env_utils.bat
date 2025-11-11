@@ -42,7 +42,7 @@ exit /b 0
 :is_port_in_use
 rem %1 = port, %2 = output var (1 busy, 0 free)
 set "PORT_STATE=FREE"
-for /f %%I in (`
+for /f "usebackq" %%I in (`
   powershell -NoProfile -Command "if (Test-NetConnection -ComputerName 'localhost' -Port %~1 -InformationLevel Quiet) { 'BUSY' } else { 'FREE' }"
 `) do set "PORT_STATE=%%I"
 if /I "%PORT_STATE%"=="BUSY" (

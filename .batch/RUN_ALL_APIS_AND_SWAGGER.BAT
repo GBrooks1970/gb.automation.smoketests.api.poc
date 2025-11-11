@@ -58,7 +58,7 @@ if "%PORT_IN_USE%"=="1" (
     exit /b 0
 )
 
-for /f %%I in ('powershell -NoProfile -Command "$p = Start-Process -FilePath 'npm' -ArgumentList 'run','start' -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"') do set "%PREFIX%_PID=%%I"
+for /f "usebackq" %%I in (`powershell -NoProfile -Command "$p = Start-Process -FilePath \"npm\" -ArgumentList \"run\",\"start\" -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"`) do set "%PREFIX%_PID=%%I"
 if not defined %PREFIX%_PID (
     echo Failed to start %LABEL% API.
     exit /b 1
@@ -67,7 +67,7 @@ if not defined %PREFIX%_PID (
 call set "CURRENT_PID=%%%PREFIX%_PID%%%"
 
 echo %LABEL% API started on port %CURRENT_PORT% (PID=%CURRENT_PID%).
-start "" "%CURRENT_BASE%/swagger/v1/json"
+powershell -NoProfile -Command "Start-Process('%CURRENT_BASE%/swagger/v1/json')" >nul 2>&1
 exit /b 0
 
 :start_dotnet_api
@@ -83,7 +83,7 @@ if "%PORT_IN_USE%"=="1" (
     exit /b 0
 )
 
-for /f %%I in ('powershell -NoProfile -Command "$p = Start-Process -FilePath 'dotnet' -ArgumentList 'run','--no-build','--project','%PROJECT_DIR%','--urls','http://localhost:%PORT%' -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"') do set "%PREFIX%_PID=%%I"
+for /f "usebackq" %%I in (`powershell -NoProfile -Command "$p = Start-Process -FilePath \"dotnet\" -ArgumentList \"run\",\"--no-build\",\"--project\",\"%PROJECT_DIR%\",\"--urls\",\"http://localhost:%PORT%\" -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"`) do set "%PREFIX%_PID=%%I"
 if not defined %PREFIX%_PID (
     echo Failed to start %LABEL% API.
     exit /b 1
@@ -91,7 +91,7 @@ if not defined %PREFIX%_PID (
 
 call set "CURRENT_PID=%%%PREFIX%_PID%%%"
 echo %LABEL% API started on port %PORT% (PID=%CURRENT_PID%).
-start "" "http://localhost:%PORT%/swagger/"
+powershell -NoProfile -Command "Start-Process('http://localhost:%PORT%/swagger/')" >nul 2>&1
 exit /b 0
 
 :stop_process
