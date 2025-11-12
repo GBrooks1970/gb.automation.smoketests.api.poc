@@ -1,8 +1,19 @@
 {
   "name": "demoapp003_typescript_playwright",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/server.ts",
   "scripts": {
+    "start": "tsx src/server.ts",
+    "dev": "tsx watch src/server.ts",
+    "ts:check": "tsc --project tsconfig.json --noEmit",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" \"screenplay/**/*.ts\" \"features/**/*.ts\"",
+    "lint:fix": "npm run lint -- --fix",
+    "format": "prettier --check \"src/**/*.ts\" \"screenplay/**/*.ts\" \"features/**/*.ts\"",
+    "format:fix": "prettier --write \"src/**/*.ts\" \"screenplay/**/*.ts\" \"features/**/*.ts\"",
+    "test:bdd": "node tooling/run-cucumber-with-summary.cjs",
+    "test": "npm run test:bdd",
+    "verify": "npm run ts:check && npm run test:bdd",
+    "pw:test": "playwright test --config tooling/playwright.config.ts",
     "pw:install": "playwright install --with-deps"
   },
   "keywords": [],
@@ -14,13 +25,26 @@
     "@types/node": "^22.5.5",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.6",
+    "@cucumber/pretty-formatter": "^2.4.1",
     "@playwright/test": "^1.48.2",
+    "@typescript-eslint/eslint-plugin": "^8.3.0",
+    "@typescript-eslint/parser": "^8.3.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.0",
     "typescript": "^5.6.2"
   },
   "dependencies": {
     "@cucumber/cucumber": "^11.0.0",
+    "@types/js-yaml": "^4.0.9",
+    "body-parser": "^1.20.3",
+    "date-fns": "^4.1.0",
+    "express": "^4.21.0",
+    "js-yaml": "^4.1.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "zod": "^3.23.8"
   }
 }

@@ -1,4 +1,4 @@
-﻿using TechTalk.SpecFlow;
+using TechTalk.SpecFlow;
 using Microsoft.Playwright;
 using TokenParserTests.Helpers;
 using Newtonsoft.Json;

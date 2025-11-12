@@ -1,4 +1,4 @@
-﻿using TechTalk.SpecFlow;
+using TechTalk.SpecFlow;
 using Newtonsoft.Json;
 using TokenParserAPI.responses;
 using NUnit.Framework.Legacy;
@@ -25,7 +25,7 @@ namespace TokenParserTests.Steps
             _Token = token;
         }
 
-        [When(@"a GET request is made to the DateTokenParser Endpoint")]
+        [When(@"a GET request is made to the ParseDateToken Endpoint")]
         public async Task WhenISendARequestWithTokenToTheParsedTokenAPI()
         {
             string endpoint = "/parse-date-token";
@@ -40,7 +40,7 @@ namespace TokenParserTests.Steps
             _responseContent = await requestHelper.GetResponseString(_response);
 
         }
-        [Then(@"the API response for the DateTokenParser Endpoint should return a status code of (.*)")]
+        [Then(@"the API response for the ParseDateToken Endpoint should return a status code of (.*)")]
         public void ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(int statusCode)
         {
             requestHelper.ValidateStatusCode(_response, statusCode);
@@ -49,42 +49,61 @@ namespace TokenParserTests.Steps
         [Then(@"the response body should contain ""(.*)"" with the value ""(.*)""")]
         public async Task ThenTheResponseBodyShouldContainWithTheValue(string key, string expectedValue)
         {
-            // Parse the JSON response
-            var jsonResponse01 = requestHelper.ParseJsonResponse(_responseContent);
             var jsonResponse = JsonDocument.Parse(_responseContent).RootElement;
 
-            if (jsonResponse.TryGetProperty(key, out var actualValue))
-            { // Handle relative date parsing logic for tokens like "[TODAY-1YEAR-1MONTH]"
-                DateTime today = DateTime.Today;
-                DateTime expectedDate = today;
-
-                if (expectedValue.Contains("ago") || expectedValue.Contains("ahead") || expectedValue.Equals("today"))
-                {
-                   
-                    //Adjust date according to expected outcome
-                    if (expectedValue == "one year and one month ago from today")
-                    {
-                        expectedDate = today.AddYears(-1).AddMonths(-1);
-                    }
-                    else if (expectedValue == "one year ahead and two months ago from today")
-                    {
-                        expectedDate = today.AddYears(1).AddMonths(-2);
-                    }
-
-                    string formattedDate = expectedDate.ToString("yyyy-MM-dd HH:mm:ssZ", CultureInfo.InvariantCulture);
-
-                    Assert.That(actualValue.GetString(), Is.EqualTo(formattedDate));
-                }
-                else
-                {           
-                    //Specific value expected
-                    Assert.That(actualValue.GetString(), Is.EqualTo(expectedValue));
-                }
-            }
-            else
-            {                
+            if (!jsonResponse.TryGetProperty(key, out var actualValue))
+            {
                 Assert.That(jsonResponse.TryGetProperty(key, out _), Is.True, $"Response does not contain '{key}'.");
+                return;
             }
+
+            var actualString = actualValue.GetString();
+            switch (expectedValue)
+            {
+                case "today":
+                    AssertRelativeDate(actualString, 0, 0);
+                    break;
+                case "one year and one month ago from today":
+                    AssertRelativeDate(actualString, -1, -1);
+                    break;
+                case "one year ahead and two months ago from today":
+                    AssertRelativeDate(actualString, 1, -2);
+                    break;
+                case "tomorrow plus three days (four days from today)":
+                    AssertRelativeDate(actualString, 0, 0, 4);
+                    break;
+                case "yesterday minus two days (three days ago)":
+                    AssertRelativeDate(actualString, 0, 0, -3);
+                    break;
+                case "two years and six months ahead of today minus 15 days":
+                    AssertRelativeDate(actualString, 2, 6, -15);
+                    break;
+                default:
+                    Assert.That(actualString, Is.EqualTo(expectedValue));
+                    break;
+            }
+        }
+
+        private static void AssertRelativeDate(string? actualValue, int yearsOffset, int monthsOffset, int daysOffset = 0)
+        {
+            DateTime expectedDate = DateTime.Today.AddYears(yearsOffset).AddMonths(monthsOffset).AddDays(daysOffset);
+            string formattedDate = expectedDate.ToString("yyyy-MM-dd HH:mm:ssZ", CultureInfo.InvariantCulture);
+            Assert.That(actualValue, Is.EqualTo(formattedDate));
+        }
+
+        [Then(@"the result should equal today plus (.*) years (.*) months (.*) days")]
+        public void ThenTheResultShouldEqualTodayPlusYearsMonthsDays(int years, int months, int days)
+        {
+            var jsonResponse = JsonDocument.Parse(_responseContent).RootElement;
+            if (!jsonResponse.TryGetProperty("ParsedToken", out var parsedToken))
+            {
+                Assert.Fail("Response does not contain 'ParsedToken'.");
+            }
+
+            var expectedDate = DateTime.Today.AddYears(years).AddMonths(months).AddDays(days);
+            var formattedDate = expectedDate.ToString("yyyy-MM-dd HH:mm:ssZ", CultureInfo.InvariantCulture);
+
+            Assert.That(parsedToken.GetString(), Is.EqualTo(formattedDate));
         }
     }
 }

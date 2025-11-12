@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <TestRun id="0d167710-005d-4141-8a9c-59a8adfb27bc" name="brook@DESKTOP-SDT5U6B 2025-09-11 20:38:48" runUser="DESKTOP-SDT5U6B\brook" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
   <Times creation="2025-09-11T20:38:48.5695937+01:00" queuing="2025-09-11T20:38:48.5695939+01:00" start="2025-09-11T20:38:46.6169980+01:00" finish="2025-09-11T20:38:48.5760749+01:00" />
   <TestSettings name="default" id="e6da351d-a0b3-45a6-b2d0-c39ad8cc4251">
@@ -9,11 +9,11 @@
       <Output>
         <StdOut>Given the TokenParser API is available&#xD;
 -&gt; done: DynamicStringParser_Steps.GivenTheDynamicStringAPIIsRunning() (0.0s)&#xD;
-When a request with dynamic string token '[ALPHA-NUMERIC-PUNCTUATION-10-LINES-2]' is made to the DynamicStringParser endpoint&#xD;
+When a request with dynamic string token '[ALPHA-NUMERIC-PUNCTUATION-10-LINES-2]' is made to the ParseDynamicStringToken endpoint&#xD;
 encodedUrl '/parse-dynamic-string?tokenString=%5BALPHA-NUMERIC-PUNCTUATION-10-LINES-2%5D' &#xD;
 responseString '{"parsedToken":")C&amp;J855HHR\r\n)C&amp;J855HHR\r\n"}' &#xD;
 -&gt; done: DynamicStringParser_Steps.WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint("[ALPHA-NUMERIC-PU...") (0.0s)&#xD;
-Then the API response should return a status code of 200 for the DynamicStringParser endpoint&#xD;
+Then the API response should return a status code of 200 for the ParseDynamicStringToken endpoint&#xD;
 -&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(200) (0.0s)&#xD;
 And the response should contain "parsedToken" with the value "2 lines of strings with each line containing 10 alpha-numeric-punctuation characters"&#xD;
 responseString '{"parsedToken":")C&amp;J855HHR\r\n)C&amp;J855HHR\r\n"}' &#xD;
@@ -24,11 +24,11 @@ responseString '{"parsedToken":")C&amp;J855HHR\r\n)C&amp;J855HHR\r\n"}' &#xD;
       <Output>
         <StdOut>Given the TokenParser API is available&#xD;
 -&gt; done: DynamicStringParser_Steps.GivenTheDynamicStringAPIIsRunning() (0.0s)&#xD;
-When a request with dynamic string token '[ALPHA-NUMERIC-5]' is made to the DynamicStringParser endpoint&#xD;
+When a request with dynamic string token '[ALPHA-NUMERIC-5]' is made to the ParseDynamicStringToken endpoint&#xD;
 encodedUrl '/parse-dynamic-string?tokenString=%5BALPHA-NUMERIC-5%5D' &#xD;
 responseString '{"parsedToken":"05NHB\r\n"}' &#xD;
 -&gt; done: DynamicStringParser_Steps.WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint("[ALPHA-NUMERIC-5]") (0.0s)&#xD;
-Then the API response should return a status code of 200 for the DynamicStringParser endpoint&#xD;
+Then the API response should return a status code of 200 for the ParseDynamicStringToken endpoint&#xD;
 -&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(200) (0.0s)&#xD;
 And the response should contain "parsedToken" with the value "An alpha-numeric string of length 5"&#xD;
 responseString '{"parsedToken":"05NHB\r\n"}' &#xD;
@@ -39,11 +39,11 @@ responseString '{"parsedToken":"05NHB\r\n"}' &#xD;
       <Output>
         <StdOut>Given a valid or invalid date token "[TODAY+1YEAR-2MONTH]"&#xD;
 -&gt; done: DateTokenParser_Steps.GivenAValidOrInvalidDateToken("[TODAY+1YEAR-2MONTH]") (0.0s)&#xD;
-When a GET request is made to the DateTokenParser Endpoint&#xD;
+When a GET request is made to the ParseDateToken Endpoint&#xD;
 encodedUrl '/parse-date-token?tokenString=%5BTODAY%2B1YEAR-2MONTH%5D' &#xD;
 responseString '{"parsedToken":"2026-07-11 00:00:00Z"}' &#xD;
 -&gt; done: DateTokenParser_Steps.WhenISendARequestWithTokenToTheParsedTokenAPI() (0.0s)&#xD;
-Then the API response for the DateTokenParser Endpoint should return a status code of 200&#xD;
+Then the API response for the ParseDateToken Endpoint should return a status code of 200&#xD;
 -&gt; done: DateTokenParser_Steps.ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(200) (0.0s)&#xD;
 And the response body should contain "parsedToken" with the value "one year ahead and two months ago from today"&#xD;
 responseString '{"parsedToken":"2026-07-11 00:00:00Z"}' &#xD;
@@ -54,11 +54,11 @@ responseString '{"parsedToken":"2026-07-11 00:00:00Z"}' &#xD;
       <Output>
         <StdOut>Given the TokenParser API is available&#xD;
 -&gt; done: DynamicStringParser_Steps.GivenTheDynamicStringAPIIsRunning() (0.0s)&#xD;
-When a request with dynamic string token 'INVALIDTOKEN' is made to the DynamicStringParser endpoint&#xD;
+When a request with dynamic string token 'INVALIDTOKEN' is made to the ParseDynamicStringToken endpoint&#xD;
 encodedUrl '/parse-dynamic-string?tokenString=INVALIDTOKEN' &#xD;
 responseString '{"error":"Invalid string token format"}' &#xD;
 -&gt; done: DynamicStringParser_Steps.WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint("INVALIDTOKEN") (0.0s)&#xD;
-Then the API response should return a status code of 400 for the DynamicStringParser endpoint&#xD;
+Then the API response should return a status code of 400 for the ParseDynamicStringToken endpoint&#xD;
 -&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(400) (0.0s)&#xD;
 And the response should contain "error" with the value "Invalid string token format"&#xD;
 responseString '{"error":"Invalid string token format"}' &#xD;
@@ -69,11 +69,11 @@ responseString '{"error":"Invalid string token format"}' &#xD;
       <Output>
         <StdOut>Given the TokenParser API is available&#xD;
 -&gt; done: DynamicStringParser_Steps.GivenTheDynamicStringAPIIsRunning() (0.0s)&#xD;
-When a request with dynamic string token '[PUNCTUATION-3]' is made to the DynamicStringParser endpoint&#xD;
+When a request with dynamic string token '[PUNCTUATION-3]' is made to the ParseDynamicStringToken endpoint&#xD;
 encodedUrl '/parse-dynamic-string?tokenString=%5BPUNCTUATION-3%5D' &#xD;
 responseString '{"parsedToken":"@%&amp;\r\n"}' &#xD;
 -&gt; done: DynamicStringParser_Steps.WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint("[PUNCTUATION-3]") (0.0s)&#xD;
-Then the API response should return a status code of 200 for the DynamicStringParser endpoint&#xD;
+Then the API response should return a status code of 200 for the ParseDynamicStringToken endpoint&#xD;
 -&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(200) (0.0s)&#xD;
 And the response should contain "parsedToken" with the value "A string of punctuation characters of length 3"&#xD;
 responseString '{"parsedToken":"@%&amp;\r\n"}' &#xD;
@@ -84,11 +84,11 @@ responseString '{"parsedToken":"@%&amp;\r\n"}' &#xD;
       <Output>
         <StdOut>Given a valid or invalid date token "[TODAY-1YEAR-1MONTH]"&#xD;
 -&gt; done: DateTokenParser_Steps.GivenAValidOrInvalidDateToken("[TODAY-1YEAR-1MONTH]") (0.0s)&#xD;
-When a GET request is made to the DateTokenParser Endpoint&#xD;
+When a GET request is made to the ParseDateToken Endpoint&#xD;
 encodedUrl '/parse-date-token?tokenString=%5BTODAY-1YEAR-1MONTH%5D' &#xD;
 responseString '{"parsedToken":"2024-08-11 00:00:00Z"}' &#xD;
 -&gt; done: DateTokenParser_Steps.WhenISendARequestWithTokenToTheParsedTokenAPI() (0.0s)&#xD;
-Then the API response for the DateTokenParser Endpoint should return a status code of 200&#xD;
+Then the API response for the ParseDateToken Endpoint should return a status code of 200&#xD;
 -&gt; done: DateTokenParser_Steps.ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(200) (0.0s)&#xD;
 And the response body should contain "parsedToken" with the value "one year and one month ago from today"&#xD;
 responseString '{"parsedToken":"2024-08-11 00:00:00Z"}' &#xD;
@@ -99,11 +99,11 @@ responseString '{"parsedToken":"2024-08-11 00:00:00Z"}' &#xD;
       <Output>
         <StdOut>Given a valid or invalid date token "INVALIDTOKEN"&#xD;
 -&gt; done: DateTokenParser_Steps.GivenAValidOrInvalidDateToken("INVALIDTOKEN") (0.0s)&#xD;
-When a GET request is made to the DateTokenParser Endpoint&#xD;
+When a GET request is made to the ParseDateToken Endpoint&#xD;
 encodedUrl '/parse-date-token?tokenString=INVALIDTOKEN' &#xD;
 responseString '{"error":"Invalid string token format"}' &#xD;
 -&gt; done: DateTokenParser_Steps.WhenISendARequestWithTokenToTheParsedTokenAPI() (0.0s)&#xD;
-Then the API response for the DateTokenParser Endpoint should return a status code of 400&#xD;
+Then the API response for the ParseDateToken Endpoint should return a status code of 400&#xD;
 -&gt; done: DateTokenParser_Steps.ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(400) (0.0s)&#xD;
 And the response body should contain "error" with the value "Invalid string token format"&#xD;
 responseString '{"error":"Invalid string token format"}' &#xD;
@@ -114,11 +114,11 @@ responseString '{"error":"Invalid string token format"}' &#xD;
       <Output>
         <StdOut>Given a valid or invalid date token "[TODAY]"&#xD;
 -&gt; done: DateTokenParser_Steps.GivenAValidOrInvalidDateToken("[TODAY]") (0.0s)&#xD;
-When a GET request is made to the DateTokenParser Endpoint&#xD;
+When a GET request is made to the ParseDateToken Endpoint&#xD;
 encodedUrl '/parse-date-token?tokenString=%5BTODAY%5D' &#xD;
 responseString '{"parsedToken":"2025-09-11 00:00:00Z"}' &#xD;
 -&gt; done: DateTokenParser_Steps.WhenISendARequestWithTokenToTheParsedTokenAPI() (0.0s)&#xD;
-Then the API response for the DateTokenParser Endpoint should return a status code of 200&#xD;
+Then the API response for the ParseDateToken Endpoint should return a status code of 200&#xD;
 -&gt; done: DateTokenParser_Steps.ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(200) (0.0s)&#xD;
 And the response body should contain "parsedToken" with the value "today"&#xD;
 responseString '{"parsedToken":"2025-09-11 00:00:00Z"}' &#xD;
@@ -231,11 +231,11 @@ responseString '{"status":"ALIVE-AND-KICKING"}' &#xD;
       <RunInfo computerName="DESKTOP-SDT5U6B" outcome="Warning" timestamp="2025-09-11T20:38:48.2552890+01:00">
         <Text>Given the TokenParser API is available&#xD;
 -&gt; done: DynamicStringParser_Steps.GivenTheDynamicStringAPIIsRunning() (0.0s)&#xD;
-When a request with dynamic string token 'INVALIDTOKEN' is made to the DynamicStringParser endpoint&#xD;
+When a request with dynamic string token 'INVALIDTOKEN' is made to the ParseDynamicStringToken endpoint&#xD;
 encodedUrl '/parse-dynamic-string?tokenString=INVALIDTOKEN' &#xD;
 responseString '{"error":"Invalid string token format"}' &#xD;
 -&gt; done: DynamicStringParser_Steps.WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint("INVALIDTOKEN") (0.0s)&#xD;
-Then the API response should return a status code of 400 for the DynamicStringParser endpoint&#xD;
+Then the API response should return a status code of 400 for the ParseDynamicStringToken endpoint&#xD;
 -&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(400) (0.0s)&#xD;
 And the response should contain "error" with the value "Invalid string token format"&#xD;
 responseString '{"error":"Invalid string token format"}' &#xD;
@@ -245,11 +245,11 @@ responseString '{"error":"Invalid string token format"}' &#xD;
       <RunInfo computerName="DESKTOP-SDT5U6B" outcome="Warning" timestamp="2025-09-11T20:38:48.2799757+01:00">
         <Text>Given the TokenParser API is available&#xD;
 -&gt; done: DynamicStringParser_Steps.GivenTheDynamicStringAPIIsRunning() (0.0s)&#xD;
-When a request with dynamic string token '[ALPHA-NUMERIC-5]' is made to the DynamicStringParser endpoint&#xD;
+When a request with dynamic string token '[ALPHA-NUMERIC-5]' is made to the ParseDynamicStringToken endpoint&#xD;
 encodedUrl '/parse-dynamic-string?tokenString=%5BALPHA-NUMERIC-5%5D' &#xD;
 responseString '{"parsedToken":"05NHB\r\n"}' &#xD;
 -&gt; done: DynamicStringParser_Steps.WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint("[ALPHA-NUMERIC-5]") (0.0s)&#xD;
-Then the API response should return a status code of 200 for the DynamicStringParser endpoint&#xD;
+Then the API response should return a status code of 200 for the ParseDynamicStringToken endpoint&#xD;
 -&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(200) (0.0s)&#xD;
 And the response should contain "parsedToken" with the value "An alpha-numeric string of length 5"&#xD;
 responseString '{"parsedToken":"05NHB\r\n"}' &#xD;
@@ -259,11 +259,11 @@ responseString '{"parsedToken":"05NHB\r\n"}' &#xD;
       <RunInfo computerName="DESKTOP-SDT5U6B" outcome="Warning" timestamp="2025-09-11T20:38:48.3059301+01:00">
         <Text>Given the TokenParser API is available&#xD;
 -&gt; done: DynamicStringParser_Steps.GivenTheDynamicStringAPIIsRunning() (0.0s)&#xD;
-When a request with dynamic string token '[PUNCTUATION-3]' is made to the DynamicStringParser endpoint&#xD;
+When a request with dynamic string token '[PUNCTUATION-3]' is made to the ParseDynamicStringToken endpoint&#xD;
 encodedUrl '/parse-dynamic-string?tokenString=%5BPUNCTUATION-3%5D' &#xD;
 responseString '{"parsedToken":"@%&amp;\r\n"}' &#xD;
 -&gt; done: DynamicStringParser_Steps.WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint("[PUNCTUATION-3]") (0.0s)&#xD;
-Then the API response should return a status code of 200 for the DynamicStringParser endpoint&#xD;
+Then the API response should return a status code of 200 for the ParseDynamicStringToken endpoint&#xD;
 -&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(200) (0.0s)&#xD;
 And the response should contain "parsedToken" with the value "A string of punctuation characters of length 3"&#xD;
 responseString '{"parsedToken":"@%&amp;\r\n"}' &#xD;
@@ -273,11 +273,11 @@ responseString '{"parsedToken":"@%&amp;\r\n"}' &#xD;
       <RunInfo computerName="DESKTOP-SDT5U6B" outcome="Warning" timestamp="2025-09-11T20:38:48.3280521+01:00">
         <Text>Given the TokenParser API is available&#xD;
 -&gt; done: DynamicStringParser_Steps.GivenTheDynamicStringAPIIsRunning() (0.0s)&#xD;
-When a request with dynamic string token '[ALPHA-NUMERIC-PUNCTUATION-10-LINES-2]' is made to the DynamicStringParser endpoint&#xD;
+When a request with dynamic string token '[ALPHA-NUMERIC-PUNCTUATION-10-LINES-2]' is made to the ParseDynamicStringToken endpoint&#xD;
 encodedUrl '/parse-dynamic-string?tokenString=%5BALPHA-NUMERIC-PUNCTUATION-10-LINES-2%5D' &#xD;
 responseString '{"parsedToken":")C&amp;J855HHR\r\n)C&amp;J855HHR\r\n"}' &#xD;
 -&gt; done: DynamicStringParser_Steps.WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint("[ALPHA-NUMERIC-PU...") (0.0s)&#xD;
-Then the API response should return a status code of 200 for the DynamicStringParser endpoint&#xD;
+Then the API response should return a status code of 200 for the ParseDynamicStringToken endpoint&#xD;
 -&gt; done: DynamicStringParser_Steps.ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(200) (0.0s)&#xD;
 And the response should contain "parsedToken" with the value "2 lines of strings with each line containing 10 alpha-numeric-punctuation characters"&#xD;
 responseString '{"parsedToken":")C&amp;J855HHR\r\n)C&amp;J855HHR\r\n"}' &#xD;
@@ -287,11 +287,11 @@ responseString '{"parsedToken":")C&amp;J855HHR\r\n)C&amp;J855HHR\r\n"}' &#xD;
       <RunInfo computerName="DESKTOP-SDT5U6B" outcome="Warning" timestamp="2025-09-11T20:38:48.3572308+01:00">
         <Text>Given a valid or invalid date token "INVALIDTOKEN"&#xD;
 -&gt; done: DateTokenParser_Steps.GivenAValidOrInvalidDateToken("INVALIDTOKEN") (0.0s)&#xD;
-When a GET request is made to the DateTokenParser Endpoint&#xD;
+When a GET request is made to the ParseDateToken Endpoint&#xD;
 encodedUrl '/parse-date-token?tokenString=INVALIDTOKEN' &#xD;
 responseString '{"error":"Invalid string token format"}' &#xD;
 -&gt; done: DateTokenParser_Steps.WhenISendARequestWithTokenToTheParsedTokenAPI() (0.0s)&#xD;
-Then the API response for the DateTokenParser Endpoint should return a status code of 400&#xD;
+Then the API response for the ParseDateToken Endpoint should return a status code of 400&#xD;
 -&gt; done: DateTokenParser_Steps.ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(400) (0.0s)&#xD;
 And the response body should contain "error" with the value "Invalid string token format"&#xD;
 responseString '{"error":"Invalid string token format"}' &#xD;
@@ -301,11 +301,11 @@ responseString '{"error":"Invalid string token format"}' &#xD;
       <RunInfo computerName="DESKTOP-SDT5U6B" outcome="Warning" timestamp="2025-09-11T20:38:48.3842392+01:00">
         <Text>Given a valid or invalid date token "[TODAY]"&#xD;
 -&gt; done: DateTokenParser_Steps.GivenAValidOrInvalidDateToken("[TODAY]") (0.0s)&#xD;
-When a GET request is made to the DateTokenParser Endpoint&#xD;
+When a GET request is made to the ParseDateToken Endpoint&#xD;
 encodedUrl '/parse-date-token?tokenString=%5BTODAY%5D' &#xD;
 responseString '{"parsedToken":"2025-09-11 00:00:00Z"}' &#xD;
 -&gt; done: DateTokenParser_Steps.WhenISendARequestWithTokenToTheParsedTokenAPI() (0.0s)&#xD;
-Then the API response for the DateTokenParser Endpoint should return a status code of 200&#xD;
+Then the API response for the ParseDateToken Endpoint should return a status code of 200&#xD;
 -&gt; done: DateTokenParser_Steps.ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(200) (0.0s)&#xD;
 And the response body should contain "parsedToken" with the value "today"&#xD;
 responseString '{"parsedToken":"2025-09-11 00:00:00Z"}' &#xD;
@@ -315,11 +315,11 @@ responseString '{"parsedToken":"2025-09-11 00:00:00Z"}' &#xD;
       <RunInfo computerName="DESKTOP-SDT5U6B" outcome="Warning" timestamp="2025-09-11T20:38:48.4072723+01:00">
         <Text>Given a valid or invalid date token "[TODAY-1YEAR-1MONTH]"&#xD;
 -&gt; done: DateTokenParser_Steps.GivenAValidOrInvalidDateToken("[TODAY-1YEAR-1MONTH]") (0.0s)&#xD;
-When a GET request is made to the DateTokenParser Endpoint&#xD;
+When a GET request is made to the ParseDateToken Endpoint&#xD;
 encodedUrl '/parse-date-token?tokenString=%5BTODAY-1YEAR-1MONTH%5D' &#xD;
 responseString '{"parsedToken":"2024-08-11 00:00:00Z"}' &#xD;
 -&gt; done: DateTokenParser_Steps.WhenISendARequestWithTokenToTheParsedTokenAPI() (0.0s)&#xD;
-Then the API response for the DateTokenParser Endpoint should return a status code of 200&#xD;
+Then the API response for the ParseDateToken Endpoint should return a status code of 200&#xD;
 -&gt; done: DateTokenParser_Steps.ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(200) (0.0s)&#xD;
 And the response body should contain "parsedToken" with the value "one year and one month ago from today"&#xD;
 responseString '{"parsedToken":"2024-08-11 00:00:00Z"}' &#xD;
@@ -329,11 +329,11 @@ responseString '{"parsedToken":"2024-08-11 00:00:00Z"}' &#xD;
       <RunInfo computerName="DESKTOP-SDT5U6B" outcome="Warning" timestamp="2025-09-11T20:38:48.4296364+01:00">
         <Text>Given a valid or invalid date token "[TODAY+1YEAR-2MONTH]"&#xD;
 -&gt; done: DateTokenParser_Steps.GivenAValidOrInvalidDateToken("[TODAY+1YEAR-2MONTH]") (0.0s)&#xD;
-When a GET request is made to the DateTokenParser Endpoint&#xD;
+When a GET request is made to the ParseDateToken Endpoint&#xD;
 encodedUrl '/parse-date-token?tokenString=%5BTODAY%2B1YEAR-2MONTH%5D' &#xD;
 responseString '{"parsedToken":"2026-07-11 00:00:00Z"}' &#xD;
 -&gt; done: DateTokenParser_Steps.WhenISendARequestWithTokenToTheParsedTokenAPI() (0.0s)&#xD;
-Then the API response for the DateTokenParser Endpoint should return a status code of 200&#xD;
+Then the API response for the ParseDateToken Endpoint should return a status code of 200&#xD;
 -&gt; done: DateTokenParser_Steps.ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(200) (0.0s)&#xD;
 And the response body should contain "parsedToken" with the value "one year ahead and two months ago from today"&#xD;
 responseString '{"parsedToken":"2026-07-11 00:00:00Z"}' &#xD;

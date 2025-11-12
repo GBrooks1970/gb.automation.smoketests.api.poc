@@ -1,4 +1,4 @@
-﻿using Microsoft.Playwright;
+using Microsoft.Playwright;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.Reflection;

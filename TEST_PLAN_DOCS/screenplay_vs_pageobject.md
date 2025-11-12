@@ -7,7 +7,7 @@
   - Tests describe **what** the user does, not **how**, aligning closely with business language and BDD.
 
 - **Better Separation of Concerns**
-  - Business logic lives in Tasks/Questions, not UI classes—keeping test code clean and DRY.
+  - Business logic lives in Tasks/Questions, not UI classes-keeping test code clean and DRY.
 
 - **Supports Multi-Actor Scenarios**
   - Easily model complex scenarios with multiple users or roles, which is harder in the Page Object pattern.
@@ -16,10 +16,11 @@
   - UI changes affect only the Interactions or Locators, not the high-level Tasks.
 
 - **Consistent Test Flow Abstraction**
-  - Abstracts test steps to a higher level of intent—ideal for collaborative Agile teams and BDD workflows.
+  - Abstracts test steps to a higher level of intent-ideal for collaborative Agile teams and BDD workflows.
 
 - **Encourages Domain Language**
   - Improves collaboration between testers, developers, and business analysts by using domain-specific terms in code.
 
 - **Scalable Architecture**
   - Better suited for large test suites and long-term maintainability than Page Object-based approaches.
+

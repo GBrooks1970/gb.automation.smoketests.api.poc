@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.RegularExpressions;
+using TokenParserAPI.Logging;
 
 namespace TokenParserAPI.utils
 {
@@ -18,7 +19,12 @@ namespace TokenParserAPI.utils
 
     public class TokenDynamicStringParser
     {
-        private static Random _random = new Random();
+        private static readonly TokenParserLogger Logger = TokenParserLogger.For(nameof(TokenDynamicStringParser));
+        private static readonly Random _random = new Random();
+        private const string AlphaChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        private const string NumericChars = "0123456789";
+        private const string PunctuationChars = ".,!?;:";
+        private const string SpecialChars = "!@#$%^&*()_+[]{}|;:,.<>?";
 
         public string ParseToken(string token)
         {
@@ -32,26 +38,39 @@ namespace TokenParserAPI.utils
             string lengthValue = match.Groups["length"].Value;
             int lineCount = match.Groups["lines"].Success ? int.Parse(match.Groups["lines"].Value) : 1;
 
+            Logger.Debug("Parsing dynamic string token {0}", token);
+            Logger.Debug("Token breakdown types={0}, length={1}, lines={2}", types, lengthValue, lineCount);
+
             bool useAllCharacters = lengthValue == SymbolsDS.ALL;
             int count = useAllCharacters ? 0 : int.Parse(lengthValue); // If ALL, count will be handled later.
+            if (!useAllCharacters && count <= 0)
+            {
+                throw new ArgumentException("Invalid string token format");
+            }
 
             string ParsedToken = GenerateString(types, count, useAllCharacters);
-            return GenerateLines(ParsedToken, lineCount);
+            Logger.Debug("Generated base string {0}", ParsedToken);
+            var result = GenerateLines(ParsedToken, lineCount);
+            Logger.Debug("Generated string result with line count {0}: {1}", lineCount, result);
+            return result;
         }
 
         private string GenerateString(string types, int count, bool useAllCharacters)
         {
             var charPool = new StringBuilder();
+            Logger.Debug("Building character pool for types {0}", types);
 
             // Build the pool of possible characters based on the token types
             if (types.Contains(SymbolsDS.ALPHA))
-                charPool.Append(GetCharRange('A', 'Z'));  // Add A-Z to the pool
+                charPool.Append(AlphaChars);
             if (types.Contains(SymbolsDS.NUMERIC))
-                charPool.Append(GetCharRange('0', '9'));  // Add 0-9 to the pool
+                charPool.Append(NumericChars);
             if (types.Contains(SymbolsDS.PUNCTUATION))
-                charPool.Append("!@#$%^&*()");  // Add punctuation characters to the pool
+                charPool.Append(PunctuationChars);
             if (types.Contains(SymbolsDS.SPECIAL))
-                charPool.Append("~`|\\/?");  // Add special characters to the pool
+                charPool.Append(SpecialChars);
+
+            Logger.Debug("Character pool size {0}. useAllCharacters={1}", charPool.Length, useAllCharacters);
 
             // If ALL is specified, use all characters in the pool once in the output
             if (useAllCharacters)
@@ -65,6 +84,7 @@ namespace TokenParserAPI.utils
 
         private string GenerateRandomStringFromPool(string charPool, int count)
         {
+            Logger.Debug("Generating random string from pool length {0} with count {1}", charPool.Length, count);
             var result = new StringBuilder();
             for (int i = 0; i < count; i++)
             {
@@ -74,22 +94,14 @@ namespace TokenParserAPI.utils
             return result.ToString();
         }
 
-        private string GetCharRange(char start, char end)
-        {
-            var sb = new StringBuilder();
-            for (char c = start; c <= end; c++)
-            {
-                sb.Append(c);
-            }
-            return sb.ToString();
-        }
-
         private string GenerateLines(string parsedToken, int lineCount)
         {
             if (lineCount <= 0)
             {
                 throw new ArgumentException("Invalid line count in token format");
             }
+
+            Logger.Debug("Applying line count {0}", lineCount);
 
             if (lineCount == 1)
             {
@@ -107,20 +119,6 @@ namespace TokenParserAPI.utils
             }
 
             return sb.ToString();
-        }
-
-        private char GetRandomChar(char min, char max) => (char)_random.Next(min, max + 1);
-
-        private char GetRandomPunctuation()
-        {
-            const string punctuation = "!@#$%^&*()";
-            return punctuation[_random.Next(punctuation.Length)];
-        }
-
-        private char GetRandomSpecialChar()
-        {
-            const string special = "~`|\\/?";
-            return special[_random.Next(special.Length)];
         }
 
         private string ShuffleString(string input)

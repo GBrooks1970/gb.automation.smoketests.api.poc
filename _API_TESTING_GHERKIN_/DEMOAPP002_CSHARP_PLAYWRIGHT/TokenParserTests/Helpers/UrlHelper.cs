@@ -1,4 +1,4 @@
-﻿namespace TokenParserTests.Helpers
+namespace TokenParserTests.Helpers
 {
     public class UrlHelper
     {

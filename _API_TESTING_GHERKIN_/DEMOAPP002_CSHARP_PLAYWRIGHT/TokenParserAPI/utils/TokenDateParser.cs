@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using TokenParserAPI.Logging;
 
 namespace TokenParserAPI.utils
 {
@@ -21,6 +22,8 @@ namespace TokenParserAPI.utils
 
     public class ParsedTokenParser
     {
+        private static readonly TokenParserLogger Logger = TokenParserLogger.For(nameof(ParsedTokenParser));
+
         public DateTime ParseToken(string token)
         {
             Regex regex = new Regex(SymbolsDT.TokenPattern);
@@ -31,6 +34,8 @@ namespace TokenParserAPI.utils
                 throw new ArgumentException("Invalid string token format");
             }
 
+            Logger.Debug("Parsing date token {0}", token);
+
             // Initialize start date based on the [STARTDATE] token
             DateTime date = match.Groups["anchorDate"].Value switch
             {
@@ -40,8 +45,11 @@ namespace TokenParserAPI.utils
                 _ => throw new ArgumentException("Invalid string token format - Invalid anchor date")
             };
 
+            Logger.Debug("Anchor date resolved to {0:u}", date);
+
             // Extract adjustment tokens and apply them
             string adjustTokens = match.Groups["adjustTokens"].Value;
+            Logger.Debug("Adjustment tokens raw string {0}", adjustTokens);
             ApplyAdjustments(ref date, adjustTokens);
 
             return date;
@@ -59,7 +67,9 @@ namespace TokenParserAPI.utils
                 int number = int.Parse(adjustMatch.Groups["adjustValue"].Value);
                 string datePart = adjustMatch.Groups["dateUnit"].Value;
 
+                Logger.Debug("Applying adjustment token {0}{1}{2}", sign, number, datePart);
                 ApplyDatePart(ref date, sign, number, datePart);
+                Logger.Debug("Date after adjustment {0:u}", date);
             }
         }
 

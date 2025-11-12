@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Net.Mime;
 using System.Text;
 using System.Net.Http.Headers;
