@@ -1,7 +1,7 @@
-using System.Globalization;
 using System.Text.Json;
 using NUnit.Framework.Legacy;
 using TechTalk.SpecFlow;
+using TokenParserAPI.utils;
 using TokenParserTests.Screenplay;
 using TokenParserTests.Screenplay.Questions;
 using TokenParserTests.Screenplay.Support;
@@ -95,7 +95,7 @@ public class DateTokenParser_Steps
         }
 
         var expectedDate = DateTime.Today.AddYears(years).AddMonths(months).AddDays(days);
-        var formattedDate = expectedDate.ToString("yyyy-MM-dd HH:mm:ssZ", CultureInfo.InvariantCulture);
+        var formattedDate = DateFormatting.FormatUtc(expectedDate);
 
         Assert.That(parsedToken.GetString(), Is.EqualTo(formattedDate));
     }
@@ -113,7 +113,7 @@ public class DateTokenParser_Steps
     private static void AssertRelativeDate(string? actualValue, int yearsOffset, int monthsOffset, int daysOffset = 0)
     {
         var expectedDate = DateTime.Today.AddYears(yearsOffset).AddMonths(monthsOffset).AddDays(daysOffset);
-        var formattedDate = expectedDate.ToString("yyyy-MM-dd HH:mm:ssZ", CultureInfo.InvariantCulture);
+        var formattedDate = DateFormatting.FormatUtc(expectedDate);
         Assert.That(actualValue, Is.EqualTo(formattedDate));
     }
 }

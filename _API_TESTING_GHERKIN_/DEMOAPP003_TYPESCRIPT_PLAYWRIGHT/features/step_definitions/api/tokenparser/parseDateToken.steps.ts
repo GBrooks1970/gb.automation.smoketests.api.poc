@@ -4,17 +4,13 @@ import { SendGetRequest } from "../../../../screenplay/tasks/SendGetRequest";
 import { ResponseStatus } from "../../../../screenplay/questions/ResponseStatus";
 import { ResponseBody } from "../../../../screenplay/questions/ResponseBody";
 import { TokenDateParser } from "../../../../src/tokenparser/TokenDateParser";
+import { DateUtils } from "../../../../src/utils/date-utils";
 import type { CustomWorld } from "../../../../screenplay/core/custom-world";
 
 let tokenString = "";
 
 const toApiProperty = (propertyName: string): string =>
   propertyName ? propertyName.charAt(0).toUpperCase() + propertyName.slice(1) : propertyName;
-
-const formatDateUtc = (date: Date): string => {
-  const iso = date.toISOString();
-  return `${iso.slice(0, 19).replace("T", " ")}Z`;
-};
 
 Given<CustomWorld>("a valid or invalid date token {string}", function (this, inputToken: string) {
   tokenString = inputToken;
@@ -43,7 +39,7 @@ Then<CustomWorld>(
 
     if (propertyKey === "ParsedToken" && expected !== "Invalid string token format") {
       const parsedDate = TokenDateParser.parseDateStringToken(tokenString);
-      expectedValue = formatDateUtc(parsedDate);
+      expectedValue = DateUtils.formatDateUtc(parsedDate);
       expect(body[propertyKey]).toBe(expectedValue);
       return;
     }

@@ -1,6 +1,6 @@
 import type { Question } from "../core/types";
 import type { Actor } from "../actors/Actor";
-import { LAST_RESPONSE } from "screenplay/support/memory-keys";
+import { LAST_RESPONSE } from "../support/memory-keys";
 import type { APIResponse } from "@playwright/test";
 
 export class ResponseBody implements Question<Record<string, unknown>> {
