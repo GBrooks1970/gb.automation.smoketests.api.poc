@@ -71,7 +71,7 @@ This note captures the current Screenplay implementation in the two TypeScript s
 ## 6. Gaps & Next Actions
 
 1. **Doc sync** – Update this parity note and both project docs whenever Screenplay helpers change.
-2. **SpecFlow adoption** – DEMOAPP002 needs the same Actor/Ability/Task/Question abstractions (see `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/docs/SCREENPLAY_GUIDE.md`).
+2. **SpecFlow adoption** – ✅ DEMOAPP002 now runs entirely on Screenplay (see `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/docs`); keep the three stacks in lockstep.
 3. **Shared tasks** – Extract parser-specific tasks into `screenplay/tasks` once reuse scales beyond a single feature folder.
 
 ---

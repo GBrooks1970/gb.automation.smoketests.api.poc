@@ -1,6 +1,6 @@
 # DEMOAPP002 - .NET 8 Web API / SpecFlow / Playwright
 
-**Version 4 - [12/11/25]**
+**Version 5 - [12/11/25]**
 
 The `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT` solution hosts the Token Parser API on `http://localhost:5228`. Swagger UI is enabled and the service is validated through SpecFlow feature files executed with Playwright. Architecture, QA strategy, and Screenplay-alignment guides now live under `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/docs`.
 
@@ -39,6 +39,7 @@ The `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT` solution hosts the Toke
 - **Token Utilities**: `TokenDateParser` and `TokenDynamicStringParser` classes reused by the API and tests—the same logic mirrored in the TypeScript stacks.
 - **Automation**: `.batch/RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT` (and `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT`) start the API, ensure Playwright dependencies exist, open Swagger, run tests, and stop the host cleanly.
 - **Documentation**: `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/docs` captures the current architecture, QA strategy, and the Screenplay migration plan required to align with the TypeScript stacks.
+- **Screenplay Implementation**: All SpecFlow bindings now run through the Screenplay layer (`TokenParserTests/Screenplay/**`). Actors receive `CallAnApi` + `UseTokenParsers` abilities, HTTP/API tasks (`SendGetRequest`) and util tasks (`ParseDateTokenLocally`, `ParseDynamicStringTokenLocally`) mirror the TypeScript stacks.
 
 ---
 
@@ -97,13 +98,13 @@ Logging level is controlled via `TokenParser:Logging:Level` (appsettings) or the
 
 | Layer | Current State (DEMOAPP002) | Next Action |
 | --- | --- | --- |
-| Actor abstraction | Step classes manage `_response`, `_token`, `_responseContent` fields manually. | Introduce a `ScreenplayContext`/Actor registered per scenario via SpecFlow DI. |
-| Abilities | HTTP traffic handled by `RequestHelper`; parsers invoked directly. | Wrap HttpClient + parser access as abilities (`CallAnApi`, `UseTokenParsers`). |
-| Tasks | Imperative helper calls inside steps. | Create task classes (e.g., `SendGetRequestTask`) so steps call `actor.AttemptsTo(...)`. |
-| Questions | Assertions inspect `JsonDocument` directly. | Add question helpers (status/body) to align with Cypress/Playwright semantics. |
-| Memory | Private fields hold scenario state. | Store responses and parser results in Actor memory or `ScenarioContext` extensions. |
+| Actor abstraction | **Complete** – `ScreenplayHooks` provisions an actor + abilities for every scenario. | Continue extending abilities as new domains appear. |
+| Abilities | **Complete** – `CallAnApi` and `UseTokenParsers` cover HTTP + local parser access. | Add future domain abilities as APIs grow. |
+| Tasks | **Complete** – HTTP (`SendGetRequest`) and util (`Parse*TokenLocally`) tasks mirror TypeScript behaviour. | Introduce POST/PUT tasks when new endpoints land. |
+| Questions | **Complete** – HTTP (`ResponseStatus`, `ResponseJson`) and util (`ParsedDateToken`, `ParsedStringToken`, `ParserExceptionMessage`) support all assertions. | Add domain questions as needed. |
+| Memory | **Complete** – `MemoryKeys` tracks API results, parser output, and exceptions. | Expand only if new data needs to be shared. |
 
 **Milestones**
-1. Add Screenplay scaffolding under `TokenParserTests/Screenplay` (Actor, abilities, tasks, questions, memory helpers).  
-2. Migrate the `/alive` bindings as a pilot, then expand to parser endpoints.  
-3. Update this doc, the Cypress/Playwright docs, and `API Testing POC/screenplay_parity_typescript.md` after each milestone.
+1. ✅ Screenplay scaffolding + ability wiring under `TokenParserTests/Screenplay`.  
+2. ✅ All SpecFlow bindings migrated (API + util scenarios).  
+3. 🔁 Keep docs (`API Testing POC/DEMO_DOCS/*`, parity notes) in sync when new Screenplay helpers land.
