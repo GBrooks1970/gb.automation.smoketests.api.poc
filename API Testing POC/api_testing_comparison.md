@@ -70,10 +70,10 @@ The stacks are:
 - **Powerful API Testing Features (Playwright):** Supports frontend and API testing, strong for RESTful APIs and contract testing.
 - **Parallel Test Execution:** Native parallelization support improves speed for large test suites.
 - **Better Integration with Swagger/OpenAPI:** Mature libraries for easier contract validation and automated schema checks.
+- **Screenplay Parity:** All SpecFlow bindings now use the same Screenplay actors/abilities/tasks/questions as the TypeScript stacks, keeping behaviour consistent across languages.
 
 ### Cons
 
-- **Screenplay Pending:** Step bindings still manage state manually; adoption plan tracked in `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/docs/SCREENPLAY_GUIDE.md`.
 - **Longer Setup:** Requires .NET SDK + Playwright dependencies; faster iteration lives in the TypeScript stacks.
 - **Smaller Community:** SpecFlow + Playwright combination is less common than Cypress/Cucumber.
 
@@ -90,7 +90,7 @@ The stacks are:
 | --- | --- | --- | --- |
 | Test Authoring | Gherkin (Cucumber) | Gherkin (Cucumber) | Gherkin (SpecFlow) |
 | Language | TypeScript | TypeScript | C# (.NET 8) |
-| Screenplay status | Complete parity with Playwright stack | Reference implementation | Planned (migration guide published) |
+| Screenplay status | Complete parity with Playwright stack | Reference implementation | Complete parity (SpecFlow Screenplay) |
 | API Focus | High (Screenplay-driven) | High (Screenplay-driven) | High (contract source of truth) |
 | Swagger Integration | Auto via Express + Swashbuckle | Same | ASP.NET Core Swashbuckle |
 | Tooling Gates | `lint`, `format`, `ts:check`, `verify` | `lint`, `format`, `ts:check`, `verify` | `dotnet format`, `dotnet test` |
@@ -104,7 +104,7 @@ The stacks are:
 
 - **TypeScript / Cypress** remains the quickest entry point for JS-focused teams and now mirrors the Playwright Screenplay implementation.
 - **TypeScript / Playwright** is the reference Screenplay implementation and the most flexible path for API-first work or future UI/API hybrid suites.
-- **C# / SpecFlow** anchors the contract (source-of-truth API) and provides a .NET-native automation path; its next milestone is adopting the same Screenplay abstractions documented in the TypeScript stacks.
+- **C# / SpecFlow** anchors the contract (source-of-truth API) and now shares the same Screenplay abstractions as the TypeScript stacks, giving .NET teams a first-class automation option.
 
 ---
 
