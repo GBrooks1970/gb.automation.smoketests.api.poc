@@ -1,10 +1,13 @@
 # Comparison Report: Token Parser Automation Stacks
 
-**Version 4 - [12/11/25]**
+**Version 5 - [14/11/25]**
 
 ## Overview
 
 This report compares the three active automation stacks that validate the Token Parser API using BDD + contract-testing principles. All stacks exercise the same Swagger contract, share test narratives, and—where possible—reuse Screenplay abstractions to keep behaviour consistent. Use this document to pick the appropriate stack for a feature, or to understand how parity is maintained across projects.
+
+> **Automation Note**  
+> `.batch/RUN_ALL_API_AND_TESTS.BAT` executes the three demo runners sequentially and records per-suite results in `run_metrics_<UTC>.{metrics,txt,md}`. The runner and reporting design is described in `API Testing POC/DEMO_DOCS/batch_runner_design.md`. Treat those metrics as the single source of truth whenever comparing the stacks.
 
 The stacks are:
 

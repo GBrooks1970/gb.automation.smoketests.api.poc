@@ -1,6 +1,6 @@
 # DEMOAPP001 - TypeScript / Express / Cypress
 
-**Version 4 - [12/11/25]**
+**Version 5 - [14/11/25]**
 
 The `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS` project hosts the Token Parser API on `http://localhost:3000`. Swagger UI is enabled and the service is validated with Cypress + Cucumber BDD tests powered by the Screenplay pattern. Screenplay source now lives at `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/screenplay` (outside `src/`) to match the Playwright stack.
 
@@ -39,6 +39,7 @@ The `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS` project hosts the Toke
 - **Screenplay**: Actors, abilities, tasks, questions, and memory helpers mirror DEMOAPP003. Both `api-world.ts` and `util-world.ts` now bootstrap actors per scenario after moving Screenplay code out of `src/`.
 - **Tooling**: ESLint + Prettier scope `src/`, `screenplay/`, and `cypress/**`. Run `npm run lint`, `npm run format`, and `npm run ts:check` before `npm run test:bdd` or `npm run verify`.
 - **Automation**: `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` (and `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT`) use `env_utils.bat` to hydrate `.env`, open Swagger, and stop the API and tests cleanly. The script now logs to `.results/demoapp001_typescript_cypress_<UTC_TIMESTAMP>.txt`.
+- **Orchestrator Support**: `.batch/RUN_ALL_API_AND_TESTS.BAT` invokes this runner as part of the combined smoke test, pushes log metadata into `run_metrics_<UTC>.{metrics,txt,md}`, and publishes per-suite stats outlined in `API Testing POC/DEMO_DOCS/batch_runner_design.md`.
 - **Install Note**: `npx cypress verify` still fails during `postinstall` on certain agents; install with `npm install --ignore-scripts` and run `npx cypress verify` manually when needed.
 - **Documentation**: Project-level references live under `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/docs` (Architecture, QA Strategy, Screenplay Guide) and stay aligned with `API Testing POC/screenplay_parity_typescript.md`.
 
@@ -66,7 +67,8 @@ _API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/
 - `npm start` / `npm run dev` - launch the Express API on port `3000`.
 - `npm run lint`, `npm run format`, `npm run ts:check` - enforce quality gates (matching DEMOAPP003).
 - `npm run test:bdd` / `npm run verify` - execute Cypress BDD suites (verify runs type-check + tests).
-- `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` - start API, open Swagger, run `npm run verify`, and teardown.
+- `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` - start API, open Swagger, run util + API suites, and teardown (logs land in `.results/`).
+- `.batch/RUN_ALL_API_AND_TESTS.BAT` - orchestrate all demo stacks, produce metrics tables, and link back to this project's logs.
 - `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` - start the three demo APIs together; now ensures TypeScript servers shut down when you exit.
 
 ---
