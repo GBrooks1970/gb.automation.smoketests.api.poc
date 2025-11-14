@@ -1,6 +1,6 @@
 # DEMOAPP002 - .NET 8 Web API / SpecFlow / Playwright
 
-**Version 5 - [12/11/25]**
+**Version 6 - [14/11/25]**
 
 The `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT` solution hosts the Token Parser API on `http://localhost:5228`. Swagger UI is enabled and the service is validated through SpecFlow feature files executed with Playwright. Architecture, QA strategy, and Screenplay-alignment guides now live under `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/docs`.
 
@@ -38,6 +38,7 @@ The `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT` solution hosts the Toke
 - **Testing**: SpecFlow + NUnit scenarios backed by Playwright for HTTP calls; util feature files mirror the TypeScript Scenario Outlines.
 - **Token Utilities**: `TokenDateParser` and `TokenDynamicStringParser` classes reused by the API and tests—the same logic mirrored in the TypeScript stacks.
 - **Automation**: `.batch/RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT` (and `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT`) start the API, ensure Playwright dependencies exist, open Swagger, run tests, and stop the host cleanly.
+- **Orchestrator Support**: `.batch/RUN_ALL_API_AND_TESTS.BAT` executes this runner after the TypeScript suites, recording both util and API log paths plus summary metrics (see `API Testing POC/DEMO_DOCS/batch_runner_design.md`).
 - **Documentation**: `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/docs` captures the current architecture, QA strategy, and the Screenplay migration plan required to align with the TypeScript stacks.
 - **Screenplay Implementation**: All SpecFlow bindings now run through the Screenplay layer (`TokenParserTests/Screenplay/**`). Actors receive `CallAnApi` + `UseTokenParsers` abilities, HTTP/API tasks (`SendGetRequest`) and util tasks (`ParseDateTokenLocally`, `ParseDynamicStringTokenLocally`) mirror the TypeScript stacks.
 
@@ -66,6 +67,7 @@ _API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/
 - `dotnet test TokenParserTests --no-build --filter "TestCategory=utiltests"` - run util parser coverage (invoked automatically by the batch script).
 - `dotnet test TokenParserTests --no-build` - execute SpecFlow + Playwright API scenarios.
 - `.batch/RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT` - orchestrate API start, Swagger launch, util + API tests, and teardown while logging to `.results/demoapp002_csharp_playwright_<UTC_TIMESTAMP>.txt`.
+- `.batch/RUN_ALL_API_AND_TESTS.BAT` - orchestrate all demos, producing run metrics that link back to this suite's logs.
 - `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` - start all three demo APIs; recent fixes ensure the TypeScript hosts stop when the script exits.
 
 ---

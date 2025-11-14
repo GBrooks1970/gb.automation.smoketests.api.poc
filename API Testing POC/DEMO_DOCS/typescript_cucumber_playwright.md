@@ -1,6 +1,6 @@
 # DEMOAPP003 - TypeScript / Express / Playwright BDD
 
-**Version 4 - [12/11/25]**
+**Version 5 - [14/11/25]**
 
 The `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT` project hosts the Token Parser API on `http://localhost:3001`. It mirrors the shared token parsing utilities, exposes Swagger, and is validated through Playwright + Cucumber scenarios implemented with the Screenplay pattern. Documentation for architecture, QA strategy, and Screenplay conventions now lives under `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT/docs`.
 
@@ -41,6 +41,7 @@ The `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT` project hosts the T
 - **Configuration**: `.env.example` documents defaults including `API_BASE_URL=http://localhost:3001`, `PORT`, and logging verbosity controls.
 - **Tooling**: ESLint + Prettier scope `src/`, `screenplay/`, and `features/**`; `npm run lint`, `npm run format`, and `npm run ts:check` form the quality gates before `npm run test:bdd` / `npm run verify`.
 - **Automation**: `.batch/RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` (and `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT`) start/stop the API via `env_utils.bat`, open Swagger, run tests, and append summaries to `.results/`.
+- **Orchestrator Support**: `.batch/RUN_ALL_API_AND_TESTS.BAT` consumes this runner, captures the latest `.results/demoapp003_typescript_playwright_<UTC>.txt` log, and records per-suite metrics (see `API Testing POC/DEMO_DOCS/batch_runner_design.md`).
 - **Parity**: `UseTokenParsers`, `SendGetRequest`, and Screenplay memory are aligned with DEMOAPP001; `API Testing POC/screenplay_parity_typescript.md` tracks the shared status.
 
 ---
@@ -66,7 +67,8 @@ _API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT/
 - `npm run lint`, `npm run format`, `npm run ts:check` - local quality gates.
 - `npm run test:bdd` / `npm run verify` - execute Playwright + Cucumber suites (`verify` = type-check + test).
 - `npm run pw:test` - reserved for future browser/e2e specs.
-- `.batch/RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` - start API, open Swagger, run `npm run verify`, produce `.results/demoapp003_typescript_playwright_<UTC_TIMESTAMP>.txt`, and persist `playwright_cucumber_report.json`.
+- `.batch/RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` - start API, open Swagger, run util + API suites, produce `.results` logs, and persist `playwright_cucumber_report.json`.
+- `.batch/RUN_ALL_API_AND_TESTS.BAT` - orchestrate all demo stacks, writing cross-suite metrics that reference this project's log path.
 - `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` - start the three demo APIs and stop them cleanly once the session ends.
 
 ---

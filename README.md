@@ -1,6 +1,6 @@
 # API Automation Smoke Tests POC
 
-**Updated: 06/11/25**
+**Updated: 14/11/25**
 
 This repository hosts three end-to-end API automation demos that exercise a shared Token Parser API idea:
 
@@ -9,6 +9,8 @@ This repository hosts three end-to-end API automation demos that exercise a shar
 - **DEMOAPP003 - TypeScript / Express / Playwright BDD** (`_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT`)
 
 Each stack exposes Swagger documentation, provides scripted start-and-test flows, and demonstrates how token parsing utilities drive automated checks. All runtimes now share a configurable logging abstraction so verbosity can be tuned via configuration or environment variables (see `TOKENPARSER_LOG_LEVEL` for TypeScript projects and `TokenParser:Logging:Level` for the .NET API).
+
+Automation scripts for these stacks live under `.batch/`. See **`API Testing POC/DEMO_DOCS/batch_runner_design.md`** for the formal design spec covering the orchestrator, per-project runners, helper utilities, and run metrics.
 
 ---
 
@@ -50,6 +52,28 @@ Use `.batch/RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT` to orchestrate t
 
 ---
 
+## Automation & Metrics
+
+To execute every stack in sequence, run:
+
+```powershell
+.batch\RUN_ALL_API_AND_TESTS.BAT
+```
+
+The orchestrator:
+
+1. Invokes each per-project runner (util suite first, then main API tests).
+2. Starts/stops APIs unless the relevant port is already in use (`SKIP_API_START` safeguards shared dev environments).
+3. Captures log paths and exit codes for each suite.
+4. Produces three artefacts per run inside `.results/`:
+   - `run_metrics_<UTC>.metrics` – raw key/value pairs consumed by tooling.
+   - `run_metrics_<UTC>.txt` – ASCII summary table including test counts and pass/fail info.
+   - `run_metrics_<UTC>.md` – Markdown table suitable for PR comments and documentation.
+
+Use the new metrics files as the single source of truth for automation health; each entry links directly to the underlying suite log. The design of the orchestrator and the metrics renderer is documented in `API Testing POC/DEMO_DOCS/batch_runner_design.md`.
+
+---
+
 ## Token Parser API Endpoints
 
 All stacks expose the same contract:
@@ -79,7 +103,7 @@ Shared implementations now emit structured log messages through the new logging 
   - `src/server.ts`, `src/tokenparser/`, `features/` - Playwright BDD server and Screenplay test harness
   - `tooling/` - Cucumber + Playwright configs and reporting scripts
   - `docs/` - Architecture, QA strategy, and Screenplay guidelines
-- `.batch/` - Automation scripts (start API, open Swagger, run tests, capture output)
+- `.batch/` - Automation scripts (per-project runners, orchestrator, helpers)
 - `API Testing POC/` - Supporting documentation and comparison guides
 
 ---

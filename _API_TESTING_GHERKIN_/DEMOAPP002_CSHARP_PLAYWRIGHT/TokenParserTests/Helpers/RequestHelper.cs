@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Reflection;
+using TokenParserAPI.utils;
 
 namespace TokenParserTests.Helpers
 {
@@ -102,7 +103,7 @@ namespace TokenParserTests.Helpers
             // Attempt to parse the date string into a DateTime object
             if (DateTime.TryParseExact(
                     dateStr,
-                    "yyyy-MM-dd HH:mm:ssZ",
+                    DateFormatting.CanonicalFormat,
                     CultureInfo.InvariantCulture,
                     DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal,
                     out DateTime parsedDate))

@@ -1,6 +1,7 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import { expect } from "chai";
 import { TokenDateParser } from "../../../../../src/tokenparser/TokenDateParser";
+import { DateUtils } from "../../../../../src/utils/date-utils";
 import { SendGetRequest } from "../../../../../screenplay/tasks/SendGetRequest";
 import { ResponseStatus } from "../../../../../screenplay/questions/ResponseStatus";
 import { ResponseBody } from "../../../../../screenplay/questions/ResponseBody";
@@ -8,11 +9,6 @@ import { apiActor } from "../../../../../screenplay/core/api-world";
 
 const toApiProperty = (propertyName: string): string =>
   propertyName ? propertyName.charAt(0).toUpperCase() + propertyName.slice(1) : propertyName;
-
-const formatDateUtc = (date: Date): string => {
-  const iso = date.toISOString();
-  return `${iso.slice(0, 19).replace("T", " ")}Z`;
-};
 
 let tokenString = "";
 
@@ -46,7 +42,7 @@ Then(
 
     if (propertyKey === "ParsedToken" && expected !== "Invalid string token format") {
       const parsedDate = TokenDateParser.parseDateStringToken(tokenString);
-      const expectedValue = formatDateUtc(parsedDate);
+      const expectedValue = DateUtils.formatDateUtc(parsedDate);
       expect(body[propertyKey]).to.equal(expectedValue);
       return;
     }
