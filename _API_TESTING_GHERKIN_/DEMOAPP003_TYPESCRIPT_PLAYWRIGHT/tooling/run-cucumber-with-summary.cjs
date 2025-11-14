@@ -4,7 +4,8 @@ const path = require("path");
 
 const isWindows = process.platform === "win32";
 const npxCommand = "npx";
-const cucumberArgs = ["cucumber-js", "--config", "tooling/cucumber.cjs"];
+const cliArgs = process.argv.slice(2);
+const cucumberArgs = ["cucumber-js", "--config", "tooling/cucumber.cjs", ...cliArgs];
 const reportPath = path.resolve(".results/playwright_cucumber_report.json");
 fs.mkdirSync(path.dirname(reportPath), { recursive: true });
 
