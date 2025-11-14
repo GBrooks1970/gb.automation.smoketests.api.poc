@@ -2,10 +2,10 @@
 setlocal EnableDelayedExpansion
 
 rem ---------------------------------------------------------------------------
-rem Parity with RUN_ALL_APIS_AND_SWAGGER.BAT:
-rem   • env/port helpers live in env_utils.bat
-rem   • reusable helpers manage dotnet API lifecycle + test execution
-rem   • comments explain each stage for future maintainers
+rem Mirrors RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT structure:
+rem   - env_utils.bat loads shared env + port defaults
+rem   - util SpecFlow tests (TestCategory=utiltests) run first to fail fast
+rem   - main API SpecFlow tests run after the service is confirmed online
 rem ---------------------------------------------------------------------------
 
 set "SCRIPT_DIR=%~dp0"
@@ -15,29 +15,23 @@ set "ROOT_DIR=%CD%"
 set "RESULTS_DIR=%ROOT_DIR%\.results"
 if not exist "%RESULTS_DIR%" mkdir "%RESULTS_DIR%" >nul 2>&1
 
-set "API_DIR=%ROOT_DIR%\_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT\TokenParserAPI"
-set "TEST_DIR=%ROOT_DIR%\_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT\TokenParserTests"
+set "APP_DIR=%ROOT_DIR%\_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT"
+set "API_DIR=%APP_DIR%\TokenParserAPI"
+set "TEST_DIR=%APP_DIR%\TokenParserTests"
 set "SUITE_LABEL=DEMOAPP002"
-set "SERVER_PORT=5228"
-set "API_BASE_URL=http://localhost:%SERVER_PORT%"
 
-rem Timestamped logs for util + API suites
+rem Load env vars for parity with other runners (defaults to port 5228)
+call "%SCRIPT_DIR%env_utils.bat" load_env_vars "%API_DIR%" 5228 "http://localhost:5228" SERVER_PORT API_BASE_URL
+
+rem Timestamped log files for util + main suites
 for /f %%I in ('powershell -NoProfile -Command "(Get-Date).ToUniversalTime().ToString(\"yyyyMMddTHHmmZ\")"') do set "UTC_TIMESTAMP=%%I"
-set "RESULT_LOG=%RESULTS_DIR%\demoapp002_csharp_playwright_%UTC_TIMESTAMP%.txt"
+set "API_LOG=%RESULTS_DIR%\demoapp002_csharp_playwright_%UTC_TIMESTAMP%.txt"
 set "UTIL_LOG=%RESULTS_DIR%\demoapp002_csharp_playwright_util_%UTC_TIMESTAMP%.txt"
 
-rem Run util-only SpecFlow tests first (no API dependency)
-call :run_dotnet_tests "%TEST_DIR%" "%UTIL_LOG%" "TestCategory=utiltests"
-if errorlevel 1 (
-    echo %SUITE_LABEL% util tests failed. See "%UTIL_LOG%"
-    set "EXIT_CODE=1"
-    goto cleanup
-)
-
-rem Start API (unless SKIP_API_START or port already used)
+rem Start the API (unless port already occupied or SKIP_API_START set)
 call "%SCRIPT_DIR%env_utils.bat" is_port_in_use %SERVER_PORT% PORT_IN_USE
 if "%SKIP_API_START%"=="1" (
-    echo SKIP_API_START set. Skipping %SUITE_LABEL% API startup.
+    echo SKIP_API_START set. Skipping %SUITE_LABEL% API start.
 ) else if "%PORT_IN_USE%"=="1" (
     echo Port %SERVER_PORT% already in use. Assuming %SUITE_LABEL% API is running.
 ) else (
@@ -47,21 +41,31 @@ if "%SKIP_API_START%"=="1" (
         goto cleanup
     )
 
+    rem Launch Swagger UI to mimic the global runner behaviour
     powershell -NoProfile -Command "Start-Process('%API_BASE_URL%/swagger')" >nul 2>&1
 )
 
-rem Ensure Playwright deps installed (matching original script intent)
+rem Run util-only tests first (category filter avoids API dependency)
+call :run_dotnet_tests "util" "%TEST_DIR%" "%UTIL_LOG%" "TestCategory=utiltests"
+if errorlevel 1 (
+    echo %SUITE_LABEL% util tests failed. See "%UTIL_LOG%"
+    set "EXIT_CODE=1"
+    goto cleanup
+)
+
+rem Ensure Playwright dependencies are installed before API-focused specs
 call :ensure_playwright_install "%TEST_DIR%"
 if errorlevel 1 (
     set "EXIT_CODE=1"
     goto cleanup
 )
 
-rem Run all non-util SpecFlow tests (API scenarios)
-call :run_dotnet_tests "%TEST_DIR%" "%RESULT_LOG%" "TestCategory!=utiltests"
+rem Run the full API + UI SpecFlow suite (includes API endpoints)
+call :run_dotnet_tests "main" "%TEST_DIR%" "%API_LOG%" ""
 set "EXIT_CODE=%ERRORLEVEL%"
 
 :cleanup
+rem Stop API if we launched it
 if "%SKIP_API_START%"=="1" (
     set "API_PID="
 ) else (
@@ -70,13 +74,13 @@ if "%SKIP_API_START%"=="1" (
 
 if "%EXIT_CODE%"=="0" (
     echo(
-    echo %SUITE_LABEL% C# + Playwright tests completed successfully.
-    echo   API suite: "%RESULT_LOG%"
+    echo %SUITE_LABEL% C# + Playwright tests completed successfully. Results:
+    echo   API suite: "%API_LOG%"
     echo   Util suite: "%UTIL_LOG%"
 ) else (
     echo(
-    echo %SUITE_LABEL% C# + Playwright tests failed.
-    echo   API suite: "%RESULT_LOG%"
+    echo %SUITE_LABEL% C# + Playwright tests failed. See:
+    echo   API suite: "%API_LOG%"
     echo   Util suite: "%UTIL_LOG%"
 )
 
@@ -84,7 +88,7 @@ popd
 endlocal & exit /b %EXIT_CODE%
 
 rem ---------------------------------------------------------------------------
-rem Helper: start dotnet API (structured like RUN_ALL_APIS... :start_dotnet_api)
+rem Helper: start dotnet API (mirrors RUN_ALL_APIS_AND_SWAGGER.BAT pattern)
 rem ---------------------------------------------------------------------------
 :start_dotnet_api
 set "LABEL=%~1"
@@ -98,13 +102,15 @@ if "%PORT_IN_USE%"=="1" (
     exit /b 0
 )
 
-for /f "usebackq" %%I in (`powershell -NoProfile -Command "$p = Start-Process -FilePath \"dotnet\" -ArgumentList \"run\",\"--no-build\",\"--project\",\"%PROJECT_DIR%\",\"--urls\",\"http://localhost:%PORT%\" -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"`) do set "%PREFIX%_PID=%%I"
+for /f "usebackq" %%I in (
+    `powershell -NoProfile -Command "$p = Start-Process -FilePath 'dotnet' -ArgumentList 'run','--no-build','--project','%PROJECT_DIR%','--urls','http://localhost:%PORT%' -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"`
+) do set "%PREFIX%_PID=%%I"
 if not defined %PREFIX%_PID (
     echo Failed to start %LABEL% API.
     exit /b 1
 )
 
-rem Wait until the port is reachable before running tests
+rem Wait for port readiness
 powershell -NoProfile -Command "for($i=0;$i -lt 30;$i++){ if(Test-NetConnection -ComputerName 'localhost' -Port %PORT% -InformationLevel Quiet){ exit 0 } Start-Sleep -Seconds 2 }; exit 1"
 if errorlevel 1 (
     echo %LABEL% API did not become ready before timeout.
@@ -124,12 +130,13 @@ echo Stopped %~1 (PID %~2).
 goto :EOF
 
 rem ---------------------------------------------------------------------------
-rem Helper: run dotnet test with optional filter (logs to supplied file)
+rem Helper: run dotnet test with optional filter and tagged context
 rem ---------------------------------------------------------------------------
 :run_dotnet_tests
-set "PROJECT_DIR=%~1"
-set "LOG_FILE=%~2"
-set "FILTER=%~3"
+set "SUITE_NAME=%~1"
+set "PROJECT_DIR=%~2"
+set "LOG_FILE=%~3"
+set "FILTER=%~4"
 
 pushd "%PROJECT_DIR%"
 if "%FILTER%"=="" (
