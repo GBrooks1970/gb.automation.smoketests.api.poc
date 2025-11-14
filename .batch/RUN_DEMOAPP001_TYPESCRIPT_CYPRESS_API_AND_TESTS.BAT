@@ -26,14 +26,6 @@ for /f %%I in ('powershell -NoProfile -Command "(Get-Date).ToUniversalTime().ToS
 set "API_LOG=%RESULTS_DIR%\demoapp001_typescript_cypress_%UTC_TIMESTAMP%.txt"
 set "UTIL_LOG=%RESULTS_DIR%\demoapp001_typescript_cypress_util_%UTC_TIMESTAMP%.txt"
 
-rem Run util specs first; if they fail, skip the rest.
-call :run_cypress_suite "util" "%APP_DIR%" "%UTIL_LOG%" "cypress/integration/util-tests/**/*.feature"
-if errorlevel 1 (
-    echo %SUITE_LABEL% util tests failed. See "%UTIL_LOG%"
-    set "EXIT_CODE=1"
-    goto cleanup
-)
-
 rem Start the API (unless port already occupied or SKIP_API_START set)
 call "%SCRIPT_DIR%env_utils.bat" is_port_in_use %SERVER_PORT% PORT_IN_USE
 if "%SKIP_API_START%"=="1" (
@@ -49,6 +41,14 @@ if "%SKIP_API_START%"=="1" (
 
     rem Open Swagger for parity with RUN_ALL_APIS... behaviour
     powershell -NoProfile -Command "Start-Process('%API_BASE_URL%/swagger/v1/json')" >nul 2>&1
+)
+
+rem Run util specs first; keeping consistent structure while API is now guaranteed up.
+call :run_cypress_suite "util" "%APP_DIR%" "%UTIL_LOG%" "cypress/integration/util-tests/**/*.feature"
+if errorlevel 1 (
+    echo %SUITE_LABEL% util tests failed. See "%UTIL_LOG%"
+    set "EXIT_CODE=1"
+    goto cleanup
 )
 
 rem Run full Cypress suite (logs go to API_LOG)
@@ -128,6 +128,10 @@ set "SUITE_NAME=%~1"
 set "PROJECT_DIR=%~2"
 set "LOG_FILE=%~3"
 set "SPEC_PATTERN=%~4"
+set "PREV_ELECTRON_FLAG=%ELECTRON_RUN_AS_NODE%"
+
+rem Cypress/Electron fails to boot if ELECTRON_RUN_AS_NODE=1, so temporarily clear it.
+set "ELECTRON_RUN_AS_NODE="
 
 pushd "%PROJECT_DIR%"
 if "%SUITE_NAME%"=="util" (
@@ -147,4 +151,13 @@ if "%SUITE_NAME%"=="util" (
 )
 set "RUN_EXIT=%ERRORLEVEL%"
 popd
+
+rem Restore whatever ELECTRON_RUN_AS_NODE value the caller had (if any).
+if defined PREV_ELECTRON_FLAG (
+    set "ELECTRON_RUN_AS_NODE=%PREV_ELECTRON_FLAG%"
+) else (
+    set "ELECTRON_RUN_AS_NODE="
+)
+set "PREV_ELECTRON_FLAG="
+
 exit /b %RUN_EXIT%

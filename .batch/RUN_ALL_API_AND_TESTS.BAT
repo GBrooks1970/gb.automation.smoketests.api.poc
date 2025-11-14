@@ -40,6 +40,11 @@ if not exist "%RESULT_DIR%" (
     mkdir "%RESULT_DIR%" >nul 2>&1
 )
 
+for /f %%I in ('powershell -NoProfile -Command "(Get-Date).ToUniversalTime().ToString(\"yyyyMMddTHHmmZ\")"') do set "RUN_UTC=%%I"
+set "METRICS_FILE=%RESULT_DIR%\run_metrics_%RUN_UTC%.txt"
+set "METRICS_MD=%RESULT_DIR%\run_metrics_%RUN_UTC%.md"
+> "%METRICS_FILE%" echo RUN UTC: %RUN_UTC%
+
 set "TS_SCRIPT=%BATCH_DIR%\RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT"
 set "CS_SCRIPT=%BATCH_DIR%\RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT"
 set "PW_SCRIPT=%BATCH_DIR%\RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT"
@@ -114,6 +119,8 @@ if "%OVERALL_EXIT%"=="0" (
     echo === Combined run completed with failures. Review logs above. ===
 )
 
+echo OverallExit=%OVERALL_EXIT%>> "%METRICS_FILE%"
+powershell -NoProfile -Command "$metrics = Get-Content '%METRICS_FILE%'; $rows=@(); $runUtc=''; $overall=''; foreach($line in $metrics){ if($line -like 'RUN UTC:*'){ $runUtc = $line.Split(':')[1].Trim(); } elseif($line -match '^(.*)_Exit=(.*),(.*)_Log=(.*)$'){ $rows += [pscustomobject]@{ Suite=$matches[1]; Exit=$matches[2]; Log=$matches[4]; }; } elseif($line -match '^OverallExit=(.*)$'){ $overall=$matches[1]; } } $table = '| Suite | Exit Code | Log |' + \"`n\" + '| --- | --- | --- |'; foreach($r in $rows){ $table += \"`n| $($r.Suite) | $($r.Exit) | $($r.Log) |\"; } $table += \"`n| Overall | $overall |  |\"; \"Run UTC: $runUtc`n`n$table\" | Set-Content '%METRICS_MD%'"
 set "FINAL_EXIT=%OVERALL_EXIT%"
 goto cleanup
 
@@ -133,9 +140,9 @@ rem %1=results directory, %2=filter, %3=output variable name
 set "%~3="
 for /f "usebackq delims=" %%I in (`powershell -NoProfile -Command "Get-ChildItem -Path '%~1' -Filter '%~2' | Sort-Object LastWriteTime -Descending | Select-Object -First 1 | ForEach-Object { $_.Name }"`) do (
     set "%~3=%%~I"
-    goto :EOF
+    exit /b
 )
-goto :EOF
+exit /b
 
 :report_result
 rem Helper: print a friendly summary for each runner, showing result files and
@@ -149,6 +156,7 @@ set "EXIT_CODE=%~5"
 
 if not defined AFTER (
     echo [%LABEL%] No result file detected in "%DIR%".
+    set "LOG_PATH=unavailable"
     goto :report_status
 )
 
@@ -161,6 +169,7 @@ if defined BEFORE (
 ) else (
     echo [%LABEL%] Result file: "%DIR%\%AFTER%"
 )
+set "LOG_PATH=%DIR%\%AFTER%"
 
 :report_status
 if "%EXIT_CODE%"=="0" (
@@ -168,4 +177,8 @@ if "%EXIT_CODE%"=="0" (
 ) else (
     echo [%LABEL%] Tests failed with exit code %EXIT_CODE%.
 )
-goto :EOF
+if defined METRICS_FILE (
+    >> "%METRICS_FILE%" echo %LABEL%_Exit=%EXIT_CODE%,%LABEL%_Log=%LOG_PATH%
+    >> "%METRICS_MD%" echo ^| %LABEL% ^| %EXIT_CODE% ^| %LOG_PATH% ^|
+)
+exit /b
