@@ -119,8 +119,8 @@ if "%OVERALL_EXIT%"=="0" (
     echo === Combined run completed with failures. Review logs above. ===
 )
 
-echo OverallExit=%OVERALL_EXIT%>> "%METRICS_FILE%"
-powershell -NoProfile -Command "$metrics = Get-Content '%METRICS_FILE%'; $rows=@(); $runUtc=''; $overall=''; foreach($line in $metrics){ if($line -like 'RUN UTC:*'){ $runUtc = $line.Split(':')[1].Trim(); } elseif($line -match '^(.*)_Exit=(.*),(.*)_Log=(.*)$'){ $rows += [pscustomobject]@{ Suite=$matches[1]; Exit=$matches[2]; Log=$matches[4]; }; } elseif($line -match '^OverallExit=(.*)$'){ $overall=$matches[1]; } } $table = '| Suite | Exit Code | Log |' + \"`n\" + '| --- | --- | --- |'; foreach($r in $rows){ $table += \"`n| $($r.Suite) | $($r.Exit) | $($r.Log) |\"; } $table += \"`n| Overall | $overall |  |\"; \"Run UTC: $runUtc`n`n$table\" | Set-Content '%METRICS_MD%'"
+>> "%METRICS_FILE%" echo OverallExit=%OVERALL_EXIT%
+powershell -NoProfile -File "%BATCH_DIR%\.ps\render-run-metrics.ps1" -MetricsFile "%METRICS_FILE%" -MarkdownFile "%METRICS_MD%"
 set "FINAL_EXIT=%OVERALL_EXIT%"
 goto cleanup
 
@@ -179,6 +179,5 @@ if "%EXIT_CODE%"=="0" (
 )
 if defined METRICS_FILE (
     >> "%METRICS_FILE%" echo %LABEL%_Exit=%EXIT_CODE%,%LABEL%_Log=%LOG_PATH%
-    >> "%METRICS_MD%" echo ^| %LABEL% ^| %EXIT_CODE% ^| %LOG_PATH% ^|
 )
 exit /b
