@@ -74,3 +74,4 @@
 
 - Manual: Postman, Swagger UI
 - Automated: Newman, Specflow, Resharper
+

@@ -1,9 +1,10 @@
-﻿using Microsoft.Playwright;
+using Microsoft.Playwright;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using TokenParserAPI.utils;
 
 namespace TokenParserTests.Helpers
 {
@@ -119,7 +120,7 @@ namespace TokenParserTests.Helpers
             // Attempt to parse the date string into a DateTime object
             if (DateTime.TryParseExact(
                     dateStr,
-                    "yyyy-MM-dd HH:mm:ssZ",
+                    DateFormatting.CanonicalFormat,
                     CultureInfo.InvariantCulture,
                     DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal,
                     out DateTime parsedDate))

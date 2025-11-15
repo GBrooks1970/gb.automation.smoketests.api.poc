@@ -1,104 +1,106 @@
-﻿using TechTalk.SpecFlow;
-using Newtonsoft.Json;
-using TokenParserAPI.responses;
-using NUnit.Framework.Legacy;
-using TokenParserTests.Helpers;
 using System.Text.Json;
+using NUnit.Framework.Legacy;
+using TechTalk.SpecFlow;
+using TokenParserTests.Screenplay;
+using TokenParserTests.Screenplay.Questions;
+using TokenParserTests.Screenplay.Support;
+using TokenParserTests.Screenplay.Tasks;
 
-namespace TokenParserTests.Steps
+namespace TokenParserTests.Steps;
+
+[Binding]
+public class DynamicStringParser_Steps
 {
-    [Binding]
-    public class DynamicStringParser_Steps
+    private readonly ScenarioContext _scenarioContext;
+
+    public DynamicStringParser_Steps(ScenarioContext scenarioContext)
     {
-        private RequestHelper requestHelper;
-        private string _responseContent;
-        public DynamicStringParser_Steps() => requestHelper = new RequestHelper("http://localhost:5228");
+        _scenarioContext = scenarioContext;
+    }
 
-        private HttpResponseMessage _response;
+    private Actor Actor => _scenarioContext.GetActor();
 
+    [Given(@"the TokenParser API is available")]
+    public void GivenTheDynamicStringAPIIsRunning()
+    {
+        Console.WriteLine("API available for dynamic string tests.");
+    }
 
-        [Given(@"the TokenParser API is available")]
-        public void GivenTheDynamicStringAPIIsRunning()
+    [When(@"a request with dynamic string token '(.*)' is made to the ParseDynamicStringToken endpoint")]
+    public async Task WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint(string token)
+    {
+        var query = new Dictionary<string, string>
         {
-            //Assert.That(_requestContext, Is.Not.Null, "API context is not initialized");
+            { "token", token },
+        };
+
+        await Actor.AttemptsTo(SendGetRequest.To("/parse-dynamic-string-token", query));
+    }
+
+    [Then(@"the API response should return a status code of (.*) for the ParseDynamicStringToken endpoint")]
+    public async Task ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(int statusCode)
+    {
+        var actualStatus = await Actor.Answer(ResponseStatus.Code());
+        Assert.That((int)actualStatus, Is.EqualTo(statusCode));
+    }
+
+    [Then(@"the response should contain ""(.*)"" with the value ""(.*)""")]
+    public async Task ThenTheResponseShouldContainWithTheValue(string key, string expectedValue)
+    {
+        using var json = await Actor.Answer(ResponseJson.Body());
+        if (!json.RootElement.TryGetProperty(key, out var actualValue))
+        {
+            Assert.Fail($"Response does not contain '{key}'.");
         }
 
-        [When(@"a request with dynamic string token '(.*)' is made to the DynamicStringParser endpoint")]
-        public async Task WhenARequestWithDynamicStringTokenIsMadeToTheDynamicStringParserEndpoint(string token)
+        var actualString = actualValue.GetString()?.Trim() ?? string.Empty;
+        var actualLength = actualString.Length;
+
+        switch (expectedValue)
         {
-            var endpoint = "/parse-dynamic-string-token";
+            case "An alpha-numeric string of length 5":
+                Assert.That(actualLength, Is.EqualTo(5));
+                Assert.That(actualString, Does.Match(@"^[A-Za-z0-9]+$"));
+                break;
 
-            var queryParams = new Dictionary<string, string>
-            {
-                { "token", token }
-            };
-            string encodedUrl = UrlHelper.BuildEncodedUrl(endpoint, queryParams);
+            case "A string of punctuation characters of length 3":
+                Assert.That(actualLength, Is.EqualTo(3));
+                Assert.That(actualString, Does.Match(@"^[\.\,\!\?\;\:]+$"));
+                break;
 
-            _response = await requestHelper.GetAsyncToEndpoint(encodedUrl);
+            case "2 lines of strings with each line containing 10 alpha-numeric-punctuation characters":
+                AssertLines(actualString, 2, 10, @"^[A-Za-z0-9\.\,\!\?\;\:]+$");
+                break;
 
-            _responseContent = await requestHelper.GetResponseString(_response);
+            case "A numeric string of length 8":
+                Assert.That(actualLength, Is.EqualTo(8));
+                Assert.That(actualString, Does.Match(@"^\d+$"));
+                break;
+
+            case "3 lines of strings with each line containing 5 special characters":
+                AssertLines(actualString, 3, 5, @"^[!@#\$%\^&\*\(\)_\+\[\]\{\}\|;:,\.<>\?]+$");
+                break;
+
+            case "A mixed alpha, numeric, and special character string of length 12":
+                Assert.That(actualLength, Is.EqualTo(12));
+                Assert.That(actualString, Does.Match(@"^[A-Za-z0-9!@#\$%\^&\*\(\)_\+\[\]\{\}\|;:,\.<>\?]+$"));
+                break;
+
+            default:
+                Assert.That(actualValue.GetString(), Is.EqualTo(expectedValue));
+                break;
         }
+    }
 
+    private static void AssertLines(string actualString, int expectedLines, int expectedLengthPerLine, string regex)
+    {
+        var lines = actualString.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+        Assert.That(lines.Length, Is.EqualTo(expectedLines));
 
-        [Then(@"the API response should return a status code of (.*) for the DynamicStringParser endpoint")]
-        public void ThenTheResponseShouldReturnAStatusCodeOfForDynamicToken(int statusCode)
+        foreach (var line in lines.Where(l => l.Length > 0))
         {
-            requestHelper.ValidateStatusCode(_response, statusCode);
-        }
-
-        [Then(@"the response should contain ""(.*)"" with the value ""(.*)""")]
-        public async Task ThenTheResponseShouldContainWithTheValue(string key, string expectedValue)
-        {
-            // Parse the JSON response
-            var jsonResponse01 = requestHelper.ParseJsonResponse(_responseContent);
-            var jsonResponse = JsonDocument.Parse(_responseContent).RootElement;
-
-            if (jsonResponse.TryGetProperty(key, out var actualValue))
-            {
-                var actualString = actualValue.GetString()?.Trim();
-                var actulLength = actualString?.Length;
-
-                // Handle dynamic verification for the different expected values
-                if (expectedValue == "An alpha-numeric string of length 5")
-                {
-                    int expectedLength = 5;
-                    Assert.That(expectedLength, Is.EqualTo(actulLength), $"Expected generated string: {actualString} to be of length: {expectedLength}, but got: {actulLength}");
-                    Assert.That(actualString?.Trim(), Does.Match(@"^[A-Za-z0-9]+$"), $"Expected generated string: {actualString} to be a combination of alpha and numeric characters, but it is not");
-
-                }
-                else if (expectedValue == "A string of punctuation characters of length 3")
-                {
-                    int expectedLength = 3;
-                    Assert.That(expectedLength, Is.EqualTo(actulLength), $"Expected generated string: {actualString} to be of length: {expectedLength}, but got: {actulLength}");
-                    Assert.That(actualString?.Trim(), Does.Match(@"^[!@#$%^&*()]+$"), $"Expected generated string: {actualString} to be a punctuation characters, but it is not");
-                }
-                else if (expectedValue == "2 lines of strings with each line containing 10 alpha-numeric-punctuation characters")
-                {
-
-                    int lineCount = 2;
-                    int charPerLine = 10;
-                    var lines = actualString?.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-                    var actullineCount = lines?.Length; // Last line might be empty due to line break
-                    Assert.That(lineCount, Is.EqualTo(actullineCount), $"Expected generated string: {actualString} to be of lineCount: {lineCount}, but got: {actullineCount}");
-
-                    foreach (var line in lines)
-                    {
-                        if (line.Length > 0)
-                        {
-                            Assert.That(charPerLine, Is.EqualTo(line.Length), $"Expected generated string line: {line} to be of length: {charPerLine}, but got: {line.Length}");
-                            Assert.That(line.Trim(), Does.Match(@"^[A-Za-z0-9!@#$%^&*()]+$"), $"Expected generated string line: {line} to be a combination of alpha, numeric, and punctuation characters, but it is not");
-                        }
-                    }
-                }
-                else
-                {
-                    Assert.That(actualValue.GetString(), Is.EqualTo(expectedValue));
-                }
-            }
-            else
-            {
-                Assert.Fail($"Response does not contain '{key}'.");
-            }
+            Assert.That(line.Length, Is.EqualTo(expectedLengthPerLine));
+            Assert.That(line, Does.Match(regex));
         }
     }
 }

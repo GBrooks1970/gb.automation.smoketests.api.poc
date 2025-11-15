@@ -1,90 +1,119 @@
-﻿using TechTalk.SpecFlow;
-using Newtonsoft.Json;
-using TokenParserAPI.responses;
-using NUnit.Framework.Legacy;
-using TokenParserTests.Helpers;
-using NUnit.Framework.Internal;
-using System.Globalization;
 using System.Text.Json;
+using NUnit.Framework.Legacy;
+using TechTalk.SpecFlow;
+using TokenParserAPI.utils;
+using TokenParserTests.Screenplay;
+using TokenParserTests.Screenplay.Questions;
+using TokenParserTests.Screenplay.Support;
+using TokenParserTests.Screenplay.Tasks;
 
-namespace TokenParserTests.Steps
+namespace TokenParserTests.Steps;
+
+[Binding]
+public class DateTokenParser_Steps
 {
-    [Binding]
-    public class DateTokenParser_Steps
+    private const string TokenKey = "__date-token";
+
+    private readonly ScenarioContext _scenarioContext;
+
+    public DateTokenParser_Steps(ScenarioContext scenarioContext)
     {
-        private RequestHelper requestHelper;
-        private string _responseContent;
-        public DateTokenParser_Steps() => requestHelper = new RequestHelper("http://localhost:5228");
-        public string _Token;
+        _scenarioContext = scenarioContext;
+    }
 
-        private HttpResponseMessage _response;
+    private Actor Actor => _scenarioContext.GetActor();
 
-        [Given(@"a valid or invalid date token ""(.*)""")]
-        public void GivenAValidOrInvalidDateToken(string token)
+    [Given(@"a valid or invalid date token ""(.*)""")]
+    public void GivenAValidOrInvalidDateToken(string token)
+    {
+        _scenarioContext[TokenKey] = token;
+    }
+
+    [When(@"a GET request is made to the ParseDateToken Endpoint")]
+    public async Task WhenISendARequestWithTokenToTheParsedTokenAPI()
+    {
+        var token = GetStoredToken();
+        var query = new Dictionary<string, string>
         {
-            _Token = token;
+            { "token", token },
+        };
+
+        await Actor.AttemptsTo(SendGetRequest.To("/parse-date-token", query));
+    }
+
+    [Then(@"the API response for the ParseDateToken Endpoint should return a status code of (.*)")]
+    public async Task ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(int statusCode)
+    {
+        var actualStatus = await Actor.Answer(ResponseStatus.Code());
+        Assert.That((int)actualStatus, Is.EqualTo(statusCode));
+    }
+
+    [Then(@"the response body should contain ""(.*)"" with the value ""(.*)""")]
+    public async Task ThenTheResponseBodyShouldContainWithTheValue(string key, string expectedValue)
+    {
+        using var json = await Actor.Answer(ResponseJson.Body());
+        if (!json.RootElement.TryGetProperty(key, out var actualValue))
+        {
+            Assert.Fail($"Response does not contain '{key}'.");
+            return;
         }
 
-        [When(@"a GET request is made to the DateTokenParser Endpoint")]
-        public async Task WhenISendARequestWithTokenToTheParsedTokenAPI()
+        var actualString = actualValue.GetString();
+        switch (expectedValue)
         {
-            string endpoint = "/parse-date-token";
-            var queryParams = new Dictionary<string, string>
-            {
-                { "token", _Token }
-            };
-            string encodedUrl = UrlHelper.BuildEncodedUrl(endpoint, queryParams);
-
-            _response = await requestHelper.GetAsyncToEndpoint(encodedUrl);
-
-            _responseContent = await requestHelper.GetResponseString(_response);
-
+            case "today":
+                AssertRelativeDate(actualString, 0, 0);
+                break;
+            case "one year and one month ago from today":
+                AssertRelativeDate(actualString, -1, -1);
+                break;
+            case "one year ahead and two months ago from today":
+                AssertRelativeDate(actualString, 1, -2);
+                break;
+            case "tomorrow plus three days (four days from today)":
+                AssertRelativeDate(actualString, 0, 0, 4);
+                break;
+            case "yesterday minus two days (three days ago)":
+                AssertRelativeDate(actualString, 0, 0, -3);
+                break;
+            case "two years and six months ahead of today minus 15 days":
+                AssertRelativeDate(actualString, 2, 6, -15);
+                break;
+            default:
+                Assert.That(actualString, Is.EqualTo(expectedValue));
+                break;
         }
-        [Then(@"the API response for the DateTokenParser Endpoint should return a status code of (.*)")]
-        public void ThenTheAPIResponseForTheDateTokenParserEndpointShouldReturnAStatusCodeOf(int statusCode)
+    }
+
+    [Then(@"the result should equal today plus (.*) years (.*) months (.*) days")]
+    public async Task ThenTheResultShouldEqualTodayPlusYearsMonthsDays(int years, int months, int days)
+    {
+        using var json = await Actor.Answer(ResponseJson.Body());
+        if (!json.RootElement.TryGetProperty("ParsedToken", out var parsedToken))
         {
-            requestHelper.ValidateStatusCode(_response, statusCode);
+            Assert.Fail("Response does not contain 'ParsedToken'.");
         }
 
-        [Then(@"the response body should contain ""(.*)"" with the value ""(.*)""")]
-        public async Task ThenTheResponseBodyShouldContainWithTheValue(string key, string expectedValue)
+        var expectedDate = DateTime.Today.AddYears(years).AddMonths(months).AddDays(days);
+        var formattedDate = DateFormatting.FormatUtc(expectedDate);
+
+        Assert.That(parsedToken.GetString(), Is.EqualTo(formattedDate));
+    }
+
+    private string GetStoredToken()
+    {
+        if (_scenarioContext.TryGetValue(TokenKey, out var value) && value is string token)
         {
-            // Parse the JSON response
-            var jsonResponse01 = requestHelper.ParseJsonResponse(_responseContent);
-            var jsonResponse = JsonDocument.Parse(_responseContent).RootElement;
-
-            if (jsonResponse.TryGetProperty(key, out var actualValue))
-            { // Handle relative date parsing logic for tokens like "[TODAY-1YEAR-1MONTH]"
-                DateTime today = DateTime.Today;
-                DateTime expectedDate = today;
-
-                if (expectedValue.Contains("ago") || expectedValue.Contains("ahead") || expectedValue.Equals("today"))
-                {
-                   
-                    //Adjust date according to expected outcome
-                    if (expectedValue == "one year and one month ago from today")
-                    {
-                        expectedDate = today.AddYears(-1).AddMonths(-1);
-                    }
-                    else if (expectedValue == "one year ahead and two months ago from today")
-                    {
-                        expectedDate = today.AddYears(1).AddMonths(-2);
-                    }
-
-                    string formattedDate = expectedDate.ToString("yyyy-MM-dd HH:mm:ssZ", CultureInfo.InvariantCulture);
-
-                    Assert.That(actualValue.GetString(), Is.EqualTo(formattedDate));
-                }
-                else
-                {           
-                    //Specific value expected
-                    Assert.That(actualValue.GetString(), Is.EqualTo(expectedValue));
-                }
-            }
-            else
-            {                
-                Assert.That(jsonResponse.TryGetProperty(key, out _), Is.True, $"Response does not contain '{key}'.");
-            }
+            return token;
         }
+
+        throw new InvalidOperationException("Date token has not been initialised.");
+    }
+
+    private static void AssertRelativeDate(string? actualValue, int yearsOffset, int monthsOffset, int daysOffset = 0)
+    {
+        var expectedDate = DateTime.Today.AddYears(yearsOffset).AddMonths(monthsOffset).AddDays(daysOffset);
+        var formattedDate = DateFormatting.FormatUtc(expectedDate);
+        Assert.That(actualValue, Is.EqualTo(formattedDate));
     }
 }
