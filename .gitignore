@@ -63,3 +63,5 @@ _API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/TokenParserTests/TEST_RUN001.
 /.review
 *.zip
 /_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/cypress/screenshots
+/.batch/archive
+*.bak
