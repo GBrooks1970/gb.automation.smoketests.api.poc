@@ -1,12 +1,13 @@
 # API Automation Smoke Tests POC
 
-**Updated: 14/11/25**
+**Updated: 15/11/25**
 
-This repository hosts three end-to-end API automation demos that exercise a shared Token Parser API idea:
+This repository hosts four end-to-end API automation demos that exercise a shared Token Parser API idea:
 
 - **DEMOAPP001 - TypeScript / Express / Cypress** (`_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS`)
 - **DEMOAPP002 - .NET 8 Minimal API / SpecFlow / Playwright** (`_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT`)
 - **DEMOAPP003 - TypeScript / Express / Playwright BDD** (`_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT`)
+- **DEMOAPP004 - Python / FastAPI / Playwright Screenplay** (`_API_TESTING_GHERKIN_/DEMOAPP004_PYTHON_PLAYWRIGHT`)
 
 Each stack exposes Swagger documentation, provides scripted start-and-test flows, and demonstrates how token parsing utilities drive automated checks. All runtimes now share a configurable logging abstraction so verbosity can be tuned via configuration or environment variables (see `TOKENPARSER_LOG_LEVEL` for TypeScript projects and `TokenParser:Logging:Level` for the .NET API).
 
@@ -50,6 +51,21 @@ Use `.batch/RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT` to orchestrate t
 
 `.batch/RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` spins up the API on port `3001`, sets `API_BASE_URL` for tests, opens Swagger, executes the BDD suite, and saves output to `.results/demoapp003_typescript_playwright_*.txt`.
 
+### DEMOAPP004 - Python FastAPI + Playwright Screenplay
+
+1. `cd _API_TESTING_GHERKIN_/DEMOAPP004_PYTHON_PLAYWRIGHT`
+2. `python -m venv .venv && .\.venv\Scripts\activate`
+3. `pip install -r requirements.txt && python -m playwright install`
+4. Start the API: `python -m src.server`  
+   - Swagger UI: `http://localhost:3002/docs`  
+   - OpenAPI JSON: `http://localhost:3002/openapi.json`
+5. Run util tests: `pytest -m util`  
+6. Run API tests: `pytest -m api`
+
+`.batch/RUN_DEMOAPP004_PYTHON_PLAYWRIGHT_API_AND_TESTS.BAT` applies the same lifecycle as the TypeScript stacks (load env, port probe, start API/Swagger, run util + API suites, capture `.results/demoapp004_python_playwright_*.txt` logs). The runner intentionally shells through `playwright.cmd` to avoid .NET CLI conflicts and documents the behaviour in the project README.
+
+> **Note:** Always run `python -m playwright install` from the activated virtual environment so Playwright discovers the Python project (running `playwright install` without the `python -m` shim will default to the .NET CLI and fail).
+
 ---
 
 ## Automation & Metrics
@@ -62,7 +78,7 @@ To execute every stack in sequence, run:
 
 The orchestrator:
 
-1. Invokes each per-project runner (util suite first, then main API tests).
+1. Invokes each per-project runner (util suite first, then main API tests) across all four demos.
 2. Starts/stops APIs unless the relevant port is already in use (`SKIP_API_START` safeguards shared dev environments).
 3. Captures log paths and exit codes for each suite.
 4. Produces three artefacts per run inside `.results/`:
@@ -103,6 +119,10 @@ Shared implementations now emit structured log messages through the new logging 
   - `src/server.ts`, `src/tokenparser/`, `features/` - Playwright BDD server and Screenplay test harness
   - `tooling/` - Cucumber + Playwright configs and reporting scripts
   - `docs/` - Architecture, QA strategy, and Screenplay guidelines
+- `_API_TESTING_GHERKIN_/DEMOAPP004_PYTHON_PLAYWRIGHT/`
+  - `src/server.py`, `src/tokenparser/` - FastAPI host plus shared date/dynamic parser ports
+  - `tests/features/` - pytest-bdd suites mirroring DEMOAPP001 scenarios with Screenplay actors
+  - `docs/ARCHITECTURE.md`, `QA_STRATEGY.md`, `SCREENPLAY_GUIDE.md` - parity and ISTQB rationale for the Python stack
 - `.batch/` - Automation scripts (per-project runners, orchestrator, helpers)
 - `API Testing POC/` - Supporting documentation and comparison guides
 
@@ -119,6 +139,7 @@ Generated content under `*/bin`, `*/obj`, `.playwright/`, and `node_modules/` is
 - API Testing POC/typescript_cucumber_cypress.md - Full breakdown of the Cypress stack
 - API Testing POC/typescript_cucumber_playwright.md - Full breakdown of the TypeScript + Playwright stack
 - API Testing POC/csharp_specflow_playwright.md - Full breakdown of the C# + Playwright stack
+- API Testing POC/DEMO_DOCS/DEMOAPP004_blueprint.md - Blueprint + requirements traceability for the Python stack
 - API Testing POC/testing_guidelines_3_a.md - Process and testing guidance
 - API Testing POC/api_testing_comparison.md - Cross-stack comparisons and rationale
 

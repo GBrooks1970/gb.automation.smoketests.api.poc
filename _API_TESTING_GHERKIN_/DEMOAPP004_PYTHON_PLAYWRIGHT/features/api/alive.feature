@@ -1,3 +1,4 @@
+@api
 Feature: API Health Check Endpoint
   As a consumer
   I want to confirm the API is alive

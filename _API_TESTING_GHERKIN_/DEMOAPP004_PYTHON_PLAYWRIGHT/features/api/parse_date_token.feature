@@ -1,3 +1,4 @@
+@api
 Feature: Parse Date Token Endpoint
   As a consumer
   I want to resolve date tokens via the API

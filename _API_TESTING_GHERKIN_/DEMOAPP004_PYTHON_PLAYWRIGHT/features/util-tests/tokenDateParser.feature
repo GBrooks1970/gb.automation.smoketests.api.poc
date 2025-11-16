@@ -1,3 +1,4 @@
+@util
 Feature: TokenDateParser Utilities
   Scenario Outline: Parse token locally
     Given I have the date token "<token>"

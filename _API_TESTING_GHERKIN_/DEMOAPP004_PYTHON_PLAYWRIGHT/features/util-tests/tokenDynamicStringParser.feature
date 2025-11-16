@@ -1,3 +1,4 @@
+@util
 Feature: TokenDynamicStringParser Utilities
   Scenario Outline: Generate local dynamic string
     Given I have the dynamic token "<token>"

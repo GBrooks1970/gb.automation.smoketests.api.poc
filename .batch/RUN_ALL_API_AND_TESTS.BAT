@@ -30,6 +30,11 @@ if not exist "%BATCH_DIR%\RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT
     goto fail
 )
 
+if not exist "%BATCH_DIR%\RUN_DEMOAPP004_PYTHON_PLAYWRIGHT_API_AND_TESTS.BAT" (
+    echo [ERROR] Missing RUN_DEMOAPP004_PYTHON_PLAYWRIGHT_API_AND_TESTS.BAT in "%BATCH_DIR%".
+    goto fail
+)
+
 rem Align root + results folder with other scripts.
 pushd ".."
 set "ROOT_DIR=%CD%"
@@ -49,9 +54,11 @@ set "METRICS_MD=%RESULT_DIR%\run_metrics_%RUN_UTC%.md"
 set "TS_SCRIPT=%BATCH_DIR%\RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT"
 set "CS_SCRIPT=%BATCH_DIR%\RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT"
 set "PW_SCRIPT=%BATCH_DIR%\RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT"
+set "PY_SCRIPT=%BATCH_DIR%\RUN_DEMOAPP004_PYTHON_PLAYWRIGHT_API_AND_TESTS.BAT"
 
 set "APP1_DIR=%ROOT_DIR%\_API_TESTING_GHERKIN_\DEMOAPP001_TYPESCRIPT_CYPRESS"
 set "APP3_DIR=%ROOT_DIR%\_API_TESTING_GHERKIN_\DEMOAPP003_TYPESCRIPT_PLAYWRIGHT"
+set "APP4_DIR=%ROOT_DIR%\_API_TESTING_GHERKIN_\DEMOAPP004_PYTHON_PLAYWRIGHT"
 
 set "OVERALL_EXIT=0"
 
@@ -96,6 +103,27 @@ set "PW_AFTER="
 for /f "usebackq delims=" %%I in (`powershell -NoProfile -File "%BATCH_DIR%\.ps\get-latest-log.ps1" -Directory "%RESULT_DIR%" -Filter "demoapp003_typescript_playwright_*.txt"`) do set "PW_AFTER=%%I"
 call :report_result "Playwright TS" "%RESULT_DIR%" "%PW_BEFORE%" "%PW_AFTER%" "%PW_EXIT%"
 if not "%PW_EXIT%"=="0" set "OVERALL_EXIT=1"
+
+rem --- DEMOAPP004: Playwright Python stack --------------------------------------
+echo.
+echo === Running Python API and Playwright BDD tests ===
+set "PY_BEFORE="
+for /f "usebackq delims=" %%I in (`powershell -NoProfile -File "%BATCH_DIR%\.ps\get-latest-log.ps1" -Directory "%RESULT_DIR%" -Filter "demoapp004_python_playwright_*.txt"`) do set "PY_BEFORE=%%I"
+call "%SCRIPT_DIR%\env_utils.bat" load_env_vars "%APP4_DIR%" 3002 "http://localhost:3002" APP4_PORT APP4_BASE >nul
+call "%SCRIPT_DIR%\env_utils.bat" is_port_in_use !APP4_PORT! APP4_PORT_BUSY >nul
+if "!APP4_PORT_BUSY!"=="1" (
+    set "SKIP_API_START=1"
+    echo Port !APP4_PORT! already in use. Skipping DEMOAPP004 API start.
+) else (
+    set "SKIP_API_START="
+)
+call "%PY_SCRIPT%"
+set "PY_EXIT=%ERRORLEVEL%"
+set "SKIP_API_START="
+set "PY_AFTER="
+for /f "usebackq delims=" %%I in (`powershell -NoProfile -File "%BATCH_DIR%\.ps\get-latest-log.ps1" -Directory "%RESULT_DIR%" -Filter "demoapp004_python_playwright_*.txt"`) do set "PY_AFTER=%%I"
+call :report_result "Playwright PY" "%RESULT_DIR%" "%PY_BEFORE%" "%PY_AFTER%" "%PY_EXIT%"
+if not "%PY_EXIT%"=="0" set "OVERALL_EXIT=1"
 
 rem --- DEMOAPP002: .NET + Playwright stack --------------------------------------
 echo.

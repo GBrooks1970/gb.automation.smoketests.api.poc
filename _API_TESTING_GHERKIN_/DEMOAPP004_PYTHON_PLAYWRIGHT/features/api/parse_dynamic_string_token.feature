@@ -1,3 +1,4 @@
+@api
 Feature: Parse Dynamic String Token Endpoint
   Scenario Outline: Parse dynamic string token
     Given a dynamic string token "<token>"

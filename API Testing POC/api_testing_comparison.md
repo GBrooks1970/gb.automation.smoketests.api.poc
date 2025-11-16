@@ -1,19 +1,20 @@
 # Comparison Report: Token Parser Automation Stacks
 
-**Version 5 - [14/11/25]**
+**Version 6 - [15/11/25]**
 
 ## Overview
 
-This report compares the three active automation stacks that validate the Token Parser API using BDD + contract-testing principles. All stacks exercise the same Swagger contract, share test narratives, and—where possible—reuse Screenplay abstractions to keep behaviour consistent. Use this document to pick the appropriate stack for a feature, or to understand how parity is maintained across projects.
+This report compares the four active automation stacks that validate the Token Parser API using BDD + contract-testing principles. All stacks exercise the same Swagger contract, share test narratives, and—where possible—reuse Screenplay abstractions to keep behaviour consistent. Use this document to pick the appropriate stack for a feature, or to understand how parity is maintained across projects.
 
 > **Automation Note**  
-> `.batch/RUN_ALL_API_AND_TESTS.BAT` executes the three demo runners sequentially and records per-suite results in `run_metrics_<UTC>.{metrics,txt,md}`. The runner and reporting design is described in `API Testing POC/DEMO_DOCS/batch_runner_design.md`. Treat those metrics as the single source of truth whenever comparing the stacks.
+> `.batch/RUN_ALL_API_AND_TESTS.BAT` executes the four demo runners sequentially and records per-suite results in `run_metrics_<UTC>.{metrics,txt,md}`. The runner and reporting design is described in `API Testing POC/DEMO_DOCS/batch_runner_design.md`. Treat those metrics as the single source of truth whenever comparing the stacks.
 
 The stacks are:
 
 1. **TypeScript / Cypress / Cucumber (DEMOAPP001)**
 2. **TypeScript / Playwright / Cucumber (DEMOAPP003)**
 3. **C# / SpecFlow / Playwright (DEMOAPP002)**
+4. **Python / FastAPI / Playwright Screenplay (DEMOAPP004)**
 
 ---
 
@@ -87,19 +88,42 @@ The stacks are:
 
 ---
 
+## Approach #4: Python / FastAPI / Playwright Screenplay (DEMOAPP004)
+
+### Pros
+
+- **FastAPI Host with Shared Parsers:** Ports the TypeScript token parsing logic into Python, exposing identical `/alive`, `/parse-dynamic-string-token`, and `/parse-date-token` behaviour plus Swagger UI/JSON parity.
+- **Screenplay Consistency:** pytest-bdd hooks create actors with `CallAnApi` + `UseTokenParsers`, reusing the same memory keys/questions/tasks documented in the TypeScript stacks.
+- **Playwright RequestClient:** Leverages Playwright's synchronous Python request API for deterministic, dependency-light HTTP checks aligned with ISTQB best practices documented in `QA_STRATEGY.md`.
+- **Docs + Batch Support:** Architecture, QA, and Screenplay guides explain the design, while `.batch/RUN_DEMOAPP004_PYTHON_PLAYWRIGHT_API_AND_TESTS.BAT` mirrors the lifecycle of the other stacks.
+
+### Cons
+
+- **Python Environment Bootstrap:** Requires virtual environments plus `playwright install` executed via the Python CLI wrapper; Windows users must avoid the .NET CLI variant.
+- **Sync-only Helpers:** Tasks intentionally avoid async/await; teams needing concurrent flows must extend the abstraction.
+- **Metrics Still Log-Derived:** pytest output feeds the existing log scraper; JSON metrics emission is planned but not implemented.
+
+### References
+
+- Blueprint and requirements traceability: `API Testing POC/DEMO_DOCS/DEMOAPP004_blueprint.md`
+- Architecture/QA/Screenplay docs: `_API_TESTING_GHERKIN_/DEMOAPP004_PYTHON_PLAYWRIGHT/docs/**`
+- Batch automation: `.batch/RUN_DEMOAPP004_PYTHON_PLAYWRIGHT_API_AND_TESTS.BAT`
+
+---
+
 ## Summary of Key Considerations
 
-| Factor | TS/Cypress | TS/Playwright | C#/SpecFlow |
-| --- | --- | --- | --- |
-| Test Authoring | Gherkin (Cucumber) | Gherkin (Cucumber) | Gherkin (SpecFlow) |
-| Language | TypeScript | TypeScript | C# (.NET 8) |
-| Screenplay status | Complete parity with Playwright stack | Reference implementation | Complete parity (SpecFlow Screenplay) |
-| API Focus | High (Screenplay-driven) | High (Screenplay-driven) | High (contract source of truth) |
-| Swagger Integration | Auto via Express + Swashbuckle | Same | ASP.NET Core Swashbuckle |
-| Tooling Gates | `lint`, `format`, `ts:check`, `verify` | `lint`, `format`, `ts:check`, `verify` | `dotnet format`, `dotnet test` |
-| Batch Automation | `RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` | `RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` | `RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT` |
-| Parallel Execution | Limited (Cypress Dashboard) | Playwright sharding ready | Native via `dotnet test -m` |
-| Install Caveats | `npm install --ignore-scripts` due to Cypress verify | None | Requires `npx playwright install` |
+| Factor | TS/Cypress | TS/Playwright | C#/SpecFlow | Python/Playwright |
+| --- | --- | --- | --- | --- |
+| Test Authoring | Gherkin (Cucumber) | Gherkin (Cucumber) | Gherkin (SpecFlow) | Gherkin (pytest-bdd) |
+| Language | TypeScript | TypeScript | C# (.NET 8) | Python 3.12 |
+| Screenplay status | Complete parity with Playwright stack | Reference implementation | Complete parity (SpecFlow Screenplay) | Screenplay port (actors/tasks/questions match TS) |
+| API Focus | High (Screenplay-driven) | High (Screenplay-driven) | High (contract source of truth) | High (FastAPI + shared parsers) |
+| Swagger Integration | Auto via Express + Swashbuckle | Same | ASP.NET Core Swashbuckle | FastAPI + `fastapi.openapi.utils` |
+| Tooling Gates | `lint`, `format`, `ts:check`, `verify` | `lint`, `format`, `ts:check`, `verify` | `dotnet format`, `dotnet test` | `ruff`, `black`, `pytest -m lint` (documented in README) |
+| Batch Automation | `RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` | `RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` | `RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT` | `RUN_DEMOAPP004_PYTHON_PLAYWRIGHT_API_AND_TESTS.BAT` |
+| Parallel Execution | Limited (Cypress Dashboard) | Playwright sharding ready | Native via `dotnet test -m` | pytest-xdist ready (not enabled) |
+| Install Caveats | `npm install --ignore-scripts` due to Cypress verify | None | Requires `npx playwright install` | Must run `playwright install` via Python CLI wrapper |
 
 ---
 
@@ -108,6 +132,7 @@ The stacks are:
 - **TypeScript / Cypress** remains the quickest entry point for JS-focused teams and now mirrors the Playwright Screenplay implementation.
 - **TypeScript / Playwright** is the reference Screenplay implementation and the most flexible path for API-first work or future UI/API hybrid suites.
 - **C# / SpecFlow** anchors the contract (source-of-truth API) and now shares the same Screenplay abstractions as the TypeScript stacks, giving .NET teams a first-class automation option.
+- **Python / Playwright** demonstrates how the Screenplay contract ports into a different runtime while keeping the FastAPI host, pytest-bdd features, and batch automation consistent with the other stacks.
 
 ---
 

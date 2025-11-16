@@ -86,10 +86,12 @@ def assert_field_matches(actor, field: str, expectation: str, scenario_context):
 @then(parsers.parse('the dynamic string response should satisfy "{expectation}"'))
 def assert_dynamic_response(actor, expectation: str):
     body = ResponseBody.answered_by(actor)
-    parsed = body["ParsedToken"]
 
     if expectation == "error":
-        pytest.fail("Expected error response but got success")
+        assert "Error" in body, "Expected error response field"
+        return
+
+    parsed = body["ParsedToken"]
 
     if expectation.startswith("regex:"):
         pattern = expectation.split(":", 1)[1]
