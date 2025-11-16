@@ -1,0 +1,12 @@
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+playwright>=1.48.0
+pytest>=8.3.0
+pytest-asyncio>=0.23.0
+pytest-bdd>=7.0.0
+python-dotenv>=1.0.1
+pyyaml>=6.0.2
+
+[dev]
+ruff>=0.6.0
+mypy>=1.11.0

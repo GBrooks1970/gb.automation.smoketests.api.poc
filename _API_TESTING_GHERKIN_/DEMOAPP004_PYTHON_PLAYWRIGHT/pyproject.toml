@@ -1,0 +1,24 @@
+[project]
+name = "demoapp004-playwright"
+version = "0.1.0"
+description = "Playwright + pytest-bdd Screenplay demo for the Token Parser API"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+    "playwright>=1.48.0",
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-bdd>=7.0.0",
+    "python-dotenv>=1.0.1",
+    "pyyaml>=6.0.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.6.0",
+    "mypy>=1.11.0",
+]
+
+[tool.pytest.ini_options]
+addopts = "-ra -q"

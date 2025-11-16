@@ -1,19 +1,20 @@
-# Screenplay Parity – TypeScript Stacks
+﻿# Screenplay Parity - TypeScript Stacks
 
-**Version 2 - [12/11/25]**
+**Version 3 - [15/11/25]**
 
-This note captures the current Screenplay implementation in the two TypeScript stacks and highlights how actors, abilities, tasks, questions, memory, and tooling line up. Architecture/QA details live in each project’s `docs/` folder; this file remains the shared parity dashboard.
+This note captures the current Screenplay implementation in the two TypeScript stacks and highlights how actors, abilities, tasks, questions, memory, and tooling line up. Architecture/QA details live in each project’s `docs/` folder; this file remains the shared parity dashboard.  
+**Update:** DEMOAPP004 (Python + Playwright + FastAPI) now mirrors these contracts; section 7 summarises the cross-language alignment.
 
 ---
 
 ## 1. Stack Overview
 
-| Capability | DEMOAPP001 (Cypress) | DEMOAPP003 (Playwright) |
+| Capability | DEMOAPP001 (Cypress) | DEMOAPP003 (Playwright TS) |
 | --- | --- | --- |
 | Runtime | Cypress + `@badeball/cypress-cucumber-preprocessor` | Playwright + `@cucumber/cucumber` |
 | Actor lifecycle | `screenplay/core/api-world.ts` & `util-world.ts` recreate actors per scenario | `screenplay/core/custom-world.ts` instantiates an actor per scenario |
 | Abilities | `CallAnApi`, `UseTokenParsers` | `CallAnApi`, `UseTokenParsers` |
-| Tasks | `SendGetRequest` (sync Cypress chainers) + lightweight parser helpers near util steps | `SendGetRequest` (async/await) + parser helpers |
+| Tasks | `SendGetRequest` (sync Cypress chainers) + parser helpers in util steps | `SendGetRequest` (async/await) + parser helpers |
 | Questions | `ResponseStatus`, `ResponseBody`, util helpers (`UtilActorMemory`) | Same modules plus JSON helpers |
 | Memory keys | `screenplay/support/memory-keys.ts` | `screenplay/support/memory-keys.ts` |
 | Tooling | `npm run lint`, `npm run format`, `npm run ts:check`, `npm run test:bdd` / `verify` | Same scripts + optional `npm run pw:test` |
@@ -27,8 +28,8 @@ This note captures the current Screenplay implementation in the two TypeScript s
 - **Actor**: `screenplay/actors/Actor.ts` stores abilities/memory using synchronous Cypress chains.
 - **Types**: `screenplay/core/types.ts` codifies `Ability`, `Task`, `Question`, `AbilityType`.
 - **Worlds**:
-  - `screenplay/core/api-world.ts` provisions `"Cypress API Actor"` for REST scenarios.
-  - `screenplay/core/util-world.ts` provisions `"Cypress Util Actor"` for `@UTILTEST` tagged scenarios.
+  - `screenplay/core/api-world.ts` provisions "Cypress API Actor" for REST scenarios.
+  - `screenplay/core/util-world.ts` provisions "Cypress Util Actor" for `@UTILTEST` tagged scenarios.
 - **Usage**: Step defs import `apiActor()` / `utilActor()`; each scenario gets a fresh actor.
 
 ### Playwright (`_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT`)
@@ -62,17 +63,29 @@ This note captures the current Screenplay implementation in the two TypeScript s
 
 | Test Type | Cypress Actor | Playwright Actor | Notes |
 | --- | --- | --- | --- |
-| API endpoints (`/alive`, `/parse-*`) | `"Cypress API Actor"` | `"Playwright API Tester"` | Identical abilities. |
-| Util parser scenarios | `"Cypress Util Actor"` | Same actor per scenario | Util flows share `UseTokenParsers`. |
+| API endpoints (`/alive`, `/parse-*`) | "Cypress API Actor" | "Playwright API Tester" | Identical abilities. |
+| Util parser scenarios | "Cypress Util Actor" | Same actor per scenario | Util flows share `UseTokenParsers`. |
 | Parallelism | Up to 2 actors (API + util) if tags overlap | One actor per scenario | Hooks isolate abilities/memory. |
 
 ---
 
 ## 6. Gaps & Next Actions
 
-1. **Doc sync** – Update this parity note and both project docs whenever Screenplay helpers change.
-2. **SpecFlow adoption** – ✅ DEMOAPP002 now runs entirely on Screenplay (see `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/docs`); keep the three stacks in lockstep.
-3. **Shared tasks** – Extract parser-specific tasks into `screenplay/tasks` once reuse scales beyond a single feature folder.
+1. **Doc sync** - Update this parity note and both project docs whenever Screenplay helpers change.
+2. **SpecFlow adoption** - DEMOAPP002 now runs entirely on Screenplay (see `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/docs`); keep the stacks in lockstep.
+3. **Shared tasks** - Extract parser-specific tasks into `screenplay/tasks` once reuse scales beyond a single feature folder.
+
+---
+
+## 7. Python Playwright Parity Snapshot
+
+DEMOAPP004 extends these conventions into Python:
+
+- **Actors/Worlds:** `tests/screenplay/actors/actor.py` plus pytest-bdd fixtures provision "Python API Actor" per scenario, wiring `CallAnApi` (Playwright request client) and `UseTokenParsers` abilities that mirror the TypeScript memory keys.
+- **Tasks/Questions:** `tests/screenplay/tasks/send_get_request.py` and `tests/screenplay/questions/response_body.py` keep naming and storage aligned with `memory_keys.LAST_RESPONSE` so features stay portable.
+- **Docs:** `_API_TESTING_GHERKIN_/DEMOAPP004_PYTHON_PLAYWRIGHT/docs/SCREENPLAY_GUIDE.md` records the one-to-one parity decisions and ISTQB rationale.
+
+Treat this section as the bridge between the TypeScript stacks described here and the Python implementation; updates to actors, abilities, memory keys, or tasks must now call out the Python port alongside the two TypeScript implementations.
 
 ---
 
@@ -80,4 +93,5 @@ This note captures the current Screenplay implementation in the two TypeScript s
 
 - Cypress Screenplay root: `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/screenplay/**`
 - Playwright Screenplay root: `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT/screenplay/**`
+- Python Screenplay root: `_API_TESTING_GHERKIN_/DEMOAPP004_PYTHON_PLAYWRIGHT/tests/screenplay/**`
 - Util helpers: `cypress/support/step_definitions/step_utils/UtilActorMemory.ts`, `features/step_definitions/step_utils/UtilActorMemory.ts`

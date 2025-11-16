@@ -31,6 +31,15 @@ function Convert-ToTimeString {
     return "{0:00}:{1:00}" -f [math]::Floor($ts.TotalMinutes), $ts.Seconds
 }
 
+function ConvertToInt {
+    param([string]$Value)
+    $result = 0
+    if ([int]::TryParse($Value, [ref]$result)) {
+        return $result
+    }
+    return 0
+}
+
 function Get-CypressStats {
     param([string]$LogPath)
 
@@ -93,6 +102,43 @@ function Get-PlaywrightStats {
     return [pscustomobject]$stats
 }
 
+function Get-PytestStats {
+    param([string]$LogPath)
+
+    $stats = [ordered]@{
+        Time    = '-'
+        Tests   = '0'
+        Passing = '0'
+        Failing = '0'
+        Pending = '0'
+        Skipped = '0'
+    }
+
+    if (-not (Test-Path -Path $LogPath)) {
+        return [pscustomobject]$stats
+    }
+
+    $summary = Select-String -Path $LogPath -Pattern '==.*in\s+([\d\.]+)s\s*==' | Select-Object -Last 1
+    if ($summary) {
+        $durationValue = $summary.Matches[0].Groups[1].Value
+        $stats.Time = Convert-ToTimeString $durationValue
+
+        if ($summary.Line -match '(\d+)\s+passed') { $stats.Passing = $matches[1] }
+        if ($summary.Line -match '(\d+)\s+failed') { $stats.Failing = $matches[1] }
+        if ($summary.Line -match '(\d+)\s+skipped') { $stats.Skipped = $matches[1] }
+        if ($summary.Line -match '(\d+)\s+xfailed') { $stats.Pending = $matches[1] }
+        if ($summary.Line -match '(\d+)\s+warnings') { } # warnings ignored
+
+        $passed = ConvertToInt $stats.Passing
+        $failed = ConvertToInt $stats.Failing
+        $skipped = ConvertToInt $stats.Skipped
+        $pending = ConvertToInt $stats.Pending
+        $stats.Tests = ($passed + $failed + $skipped + $pending).ToString()
+    }
+
+    return [pscustomobject]$stats
+}
+
 function Get-DotNetStats {
     param([string]$LogPath)
 
@@ -131,6 +177,7 @@ function Get-SuiteStats {
     switch -Regex ($Suite) {
         'Cypress'          { return Get-CypressStats -LogPath $LogPath }
         'Playwright TS'    { return Get-PlaywrightStats -LogPath $LogPath }
+        'Playwright PY'    { return Get-PytestStats -LogPath $LogPath }
         '\.NET Playwright' { return Get-DotNetStats -LogPath $LogPath }
         default            { return [pscustomobject]@{ Time='-'; Tests='-'; Passing='-'; Failing='-'; Pending='-'; Skipped='-' } }
     }
@@ -169,15 +216,6 @@ foreach ($row in $rows) {
     $row | Add-Member -NotePropertyName Failing -NotePropertyValue $stats.Failing
     $row | Add-Member -NotePropertyName Pending -NotePropertyValue $stats.Pending
     $row | Add-Member -NotePropertyName Skipped -NotePropertyValue $stats.Skipped
-}
-
-function ConvertToInt {
-    param([string]$Value)
-    $result = 0
-    if ([int]::TryParse($Value, [ref]$result)) {
-        return $result
-    }
-    return 0
 }
 
 $totalTests = ($rows | ForEach-Object { ConvertToInt $_.Tests } | Measure-Object -Sum).Sum
