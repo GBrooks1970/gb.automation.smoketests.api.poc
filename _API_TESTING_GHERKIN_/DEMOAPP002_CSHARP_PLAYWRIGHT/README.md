@@ -6,10 +6,10 @@ Short description
 
 Contents
 
-- TokenParserAPI/ — ASP.NET Core Web API project (controllers, services, appsettings)
-- TokenParserTests/ — NUnit test project using Microsoft.Playwright and test helpers
-- TokenParserAPI.sln — Visual Studio solution linking both projects
-- RUN_API.bat, RUN_TESTS.bat — convenience scripts to start the API and run tests
+- TokenParserAPI/ - ASP.NET Core Web API project (controllers, services, appsettings)
+- TokenParserTests/ - NUnit test project using Microsoft.Playwright and test helpers
+- TokenParserAPI.sln - Visual Studio solution linking both projects
+- RUN_API.bat, RUN_TESTS.bat - convenience scripts to start the API and run tests
 
 Prerequisites
 
@@ -41,3 +41,4 @@ Notes
 
 - Start the API before running tests unless tests manage the server lifecycle.
 - Inspect TokenParserAPI/appsettings.* and TokenParserTests configuration for ports and environment overrides.
+

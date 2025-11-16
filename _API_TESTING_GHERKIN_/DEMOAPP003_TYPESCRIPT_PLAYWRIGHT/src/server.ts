@@ -1,30 +1,45 @@
-import express, { Request, Response } from 'express';
-import swaggerUi from 'swagger-ui-express';
-import swaggerJsDoc from 'swagger-jsdoc';
-import bodyParser from 'body-parser';
-import { TokenDateParser } from './tokenparser/TokenDateParser';
-import { TokenDynamicStringParser } from './tokenparser/TokenDynamicStringParser';
+import express, { Request, Response } from "express";
+import swaggerUi from "swagger-ui-express";
+import swaggerJsDoc from "swagger-jsdoc";
+import bodyParser from "body-parser";
+import { TokenDateParser } from "./tokenparser/TokenDateParser";
+import { TokenDynamicStringParser } from "./tokenparser/TokenDynamicStringParser";
 import YAML from "js-yaml";
+import { getConfig } from "./config";
+import { createLogger } from "./services/logger";
+import { DateUtils } from "./utils/date-utils";
 
 const app = express();
+const config = getConfig();
+const logger = createLogger("Server");
 app.use(bodyParser.json());
 
-const formatDateUtc = (date: Date): string => {
-    const iso = date.toISOString(); // Always UTC
-    return `${iso.slice(0, 19).replace('T', ' ')}Z`; // Trim milliseconds and keep trailing Z
-};
+app.use((req, res, next) => {
+  const startedAt = Date.now();
+  logger.info("request.start", { method: req.method, path: req.path, query: req.query });
+  res.on("finish", () => {
+    const durationMs = Date.now() - startedAt;
+    logger.info("request.finish", {
+      method: req.method,
+      path: req.path,
+      status: res.statusCode,
+      durationMs,
+    });
+  });
+  next();
+});
 
 const swaggerOptions = {
-    swaggerDefinition: {
-        openapi: '3.0.0',
-        info: {
-            title: 'Token Parser API',
-            version: '1.0.0',
-            description: 'API to parse token date strings and dynamic string tokens',
-        },
-        servers: [{ url: '/' }],
+  swaggerDefinition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Token Parser API",
+      version: "1.0.0",
+      description: "API to parse token date strings and dynamic string tokens",
     },
-    apis: ['./src/server.ts'],
+    servers: [{ url: "/" }],
+  },
+  apis: ["./src/server.ts"],
 };
 
 // Initialize swagger-jsdoc -> returns the Swagger specification in JSON
@@ -46,7 +61,6 @@ app.get("/swagger/v1/swagger.yaml", (req, res) => {
   res.send(yamlSpec);
 });
 
-
 /**
  * @swagger
  * /alive:
@@ -65,9 +79,9 @@ app.get("/swagger/v1/swagger.yaml", (req, res) => {
  *                   type: string
  *                   example: ALIVE-AND-KICKING
  */
-app.get('/alive', (req, res) => {
-    res.status(200).json({ Status: 'ALIVE-AND-KICKING' });
-  });
+app.get("/alive", (req, res) => {
+  res.status(200).json({ Status: "ALIVE-AND-KICKING" });
+});
 
 /**
  * @swagger
@@ -104,20 +118,27 @@ app.get('/alive', (req, res) => {
  *                   type: string
  *                   example: Invalid string token format
  */
-app.get('/parse-date-token', (req: Request, res: Response) => {
-    const tokenString = req.query.token as string;
-    if (!tokenString) {
-        return res.status(400).json({ Error: 'Token date is required' });
-    }
+app.get("/parse-date-token", (req: Request, res: Response) => {
+  const tokenString = req.query.token as string;
+  if (!tokenString) {
+    return res.status(400).json({ Error: "Token date is required" });
+  }
 
-    try {
-        const parsedDate = TokenDateParser.parseDateStringToken(tokenString); // Use the TokenDateParser class
-        // Always format in UTC regardless of host timezone
-        const formattedDate = formatDateUtc(parsedDate);
-        return res.status(200).json({ ParsedToken: formattedDate });
-    } catch (e) {
-        return res.status(400).json({ Error: (e as Error).message });
-    }
+  try {
+    const parsedDate = TokenDateParser.parseDateStringToken(tokenString); // Use the TokenDateParser class
+    // Always format in UTC regardless of host timezone
+    const formattedDate = DateUtils.formatDateUtc(parsedDate);
+    logger.info("parse-date-token.success", { tokenPreview: tokenString.slice(0, 50) });
+    return res.status(200).json({ ParsedToken: formattedDate });
+  } catch (e) {
+    const error = e as Error;
+    logger.error("parse-date-token.failed", {
+      tokenPreview: tokenString.slice(0, 50),
+      message: error.message,
+      stack: error.stack,
+    });
+    return res.status(400).json({ Error: error.message });
+  }
 });
 
 /**
@@ -155,21 +176,28 @@ app.get('/parse-date-token', (req: Request, res: Response) => {
  *                   type: string
  *                   example: Invalid string token format
  */
-app.get('/parse-dynamic-string-token', (req: Request, res: Response) => {
-    const tokenString = req.query.token as string;
-    if (!tokenString) {
-      return res.status(400).json({ Error: 'Token string is required' });
-    }
-  
-    try {
-      const generatedString = TokenDynamicStringParser.parseAndGenerate(tokenString);
-      return res.status(200).json({ ParsedToken: generatedString });
-    } catch (e) {
-        return res.status(400).json({ Error: (e as Error).message });
-    }
-  });
+app.get("/parse-dynamic-string-token", (req: Request, res: Response) => {
+  const tokenString = req.query.token as string;
+  if (!tokenString) {
+    return res.status(400).json({ Error: "Token string is required" });
+  }
 
-const PORT = process.env.PORT || 3000;
+  try {
+    const generatedString = TokenDynamicStringParser.parseAndGenerate(tokenString);
+    logger.info("parse-dynamic-string-token.success", { tokenPreview: tokenString.slice(0, 50) });
+    return res.status(200).json({ ParsedToken: generatedString });
+  } catch (e) {
+    const error = e as Error;
+    logger.error("parse-dynamic-string-token.failed", {
+      tokenPreview: tokenString.slice(0, 50),
+      message: error.message,
+      stack: error.stack,
+    });
+    return res.status(400).json({ Error: error.message });
+  }
+});
+
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-    console.log(`TOKENPARSER API is running on port ${PORT}`);
+  logger.info(`TOKENPARSER API is running on port ${PORT}`, `(log level: ${config.logging.level})`);
 });

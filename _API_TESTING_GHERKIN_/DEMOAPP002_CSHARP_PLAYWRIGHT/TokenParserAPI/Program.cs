@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
@@ -9,9 +10,16 @@ using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using TokenParserAPI.responses;
 using TokenParserAPI.utils;
+using TokenParserAPI.Logging;
 using HttpJsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 var builder = WebApplication.CreateBuilder(args);
+var envLogLevel = Environment.GetEnvironmentVariable("TOKENPARSER_LOG_LEVEL");
+var configuredLogLevel = builder.Configuration["TokenParser:Logging:Level"];
+var logLevel = TokenParserLogger.ParseLevel(envLogLevel ?? configuredLogLevel);
+TokenParserLogger.Configure(logLevel);
+var startupLogger = TokenParserLogger.For(nameof(Program));
+startupLogger.Info("Initialising Token Parser API (log level: {0})", logLevel);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -36,10 +44,12 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Token Parser API v1");
-    c.RoutePrefix = "swagger/v1/json";
+    c.RoutePrefix = "swagger";
 });
-
-app.MapGet("/swagger/v1/json", () => Results.Redirect("/swagger/v1/json/index.html", permanent: false));
+app.MapGet("/swagger/", () => Results.Redirect("/swagger/index.html", permanent: false))
+   .ExcludeFromDescription();
+app.MapGet("/swagger/v1/json", () => Results.Redirect("/swagger/index.html", permanent: false))
+   .ExcludeFromDescription();
 app.MapGet("/swagger/v1/swagger.yaml", (ISwaggerProvider swaggerProvider) =>
 {
     var swaggerDoc = swaggerProvider.GetSwagger("v1");
@@ -47,7 +57,7 @@ app.MapGet("/swagger/v1/swagger.yaml", (ISwaggerProvider swaggerProvider) =>
     var yamlWriter = new OpenApiYamlWriter(stringWriter);
     swaggerDoc.SerializeAsV3(yamlWriter);
     return Results.Content(stringWriter.ToString(), "application/x-yaml");
-});
+}).ExcludeFromDescription();
 
 
 // Endpoint 1: Route to health checker
@@ -83,7 +93,7 @@ app.MapGet("/parse-date-token", (
 {
     if (string.IsNullOrWhiteSpace(token))
     {
-        return Results.BadRequest(new TokenParserApiErrorResponse { Error = "Token date is required" });
+        return Results.BadRequest(new TokenParserApiErrorResponse { Error = ContractError("token is required") });
     }
 
     try
@@ -94,7 +104,7 @@ app.MapGet("/parse-date-token", (
     }
     catch (ArgumentException ex)
     {
-        return Results.BadRequest(new TokenParserApiErrorResponse { Error = ex.Message });
+        return Results.BadRequest(new TokenParserApiErrorResponse { Error = ContractError(ex.Message) });
     }
 })
 .Produces<TokenParserApiResponse>(StatusCodes.Status200OK, "application/json")
@@ -145,7 +155,7 @@ app.MapGet("/parse-dynamic-string-token", (
 {
     if (string.IsNullOrWhiteSpace(token))
     {
-        return Results.BadRequest(new TokenParserApiErrorResponse { Error = "Token string is required" });
+        return Results.BadRequest(new TokenParserApiErrorResponse { Error = ContractError("token is required") });
     }
 
     try
@@ -156,7 +166,7 @@ app.MapGet("/parse-dynamic-string-token", (
     }
     catch (ArgumentException ex)
     {
-        return Results.BadRequest(new TokenParserApiErrorResponse { Error = ex.Message });
+        return Results.BadRequest(new TokenParserApiErrorResponse { Error = ContractError(ex.Message) });
     }
 })
 .Produces<TokenParserApiResponse>(StatusCodes.Status200OK, "application/json")
@@ -202,3 +212,16 @@ app.MapGet("/parse-dynamic-string-token", (
 });
 
 app.Run();
+static string ContractError(string? reason = null)
+{
+    const string canonical = "Invalid string token format";
+    if (string.IsNullOrWhiteSpace(reason))
+    {
+        return canonical;
+    }
+
+    var trimmed = reason.Trim();
+    return trimmed.StartsWith(canonical, StringComparison.OrdinalIgnoreCase)
+        ? trimmed
+        : $"{canonical}: {trimmed}";
+}

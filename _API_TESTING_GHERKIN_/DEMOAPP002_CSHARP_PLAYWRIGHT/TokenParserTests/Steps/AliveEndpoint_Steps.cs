@@ -1,59 +1,54 @@
-﻿using TechTalk.SpecFlow;
-using Microsoft.Playwright;
-using TokenParserTests.Helpers;
-using Newtonsoft.Json;
 using NUnit.Framework.Legacy;
-using TokenParserAPI.responses;
-using Newtonsoft.Json.Linq;
-using NUnit.Framework.Internal;
-using System;
-using System.Threading.Tasks;
-namespace TokenParserTests.Steps
+using TechTalk.SpecFlow;
+using TokenParserTests.Screenplay;
+using TokenParserTests.Screenplay.Questions;
+using TokenParserTests.Screenplay.Support;
+using TokenParserTests.Screenplay.Tasks;
+
+namespace TokenParserTests.Steps;
+
+[Binding]
+public class AliveEndpoint_Steps
 {
-    [Binding]
-    public class AliveEndpoint_Steps
+    private readonly ScenarioContext _scenarioContext;
+
+    public AliveEndpoint_Steps(ScenarioContext scenarioContext)
     {
-        private IAPIResponse _response;
-        private readonly RequestHelper_PW requestHelper;
-        private string _responseContent;
-        public AliveEndpoint_Steps() => requestHelper = new RequestHelper_PW("http://localhost:5228");
+        _scenarioContext = scenarioContext;
+    }
 
-        [Given(@"the API is available")]
-        public void GiventheAPIIsAvailable()
+    private Actor Actor => _scenarioContext.GetActor();
+
+    [Given(@"the API is available")]
+    public void GiventheAPIIsAvailable()
+    {
+        // Kept for readability / parity with other stacks
+        Console.WriteLine("Given the API is available");
+    }
+
+    [When(@"a GET request is made to the Alive Endpoint")]
+    public async Task WhenISendAGETRequestTo()
+    {
+        await Actor.AttemptsTo(SendGetRequest.To("/alive"));
+    }
+
+    [Then(@"the API response should return a status code of (.*)")]
+    public async Task ThenTheResponseShouldReturnAStatusCodeOf(int statusCode)
+    {
+        var actualStatus = await Actor.Answer(ResponseStatus.Code());
+        Assert.That((int)actualStatus, Is.EqualTo(statusCode));
+    }
+
+    [Then(@"the Alive Endpoint response body should contain ""(.*)"" with the value ""(.*)""")]
+    public async Task ThenTheResponseShouldContainTheMessage(string propertyName, string expectedString)
+    {
+        using var json = await Actor.Answer(ResponseJson.Body());
+        if (!json.RootElement.TryGetProperty(propertyName, out var actual))
         {
-            //Empty step for test case readabilty
-            Console.WriteLine("Given the API is available");
+            Assert.Fail($"Response body does not contain '{propertyName}'.");
         }
 
-        [When(@"a GET request is made to the Alive Endpoint")]
-        public async Task WhenISendAGETRequestTo()
-        {
-            var endpoint = "/alive";
-            _response = await requestHelper.GetAsyncToEndpoint(endpoint);
-        }
-
-        [Then(@"the API response should return a status code of (.*)")]
-        public void ThenTheResponseShouldReturnAStatusCodeOf(int statusCode)
-        {
-            requestHelper.ValidateStatusCode(_response, statusCode);
-        }
-
-        [Then(@"the Alive Endpoint response body should contain ""(.*)"" with the value ""(.*)""")]
-        public async Task ThenTheResponseShouldContainTheMessage(string propertyName, string expectedString)
-        {
-            var jsonResponseString = await requestHelper.GetResponseString(_response);
-
-            // Manually deserialize using Newtonsoft.Json
-            var responseBody = JsonConvert.DeserializeObject<TokenParserApiAliveResponse>(jsonResponseString.ToString());
-
-            var actualString = RequestHelper_PW.GetPropertyValue(responseBody, propertyName).ToString();
-            Assert.That(expectedString, Is.EqualTo(actualString), $"Expected string: {expectedString}, but got: {actualString}");
-        }
-
-        [AfterScenario]
-        public async Task DisposeContext()
-        {
-            await requestHelper.DisposeAsync();
-        }
+        Assert.That(actual.GetString(), Is.EqualTo(expectedString),
+            $"Expected string: {expectedString}, but got: {actual.GetString()}");
     }
 }

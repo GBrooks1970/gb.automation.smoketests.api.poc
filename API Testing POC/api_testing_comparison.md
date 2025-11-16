@@ -1,17 +1,24 @@
-# Comparison Report: Testing APIs using BDD/Gherkin User Stories and Contract Testing
+# Comparison Report: Token Parser Automation Stacks
+
+**Version 6 - [15/11/25]**
 
 ## Overview
 
-A report that compares two different approaches to API testing using BDD and Contract Testing principles. Both strategies aim to test API endpoints documented in Swagger/OpenAPI, leveraging a domain-specific language (DSL) for writing test cases in a natural-language style. This allows for requirements, or more specifically, the understanding of the requirements, to evolve and change throughout the life of a project and be documented in a manner that encourages collaboration between developers, QA, and non-technical or business stakeholders.
+This report compares the four active automation stacks that validate the Token Parser API using BDD + contract-testing principles. All stacks exercise the same Swagger contract, share test narratives, andâ€”where possibleâ€”reuse Screenplay abstractions to keep behaviour consistent. Use this document to pick the appropriate stack for a feature, or to understand how parity is maintained across projects.
 
-The approaches are:
+> **Automation Note**  
+> `.batch/RUN_ALL_API_AND_TESTS.BAT` executes the four demo runners sequentially and records per-suite results in `run_metrics_<UTC>.{metrics,txt,md}`. The runner and reporting design is described in `API Testing POC/DEMO_DOCS/batch_runner_design.md`. Treat those metrics as the single source of truth whenever comparing the stacks.
 
-- **Typescript/Cucumber/Cypress**
-- **C#/SpecFlow/Playwright**
+The stacks are:
+
+1. **TypeScript / Cypress / Cucumber (DEMOAPP001)**
+2. **TypeScript / Playwright / Cucumber (DEMOAPP003)**
+3. **C# / SpecFlow / Playwright (DEMOAPP002)**
+4. **Python / FastAPI / Playwright Screenplay (DEMOAPP004)**
 
 ---
 
-## Approach #1: Typescript/Cucumber/Cypress
+## Approach #1: TypeScript / Cypress / Cucumber (DEMOAPP001)
 
 ### Pros
 
@@ -24,13 +31,41 @@ The approaches are:
 
 ### Cons
 
-- **Lesser Focus on API-First Development:** Cypressâ€™ primary focus is not API testing; may lack features for API-first strategies like contract testing.
-- **Scalability Concerns:** Being browser-centric, Cypress may become less efficient for complex or high-volume API test suites.
-- **Limited Parallelization:** Test execution slows with large suites due to limited support for multi-machine parallelization.
+- **Postinstall Friction:** `npx cypress verify` still fails on some CI agents; installs run with `--ignore-scripts` and verification happens manually.
+- **Browser-Centric Runtime:** Still optimized for UI flows; large API-only suites can be slower compared to leaner runners.
+- **Limited Native Parallelisation:** Requires Cypress Dashboard for distributed execution.
+
+### References
+
+- Project doc: `API Testing POC/DEMO_DOCS/typescript_cucumber_cypress.md`
+- Screenplay parity note: `API Testing POC/DEMO_DOCS/screenplay_parity_typescript.md`
+- Architecture/QA docs: `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/docs`
 
 ---
 
-## Approach #2: C#/SpecFlow/Playwright
+## Approach #2: TypeScript / Playwright / Cucumber (DEMOAPP003)
+
+### Pros
+
+- **Playwright API Fixtures:** Lightweight HTTP client with trace capture and deterministic context disposal.
+- **Shared Screenplay Pattern:** Mirrors Cypress implementation (actors/abilities/tasks/questions) and forms the reference design for new helpers.
+- **Tooling & Docs:** Dedicated architecture/QA/Screenplay docs plus ESLint/Prettier gates ensure Screenplay code stays healthy.
+- **Batch Automation:** `.batch/RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` (and `RUN_ALL_APIS_AND_SWAGGER.BAT`) start/stop the API and capture `.results/` logs automatically.
+
+### Cons
+
+- **No Browser Specs Yet:** `npm run pw:test` is prepped but unused; UI coverage would require additional investment.
+- **Node-Only:** Still dependent on Node.js ecosystem; .NET teams may prefer the C# stack for deeper integration tests.
+
+### References
+
+- Project doc: `API Testing POC/DEMO_DOCS/typescript_cucumber_playwright.md`
+- Architecture/QA docs: `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT/docs`
+- Screenplay parity note: `API Testing POC/DEMO_DOCS/screenplay_parity_typescript.md`
+
+---
+
+## Approach #3: C# / SpecFlow / Playwright (DEMOAPP002)
 
 ### Pros
 
@@ -39,43 +74,65 @@ The approaches are:
 - **Powerful API Testing Features (Playwright):** Supports frontend and API testing, strong for RESTful APIs and contract testing.
 - **Parallel Test Execution:** Native parallelization support improves speed for large test suites.
 - **Better Integration with Swagger/OpenAPI:** Mature libraries for easier contract validation and automated schema checks.
+- **Screenplay Parity:** All SpecFlow bindings now use the same Screenplay actors/abilities/tasks/questions as the TypeScript stacks, keeping behaviour consistent across languages.
 
 ### Cons
 
-- **Higher Learning Curve:** Requires familiarity with C# and SpecFlow.
-- **Longer Setup Time:** More complex setup compared to Cypress.
-- **Less Community Support:** Smaller community compared to the Cucumber/Cypress ecosystem.
+- **Longer Setup:** Requires .NET SDK + Playwright dependencies; faster iteration lives in the TypeScript stacks.
+- **Smaller Community:** SpecFlow + Playwright combination is less common than Cypress/Cucumber.
+
+### References
+
+- Project doc: `API Testing POC/DEMO_DOCS/csharp_specflow_playwright.md`
+- Architecture/QA docs: `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/docs`
+
+---
+
+## Approach #4: Python / FastAPI / Playwright Screenplay (DEMOAPP004)
+
+### Pros
+
+- **FastAPI Host with Shared Parsers:** Ports the TypeScript token parsing logic into Python, exposing identical `/alive`, `/parse-dynamic-string-token`, and `/parse-date-token` behaviour plus Swagger UI/JSON parity.
+- **Screenplay Consistency:** pytest-bdd hooks create actors with `CallAnApi` + `UseTokenParsers`, reusing the same memory keys/questions/tasks documented in the TypeScript stacks.
+- **Playwright RequestClient:** Leverages Playwright's synchronous Python request API for deterministic, dependency-light HTTP checks aligned with ISTQB best practices documented in `QA_STRATEGY.md`.
+- **Docs + Batch Support:** Architecture, QA, and Screenplay guides explain the design, while `.batch/RUN_DEMOAPP004_PYTHON_PLAYWRIGHT_API_AND_TESTS.BAT` mirrors the lifecycle of the other stacks.
+
+### Cons
+
+- **Python Environment Bootstrap:** Requires virtual environments plus `playwright install` executed via the Python CLI wrapper; Windows users must avoid the .NET CLI variant.
+- **Sync-only Helpers:** Tasks intentionally avoid async/await; teams needing concurrent flows must extend the abstraction.
+- **Metrics Still Log-Derived:** pytest output feeds the existing log scraper; JSON metrics emission is planned but not implemented.
+
+### References
+
+- Blueprint and requirements traceability: `API Testing POC/DEMO_DOCS/DEMOAPP004_blueprint.md`
+- Architecture/QA/Screenplay docs: `_API_TESTING_GHERKIN_/DEMOAPP004_PYTHON_PLAYWRIGHT/docs/**`
+- Batch automation: `.batch/RUN_DEMOAPP004_PYTHON_PLAYWRIGHT_API_AND_TESTS.BAT`
 
 ---
 
 ## Summary of Key Considerations
 
-| Factor                   | Typescript/Cucumber/Cypress | C#/SpecFlow/Playwright |
-|--------------------------|------------------------------|-------------------------|
-| Test Case Authoring       | Gherkin via Cucumber; readable but less API-focused | Gherkin via SpecFlow; strong domain-driven support |
-| Language                  | Typescript; less strict but popular | C#; strict typing, high performance |
-| API Testing Focus         | Limited, UI-centric | Strong API & contract support |
-| Swagger/OpenAPI Integration | Basic via plugins | Advanced, integrated support |
-| Parallel Execution        | Limited | Strong support |
-| Performance               | Generally fast | Generally fast |
-| Community/Ecosystem       | Large (Cucumber/Cypress) | SpecFlow mature; Playwright smaller |
-| Ease of Setup             | Faster | More configuration required |
-| Debugging/Reporting       | Strong snapshots, real-time | Detailed logs and tracing |
-| Learning Curve            | Low | High |
+| Factor | TS/Cypress | TS/Playwright | C#/SpecFlow | Python/Playwright |
+| --- | --- | --- | --- | --- |
+| Test Authoring | Gherkin (Cucumber) | Gherkin (Cucumber) | Gherkin (SpecFlow) | Gherkin (pytest-bdd) |
+| Language | TypeScript | TypeScript | C# (.NET 8) | Python 3.12 |
+| Screenplay status | Complete parity with Playwright stack | Reference implementation | Complete parity (SpecFlow Screenplay) | Screenplay port (actors/tasks/questions match TS) |
+| API Focus | High (Screenplay-driven) | High (Screenplay-driven) | High (contract source of truth) | High (FastAPI + shared parsers) |
+| Swagger Integration | Auto via Express + Swashbuckle | Same | ASP.NET Core Swashbuckle | FastAPI + `fastapi.openapi.utils` |
+| Tooling Gates | `lint`, `format`, `ts:check`, `verify` | `lint`, `format`, `ts:check`, `verify` | `dotnet format`, `dotnet test` | `ruff`, `black`, `pytest -m lint` (documented in README) |
+| Batch Automation | `RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` | `RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` | `RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT` | `RUN_DEMOAPP004_PYTHON_PLAYWRIGHT_API_AND_TESTS.BAT` |
+| Parallel Execution | Limited (Cypress Dashboard) | Playwright sharding ready | Native via `dotnet test -m` | pytest-xdist ready (not enabled) |
+| Install Caveats | `npm install --ignore-scripts` due to Cypress verify | None | Requires `npx playwright install` | Must run `playwright install` via Python CLI wrapper |
 
 ---
 
 ## Conclusion
 
-- **Typescript/Cucumber/Cypress:**
-  - Great for ease of use, quick setup, JS/TS teams, UI + basic API tests.
-  - Ideal for fast feedback loops and lightweight API validation.
-  - Less suited for API-first or contract testing focus.
-
-- **C#/SpecFlow/Playwright:**
-  - Strong for API-first development, contract validation, scalability.
-  - Suited for .NET teams with API-heavy projects.
-  - Higher setup cost, but provides robustness and advanced capabilities.
+- **TypeScript / Cypress** remains the quickest entry point for JS-focused teams and now mirrors the Playwright Screenplay implementation.
+- **TypeScript / Playwright** is the reference Screenplay implementation and the most flexible path for API-first work or future UI/API hybrid suites.
+- **C# / SpecFlow** anchors the contract (source-of-truth API) and now shares the same Screenplay abstractions as the TypeScript stacks, giving .NET teams a first-class automation option.
+- **Python / Playwright** demonstrates how the Screenplay contract ports into a different runtime while keeping the FastAPI host, pytest-bdd features, and batch automation consistent with the other stacks.
 
 ---
 
@@ -221,9 +278,9 @@ BeforeEach:
 
 ### Tests
 
-- **Alive Test:** GET /alive — assert status=200, body contains "Status" = "ALIVE-AND-KICKING".
-- **Dynamic Token Parser:** GET /parse-dynamic-string-token — assert 200 + parsed value.
-- **Date Token Parser:** GET /parse-date-token — assert 200 + parsed date.
+- **Alive Test:** GET /alive - assert status=200, body contains "Status" = "ALIVE-AND-KICKING".
+- **Dynamic Token Parser:** GET /parse-dynamic-string-token - assert 200 + parsed value.
+- **Date Token Parser:** GET /parse-date-token - assert 200 + parsed date.
 
 ### Teardown
 
@@ -244,3 +301,4 @@ AfterAll:
 - **Test Coverage:** Core endpoints validated.
 
 This approach is adaptable to both **Typescript/Cucumber/Cypress** and **C#/SpecFlow/Playwright** while staying consistent with BDD and contract testing principles.
+

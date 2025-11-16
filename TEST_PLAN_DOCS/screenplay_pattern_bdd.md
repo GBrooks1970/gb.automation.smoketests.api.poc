@@ -85,3 +85,4 @@ This scenario can be broken into:
 - **Maintainable**: Encourages separation of concerns and clean architecture.
 
 The screenplay pattern aligns naturally with BDD, promoting collaboration through domain-specific language and clarity of intent in automated tests.
+

@@ -4,12 +4,12 @@ TypeScript demo API that exposes token parsing endpoints, together with Cypress 
 
 ## Repository Layout
 
-- `package.json` – npm scripts (`start`, `test`) and dependencies.
-- `src/server.ts` – Express entry point and Swagger wiring.
-- `src/tokenparser/` – date and dynamic string token parsing logic used by the API and tests.
-- `cypress/` – Cypress feature files, step definitions, and shared support code.
-- `.batch/` – automation scripts (for example `RUN_API_AND_TESTS.BAT`).
-- `.results/` – timestamped run artifacts written by automation.
+- `package.json` - npm scripts (`start`, `test`) and dependencies.
+- `src/server.ts` - Express entry point and Swagger wiring.
+- `src/tokenparser/` - date and dynamic string token parsing logic used by the API and tests.
+- `cypress/` - Cypress feature files, step definitions, and shared support code.
+- `.batch/` - automation scripts (for example `RUN_API_AND_TESTS.BAT`).
+- `.results/` - timestamped run artifacts written by automation.
 
 ## Prerequisites
 
@@ -63,3 +63,8 @@ Logs use UTC timestamps in `yyyyMMddTHHmmZ` format (for example `cy_results_2025
 - API responses that contain dates are normalised to UTC to avoid timezone drift between environments.
 - Refer to the Cypress feature files in `cypress/integration` for example token strings and expected outputs.
 - Update environment variables or ports in `src/server.ts` if you need to run multiple instances concurrently.
+
+## Logging Configuration
+
+Use the `TOKENPARSER_LOG_LEVEL` environment variable (see `.env.example`) to control verbosity. Supported values are `silent`, `error`, `warn`, `info`, and `debug` (default). Adjust the value before running the API or automation script to reduce noise in CI logs or capture detailed parser telemetry during debugging.
+

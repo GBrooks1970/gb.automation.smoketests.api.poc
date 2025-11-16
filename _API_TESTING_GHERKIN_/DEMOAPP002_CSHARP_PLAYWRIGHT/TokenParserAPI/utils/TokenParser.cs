@@ -8,7 +8,7 @@ namespace TokenParserAPI.utils
         public static string ParseDateToken(string token)
         {
             var parsedDate = ParsedTokenParser.ParseToken(token);
-            return parsedDate.ToString("u");
+            return DateFormatting.FormatUtc(parsedDate);
         }
 
         public static string ParseDynamicStringToken(string token)
