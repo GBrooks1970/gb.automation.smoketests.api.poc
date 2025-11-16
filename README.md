@@ -1,6 +1,6 @@
 # API Automation Smoke Tests POC
 
-**Updated: 15/11/25**
+**Updated: 16/11/25**
 
 This repository hosts four end-to-end API automation demos that exercise a shared Token Parser API idea:
 
@@ -9,7 +9,7 @@ This repository hosts four end-to-end API automation demos that exercise a share
 - **DEMOAPP003 - TypeScript / Express / Playwright BDD** (`_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT`)
 - **DEMOAPP004 - Python / FastAPI / Playwright Screenplay** (`_API_TESTING_GHERKIN_/DEMOAPP004_PYTHON_PLAYWRIGHT`)
 
-Each stack exposes Swagger documentation, provides scripted start-and-test flows, and demonstrates how token parsing utilities drive automated checks. All runtimes now share a configurable logging abstraction so verbosity can be tuned via configuration or environment variables (see `TOKENPARSER_LOG_LEVEL` for TypeScript projects and `TokenParser:Logging:Level` for the .NET API).
+Each stack exposes Swagger documentation, provides scripted start-and-test flows, and demonstrates how token parsing utilities drive automated checks. All runtimes now share a configurable logging abstraction so verbosity can be tuned via configuration or environment variables (see `TOKENPARSER_LOG_LEVEL` for the JavaScript stacks and `TokenParser:Logging:Level` for the .NET API).
 
 Automation scripts for these stacks live under `.batch/`. See **`API Testing POC/DEMO_DOCS/batch_runner_design.md`** for the formal design spec covering the orchestrator, per-project runners, helper utilities, and run metrics.
 
@@ -54,7 +54,7 @@ Use `.batch/RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT` to orchestrate t
 ### DEMOAPP004 - Python FastAPI + Playwright Screenplay
 
 1. `cd _API_TESTING_GHERKIN_/DEMOAPP004_PYTHON_PLAYWRIGHT`
-2. `python -m venv .venv && .\.venv\Scripts\activate`
+2. `python -m venv .venv && .\.venv\Scriptsctivate`
 3. `pip install -r requirements.txt && python -m playwright install`
 4. Start the API: `python -m src.server`  
    - Swagger UI: `http://localhost:3002/docs`  
@@ -82,11 +82,11 @@ The orchestrator:
 2. Starts/stops APIs unless the relevant port is already in use (`SKIP_API_START` safeguards shared dev environments).
 3. Captures log paths and exit codes for each suite.
 4. Produces three artefacts per run inside `.results/`:
-   - `run_metrics_<UTC>.metrics` – raw key/value pairs consumed by tooling.
-   - `run_metrics_<UTC>.txt` – ASCII summary table including test counts and pass/fail info.
-   - `run_metrics_<UTC>.md` – Markdown table suitable for PR comments and documentation.
+   - `run_metrics_<UTC>.metrics` - raw key/value pairs consumed by tooling (`LABEL_Exit=<code>,LABEL_Log=<path>`).
+   - `run_metrics_<UTC>.txt` - ASCII summary table including test counts and pass/fail info.
+   - `run_metrics_<UTC>.md` - Markdown table suitable for PR comments and documentation.
 
-Use the new metrics files as the single source of truth for automation health; each entry links directly to the underlying suite log. The design of the orchestrator and the metrics renderer is documented in `API Testing POC/DEMO_DOCS/batch_runner_design.md`.
+Use the new metrics files as the single source of truth for automation health; each entry links directly to the underlying suite log. The design of the orchestrator, per-project BAT files, and the metrics renderer is documented in `API Testing POC/DEMO_DOCS/batch_runner_design.md`.
 
 ---
 
@@ -100,7 +100,7 @@ All stacks expose the same contract:
 | `/parse-dynamic-string-token` | GET | Generates strings from tokens such as `[ALPHA-NUMERIC-LEN-10]` (optionally `-LINES-n`) | `{ "ParsedToken": "<generated>" }` | `{ "Error": "Invalid string token format" }` |
 | `/parse-date-token` | GET | Parses relative or range-based date tokens and normalises to UTC | `{ "ParsedToken": "yyyy-MM-dd HH:mm:ssZ" }` | `{ "Error": "Invalid string token format" }` |
 
-Shared implementations now emit structured log messages through the new logging abstraction; increase verbosity when debugging token parsing issues, or set the level to `silent` for noise-free CI runs.
+Shared implementations now emit structured log messages through the logging abstraction; increase verbosity when debugging token parsing issues, or set the level to `silent` for noise-free CI runs.
 
 ---
 
@@ -142,4 +142,15 @@ Generated content under `*/bin`, `*/obj`, `.playwright/`, and `node_modules/` is
 - API Testing POC/DEMO_DOCS/DEMOAPP004_blueprint.md - Blueprint + requirements traceability for the Python stack
 - API Testing POC/testing_guidelines_3_a.md - Process and testing guidance
 - API Testing POC/api_testing_comparison.md - Cross-stack comparisons and rationale
+- API Testing POC/DEMO_DOCS/batch_runner_design.md - Detailed specs for the orchestrator, per-project runners, and metrics artefacts
 
+---
+
+## Design References
+
+Consult the following when creating or updating a demo:
+
+1. `API Testing POC/DEMO_DOCS/batch_runner_design.md` - orchestrator, per-project runner, and metrics specifications.
+2. `API Testing POC/DEMO_DOCS/new_demo_requirements.md` - acceptance checklist for any new DEMOAPP.
+3. `API Testing POC/DEMO_DOCS/screenplay_parity_typescript.md` - Screenplay parity decisions across languages (with Python parity snapshot).
+4. Per-project docs under `_API_TESTING_GHERKIN_/DEMOAPP00x_*/docs/` - architecture, QA strategy, and Screenplay guides for each stack.

@@ -35,14 +35,23 @@ Any new runner must call `load_env_vars` before launching its API and call `is_p
 
 ### Flow
 1. Timestamp the run (`RUN_UTC`) and initialise raw metrics file `run_metrics_<UTC>.metrics`.
-2. For each project:
+2. Hydrate helper variables:
+   - `TS/CS/PW/PY_SCRIPT` for the child runners.
+   - `APPx_DIR` to feed `env_utils.bat`.
+   - `RESULT_DIR`, `METRICS_RAW`, `METRICS_FILE`, `METRICS_MD`.
+3. For each project:
    - Capture the latest log file name before execution using `.batch/.ps/get-latest-log.ps1`.
-   - Check port availability; if already taken, set `SKIP_API_START=1` so the child runner leaves the existing API intact.
-   - Invoke the per-project BAT; capture its exit code.
+   - Load env vars + port defaults, then use `env_utils.bat is_port_in_use` to decide whether to set `SKIP_API_START`.
+   - Invoke the per-project BAT; capture its exit code by reading `%ERRORLEVEL%`.
    - Capture the latest log file after execution and print a summary via `:report_result`.
-3. Update `OVERALL_EXIT` whenever a suite fails.
-4. Append `OverallExit` to the raw metrics file and call `.batch/.ps/render-run-metrics.ps1` to render the human-readable `.txt` and `.md` artefacts.
-5. Exit with the overall exit code.
+   - OR the exit code into `OVERALL_EXIT`.
+4. Append per-suite lines plus `OverallExit` to the raw metrics file and call `.batch/.ps/render-run-metrics.ps1` to render `.txt` and `.md`.
+5. Pop the pushed directories, return `OVERALL_EXIT`.
+
+### Key Environment Variables
+- `SKIP_API_START` (inherited by child runners) tells them to reuse an already running API.
+- `API_BASE_URL` is set by `env_utils.bat load_env_vars` so Screenplay abilities always point to the correct port.
+- `RUN_UTC` acts as the run identifier for both logs and metrics.
 
 ### Output
 - Individual suite logs referenced by the runners (e.g., `demoapp001_typescript_cypress_<UTC>.txt`).
@@ -71,6 +80,23 @@ All four follow the same shape:
 6. **Stop the API** if the runner started it.
 7. **Echo results** (success/failure + log paths) for visibility and for the orchestrator to consume.
 
+### Script Details
+- **DEMOAPP001 (Cypress)**
+  - Loads `.env` overrides, clears `ELECTRON_RUN_AS_NODE` before calling `npx cypress run`, then restores the variable to avoid side effects.
+  - Util suite scopes `--spec cypress/integration/util-tests/**`, main suite runs everything so API flow reuse is validated.
+  - Swagger automatically opens at `http://localhost:3000/swagger/v1/json`.
+- **DEMOAPP002 (SpecFlow + Playwright)**
+  - Starts/stops the ASP.NET API via `dotnet run --urls http://localhost:5228`.
+  - Executes util tests via `dotnet test --filter "TestCategory=utiltests"` before the full suite.
+  - Calls `playwright.ps1 install` (when available) to ensure browser binaries are present; logs util/API output separately.
+- **DEMOAPP003 (Playwright TS)**
+  - `npm run test:bdd -- --tags @UTILTEST` for util coverage, followed by the default `npm test` run (Cucumber + Playwright).
+  - Uses `env_utils.bat` to populate `API_BASE_URL` so Screenplay abilities can attach to the right endpoint.
+- **DEMOAPP004 (Playwright PY)**
+  - Relies on `python -m pytest -m util` and `python -m pytest -m api`, which map to `@util` and `@api` tags in the feature files.
+  - Starts the FastAPI host via `python -m src.server` and detects readiness using `Test-NetConnection`.
+  - Opens FastAPI docs at `http://localhost:3002/docs` to mirror the parity experience.
+
 ---
 
 ## 4. Metrics Artefacts
@@ -82,6 +108,21 @@ Each orchestrator run produces three files sharing the same timestamp:
 | `run_metrics_<UTC>.metrics` | Raw machine-readable key/value pairs (`Suite_Exit=code,Suite_Log=path`, `OverallExit=value`). The orchestrator appends to this file and the renderer consumes it. |
 | `run_metrics_<UTC>.txt` | Human-readable ASCII table summarising each suite (`Time`, `Tests`, `Pass`, `Fail`, `Pending`, `Skip`) followed by the log file locations. |
 | `run_metrics_<UTC>.md` | Markdown summary with the same fields, used for PR comments or wiki updates. |
+
+### Raw Metrics Schema
+Each `.metrics` file uses one `key=value` entry per line:
+
+```
+RUN UTC: 20251116T1552Z
+Cypress_Exit=0,Cypress_Log=D:\path\demoapp001_typescript_cypress_20251116T1552Z.txt
+Playwright TS_Exit=0,Playwright TS_Log=D:\path\demoapp003_typescript_playwright_20251116T1553Z.txt
+Playwright PY_Exit=0,Playwright PY_Log=D:\path\demoapp004_python_playwright_20251116T1554Z.txt
+.NET Playwright_Exit=0,.NET Playwright_Log=D:\path\demoapp002_csharp_playwright_20251116T1554Z.txt
+OverallExit=0
+```
+
+- Suite labels must be unique (no spaces except when reporting labels such as `Playwright TS`), because the renderer looks for `<suite>_Exit` and `<suite>_Log`.
+- Every run must end with `OverallExit=<code>` so dashboards can tell whether the orchestrator succeeded even if a suite failed to produce logs.
 
 ### Renderer: `.batch/.ps/render-run-metrics.ps1`
 
@@ -104,3 +145,15 @@ If a suite fails to produce a log, the renderer marks the entry with `-` and `un
 5. Extend `.batch/.ps/render-run-metrics.ps1` to parse the new log format if necessary.
 
 By following this design, every stack provides a predictable automation experience and consistent reporting, reducing surprises across runtimes.
+
+---
+
+## 6. Appendix: Execution Sequence Summary
+
+1. Developer or CI agent runs `.batch/RUN_ALL_API_AND_TESTS.BAT`.
+2. Orchestrator validates the presence of all per-project scripts and initialises `.results`.
+3. Each runner:
+   - Loads environment defaults and checks ports.
+   - Starts/stops its API when required.
+   - Runs util suite, then API suite, writing logs named `demoapp###_<stack>_<UTC>.txt`.
+4. Orchestrator records exit/log pairs, renders human-readable summaries, and exits with the combined result.
