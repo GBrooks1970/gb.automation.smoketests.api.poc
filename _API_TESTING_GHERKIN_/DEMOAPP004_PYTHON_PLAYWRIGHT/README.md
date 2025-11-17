@@ -57,6 +57,11 @@ Defaults:
 
 Screenplay actors are created via the `actor` fixture in `tests/conftest.py`. Tasks and questions write to `screenplay/support/memory_keys.py`, mirroring the TypeScript key names.
 
+Recent updates:
+
+- API feature tables now mirror DEMOAPP001/003; assertions reuse the shared parser modules to verify real UTC timestamps and generated strings rather than placeholder shapes.
+- Step definitions validate dynamic string character sets/lengths so contract regressions surface immediately.
+
 ---
 
 ## Automation Script

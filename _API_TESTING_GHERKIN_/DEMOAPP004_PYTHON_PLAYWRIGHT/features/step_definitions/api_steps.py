@@ -8,14 +8,20 @@ Screenplay tasks.
 from __future__ import annotations
 
 from pathlib import Path
-import re
 
-import pytest
 from pytest_bdd import given, parsers, then, when, scenarios
 
 from screenplay.questions.response_body import ResponseBody
 from screenplay.questions.response_status import ResponseStatus
 from screenplay.tasks.send_get_request import SendGetRequest
+from tokenparser.date_parser import format_date_utc, parse_date_token
+from tokenparser.dynamic_string_parser import (
+    ALPHA_CHARS,
+    NUMERIC_CHARS,
+    PUNCTUATION_CHARS,
+    SPECIAL_CHARS,
+    TOKEN_PATTERN,
+)
 
 FEATURE_DIR = Path(__file__).resolve().parents[1]
 scenarios(str(FEATURE_DIR / "api" / "alive.feature"))
@@ -31,11 +37,13 @@ def api_available():
 @given(parsers.parse('a date token "{token}"'))
 def store_date_token(token: str, scenario_context):
     scenario_context["date_token"] = token
+    scenario_context.pop("dynamic_token", None)
 
 
 @given(parsers.parse('a dynamic string token "{token}"'))
 def store_dynamic_token(token: str, scenario_context):
     scenario_context["dynamic_token"] = token
+    scenario_context.pop("date_token", None)
 
 
 @when(parsers.parse('I send a GET request to "{endpoint}"'))
@@ -63,46 +71,60 @@ def assert_status(actor, status: int):
     assert actual == status
 
 
-@then(parsers.parse('the response body field "{field}" should equal "{expected}"'))
-def assert_body_field(actor, field: str, expected: str):
-    body = ResponseBody.answered_by(actor)
-    assert body[field] == expected
+def _expected_date_string(token: str) -> str:
+    parsed = parse_date_token(token)
+    return format_date_utc(parsed)
 
 
-@then(parsers.parse('the response field "{field}" should match "{expectation}"'))
-def assert_field_matches(actor, field: str, expectation: str, scenario_context):
-    body = ResponseBody.answered_by(actor)
-    if expectation.startswith("resolves to"):
-        # Mirror TypeScript behaviour by reusing local parser output
-        scenario_context["resolved_value"] = body[field]
-        assert isinstance(body[field], str)
-    elif expectation.startswith("resolves via local date parser"):
-        assert isinstance(body[field], str)
-        assert body[field].endswith("Z")
-    else:
-        assert body[field] == expectation
+CHARSET_LOOKUP = {
+    "ALPHA": ALPHA_CHARS,
+    "NUMERIC": NUMERIC_CHARS,
+    "PUNCTUATION": PUNCTUATION_CHARS,
+    "SPECIAL": SPECIAL_CHARS,
+}
 
 
-@then(parsers.parse('the dynamic string response should satisfy "{expectation}"'))
-def assert_dynamic_response(actor, expectation: str):
-    body = ResponseBody.answered_by(actor)
+def _assert_dynamic_token_value(token: str, actual_value: str) -> None:
+    match = TOKEN_PATTERN.fullmatch(token)
+    if not match:
+        raise AssertionError(f"Token {token} is not valid according to TOKEN_PATTERN")
 
-    if expectation == "error":
-        assert "Error" in body, "Expected error response field"
+    types = match.group("types").split("-")
+    lines_expected = int(match.group("lines")) if match.group("lines") else 1
+    length_token = match.group("length")
+
+    char_pool = "".join(dict.fromkeys("".join(CHARSET_LOOKUP[t] for t in types)))
+    actual_lines = actual_value.split("\r\n")
+    assert len(actual_lines) == lines_expected, f"Expected {lines_expected} lines"
+
+    if length_token == "ALL":
+        for line in actual_lines:
+            assert line == char_pool, "Expected ALL tokens to emit the full pool"
         return
 
-    parsed = body["ParsedToken"]
+    length_expected = int(length_token)
+    allowed_chars = set(char_pool)
+    for line in actual_lines:
+        assert len(line) == length_expected, f"Expected length {length_expected}"
+        assert set(line).issubset(allowed_chars), "Unexpected characters in generated string"
 
-    if expectation.startswith("regex:"):
-        pattern = expectation.split(":", 1)[1]
-        assert re.match(pattern, parsed)
-    elif expectation.startswith("lines:"):
-        parts = dict(item.split(":") for item in expectation.split(","))
-        line_count = int(parts["lines"])
-        length = int(parts["length"])
-        lines = parsed.split("\r\n")
-        assert len(lines) == line_count
-        for line in lines:
-            assert len(line) == length
-    else:
-        raise AssertionError(f"Unknown expectation format: {expectation}")
+
+@then(parsers.parse('the response should contain "{field}" with the value "{expected}"'))
+def assert_response_contains(actor, scenario_context, field: str, expected: str):
+    body = ResponseBody.answered_by(actor)
+    assert field in body, f"Response missing field '{field}'"
+
+    if field.lower() == "error":
+        assert expected in str(body[field])
+        return
+
+    if field == "ParsedToken":
+        if "date_token" in scenario_context:
+            expected_value = _expected_date_string(scenario_context["date_token"])
+            assert body[field] == expected_value
+            return
+        if "dynamic_token" in scenario_context:
+            _assert_dynamic_token_value(scenario_context["dynamic_token"], body[field])
+            return
+
+    raise AssertionError(f"Unhandled assertion for field '{field}'")

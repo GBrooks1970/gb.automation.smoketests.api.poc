@@ -20,6 +20,11 @@ call :build_dotnet "_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT\TokenPars
 if errorlevel 1 set "OVERALL_EXIT=1"
 echo.
 
+echo === Building DEMOAPP004 Python + Playwright ===
+call :build_python "_API_TESTING_GHERKIN_\DEMOAPP004_PYTHON_PLAYWRIGHT"
+if errorlevel 1 set "OVERALL_EXIT=1"
+echo.
+
 if "%OVERALL_EXIT%"=="0" (
     echo === All demo projects built successfully ===
 ) else (
@@ -89,3 +94,22 @@ if not exist "%SOLUTION_PATH%" (
 echo [dotnet] Building "%SOLUTION_PATH%"
 dotnet build "%SOLUTION_PATH%"
 exit /b %ERRORLEVEL%
+
+:build_python
+rem %1 = project directory
+set "PROJECT_DIR=%ROOT_DIR%\%~1"
+if not exist "%PROJECT_DIR%\pyproject.toml" (
+    echo [ERROR] pyproject.toml not found in "%PROJECT_DIR%".
+    exit /b 1
+)
+
+pushd "%PROJECT_DIR%"
+echo [python] Installing editable package (with dev extras) in "%PROJECT_DIR%"
+python -m pip install -e .[dev]
+if errorlevel 1 (
+    echo [ERROR] pip install failed in "%PROJECT_DIR%"
+    popd
+    exit /b 1
+)
+popd
+exit /b 0
