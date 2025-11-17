@@ -1,120 +1,111 @@
-# Screenplay Parity – DEMOAPP Stacks
+# Screenplay Parity - DEMOAPP Stacks
 
-**Version 1 – 16/11/25**
+**Version 2 - 17/11/25**
 
-This note is the single source of truth for how all DEMOAPP stacks implement the Screenplay pattern. Use it to verify parity, identify gaps, and guide future demos.
+This document is the single source of truth for how the Screenplay pattern is implemented across every demo stack. Use it to verify parity, identify drift, and guide new DEMOAPP contributions.
 
 ---
 
-## 1. Contract: Screenplay Pattern Expectations
+## 1. Screenplay Contract
 
-Every stack must satisfy the following contract. Any deviation must be documented and justified here.
+Every stack must satisfy the following contract. Any deviation must be documented here and in the per-project docs.
 
 | Area | Expectations |
 | --- | --- |
-| **Actors** | One actor per scenario, created via world/fixture hooks. Actor names should reflect the test persona (e.g., “Cypress API Actor”). |
-| **Abilities** | `CallAnApi` (HTTP client wrapper) and `UseTokenParsers` (shared parser helpers) must be attached. Additional abilities must be optional extensions. |
-| **Tasks** | `SendGetRequest` accepts endpoint + optional params. Util tasks reuse shared parsers (no duplicate logic). Tasks return promises/futures in async runtimes. |
-| **Questions** | `ResponseStatus`, `ResponseBody`, and helper memory utilities (e.g., `UtilActorMemory`) read from a consistent memory key (`LAST_RESPONSE`). |
-| **Memory Keys** | Shared constants (TypeScript `memory-keys.ts`, Python equivalents) define keys like `LAST_RESPONSE`, `LAST_UTIL_RESULT`. Hard-coded strings are prohibited. |
-| **Hooks / Fixtures** | Scenario hooks ensure abilities are available, dispose HTTP clients, and reset memory between scenarios. |
-| **Feature Tags** | `@API` / `@UTILTEST` (TS), `@util` / `@api` (Python), SpecFlow categories must support util vs API filtering for batch scripts. |
-| **Parity Docs** | Each stack keeps architecture + QA + Screenplay docs under `_API_TESTING_GHERKIN_/DEMOAPP###/docs/`. Updates here must cross-reference those files. |
+| Actors | One actor per scenario, created in hooks/fixtures. Names should reflect the persona (for example `Cypress API Actor`). |
+| Abilities | `CallAnApi` (HTTP client wrapper) and `UseTokenParsers` (shared parser helpers) are mandatory. Additional abilities are optional extensions. |
+| Tasks | `SendGetRequest` accepts a path and optional query params. Util tasks must reuse shared parser modules so no stack reimplements parsing logic. |
+| Questions | `ResponseStatus`, `ResponseBody`, and util memory helpers read from consistent keys such as `LAST_RESPONSE`. |
+| Memory Keys | Shared constants define keys like `LAST_RESPONSE`, `LAST_PARSED_DATE`, `LAST_UTIL_RESULT`. Hard-coded strings are prohibited. |
+| Hooks / Fixtures | Scenario hooks ensure abilities exist, dispose HTTP clients, and reset memory between scenarios. |
+| Feature Tags | Util scenarios must be filterable (`@UTILTEST`, `@util`, or SpecFlow categories). API scenarios are untagged or use `@API`. |
+| Documentation | Each DEMOAPP keeps architecture / QA / Screenplay docs under its `docs/` folder. Updates here must reference those files. |
 
 ---
 
-## 2. DEMOAPP001 – TypeScript + Cypress
+## 2. DEMOAPP001 - TypeScript + Cypress
 
-- **Actors**: Defined in `screenplay/actors/Actor.ts`; scenarios use `apiActor()` or `utilActor()` from `screenplay/core/*.ts`.
-- **Abilities**: `CallAnApi` (wraps `cy.request` with base URL from env vars) and `UseTokenParsers` (TypeScript parser classes).
-- **Tasks**: `SendGetRequest` issues Cypress command chains; util parsing steps reuse parser helpers located next to step definitions.
-- **Questions**: `ResponseStatus`, `ResponseBody`, and `UtilActorMemory` read/write to `LAST_RESPONSE`, `LAST_PARSED_TOKEN`.
-- **Hooks**: Custom worlds instantiate actors per scenario via the Cypress Cucumber preprocessor.
-- **Coverage**: Feature tags `@API` and `@UTILTEST` align with batch runner filters.
+- Actors: `screenplay/core/api-world.ts` and `screenplay/core/util-world.ts` create dedicated actors per scenario.
+- Abilities: `CallAnApi` (wraps `cy.request`) and `UseTokenParsers` (TypeScript parser modules).
+- Tasks: `SendGetRequest` returns a Cypress chain; util steps call parser helpers directly.
+- Questions / Memory: `ResponseStatus`, `ResponseBody`, and `UtilActorMemory` read/write shared keys defined in `screenplay/support/memory-keys.ts`.
+- Hooks: Cypress Cucumber hooks spin up actors for both API and util tags and dispose abilities after each scenario.
+- Tags: Util scenarios are tagged `@UTILTEST` and API suites run without filters by default.
 
-**Parity Notes**
-- Serves as the golden dataset for feature tables (7 date rows, 6 dynamic rows). Other stacks must match these tables exactly.
-- Logging and memory helpers were initial source; keep changes backward compatible for ported stacks.
+Parity status: this stack is the reference dataset for feature tables (seven date rows, six dynamic rows, and range coverage). Other stacks must match its Gherkin tables exactly.
 
 ---
 
-## 3. DEMOAPP003 – TypeScript + Playwright BDD
+## 3. DEMOAPP003 - TypeScript + Playwright BDD
 
-- **Actors**: `screenplay/core/custom-world.ts` instantiates `Actor.named("Playwright API Tester")`.
-- **Abilities**: `CallAnApi` uses Playwright’s `APIRequestContext`; `UseTokenParsers` shares parser modules from `src/tokenparser`.
-- **Tasks**: `SendGetRequest` is async/await; step defs await the task to complete before asserting.
-- **Questions/Memories**: Reuse the same files as DEMOAPP001; `memory-keys.ts` lives under `screenplay/support/`.
-- **Hooks**: World hooks create/dispose API request contexts per scenario. After hooks close contexts to avoid leaks.
-- **Tags**: `@API` (default) and `@UTILTEST` used for util-only runs.
+- Actors: `screenplay/core/custom-world.ts` instantiates `Actor.named("Playwright API Tester")`.
+- Abilities: `CallAnApi` uses Playwright `APIRequestContext`; `UseTokenParsers` shares parser modules from `src/tokenparser`.
+- Tasks: `SendGetRequest` is async/await friendly and writes the Playwright `APIResponse` to actor memory.
+- Questions / Memory: Reuse the same `memory-keys.ts` and `UtilActorMemory` helpers as DEMOAPP001.
+- Hooks: World hooks enable and dispose the Playwright request context per scenario.
+- Tags: Util scenarios retain the `@UTILTEST` tag, so the batch runner can execute util tests first.
 
-**Parity Notes**
-- Maintains parity with DEMOAPP001 by design; all updates in one stack should be ported to the other simultaneously.
-- Acts as the reference design for async/await implementations.
+Parity status: matches DEMOAPP001 for scenarios, actors, and memory keys. When TypeScript Screenplay APIs change, update both stacks together.
 
 ---
 
-## 4. DEMOAPP002 – C# + SpecFlow + Playwright
+## 4. DEMOAPP002 - .NET + SpecFlow + Playwright
 
-- **Actors**: SpecFlow bindings instantiate Screenplay actors in hooks (`BeforeScenario`), attaching abilities via dependency injection helpers.
-- **Abilities**: `.NET` versions of `CallAnApi` (Playwright .NET request client) and `UseTokenParsers` (shared C# utility classes).
-- **Tasks**: Tasks represent SpecFlow step bindings (e.g., `SendGetRequest`) calling the abilities internally.
-- **Questions**: Helper classes expose `LastResponse` and JSON parsing, mapping to constant keys to keep parity with TypeScript naming.
-- **Hooks**: `BeforeScenario` creates actors; `AfterScenario` disposes Playwright contexts and clears memory.
-- **Tags/Categories**: `[Category("utiltests")]` ensures util coverage can run independently.
+- Actors: `TokenParserTests/Screenplay/Support/ScreenplayHooks.cs` creates actors in `[BeforeScenario]` and stores them in the SpecFlow `ScenarioContext`.
+- Abilities: `.NET` versions of `CallAnApi` (Playwright .NET request client) and `UseTokenParsers` (shared C# parser classes).
+- Tasks: Implemented under `TokenParserTests/Screenplay/Tasks/*.cs`, mirroring the TypeScript task names.
+- Questions / Memory: Question classes fetch values from `TokenParserTests/Screenplay/Support/MemoryKeys.cs` to keep naming in sync.
+- Hooks: `[AfterScenario]` disposes HTTP clients and clears memory.
+- Tags: Util specs use `[Category("utiltests")]`, allowing the batch runner to target util-only coverage.
 
-**Parity Notes**
-- Fully Screenplay-aligned since Nov 2025; treat this stack as the .NET reference implementation.
-- Any future ability/task additions must be mirrored in TypeScript/Python once stabilized.
+Parity status: fully Screenplay-aligned as of November 2025. When new tasks or memory keys are added, update this stack alongside the TypeScript and Python projects.
 
 ---
 
-## 5. DEMOAPP004 – Python + Playwright + pytest-bdd
+## 5. DEMOAPP004 - Python + FastAPI + pytest-bdd
 
-- **Actors**: Fixtures in `tests/conftest.py` create `Actor("Python API Tester")`.
-- **Abilities**: `CallAnApi` wraps Playwright Python `APIRequestContext`; `UseTokenParsers` reuses ported parser classes under `src/tokenparser`.
-- **Tasks**: `tests/screenplay/tasks/send_get_request.py` matches the TypeScript signature (endpoint + params). Additional util tasks live alongside the parsers.
-- **Questions**: `tests/screenplay/questions/response_body.py` and `response_status.py` store/retrieve from shared memory keys (mirrors TypeScript names).
-- **Memory**: Python constants align with TypeScript `memory-keys.ts`; do not invent new keys without updating all stacks.
-- **Tags**: `@api` and `@util` decorate features; batch runner calls `pytest -m api` or `pytest -m util`.
+- Actors: `tests/conftest.py` exposes a pytest fixture that creates `Actor("Python API Tester")`.
+- Abilities: `screenplay/abilities/call_an_api.py` wraps `APIRequestContext`; `screenplay/abilities/use_token_parsers.py` exposes the parser helpers under `src/tokenparser`.
+- Tasks: `screenplay/tasks/send_get_request.py` mirrors the TypeScript API. `screenplay/tasks/parse_token_locally.py` performs util parsing and stores values in actor memory.
+- Questions / Memory: `screenplay/questions/response_status.py` and `response_body.py` read from `MemoryKeys.LAST_RESPONSE`; `screenplay/support/memory_keys.py` mirrors the TypeScript keys.
+- Hooks: pytest-bdd currently uses fixtures rather than explicit `before_scenario` hooks. The backlog item below covers finishing the `features/step_definitions/world.py` hook to match other stacks.
+- Tags: Features use `@api` and `@util`, and the batch runner maps those tags to `pytest -m api` and `pytest -m util`.
 
-**Parity Notes**
-- Feature tables must stay synchronized with DEMOAPP001 (currently missing rows—see documentation backlog).
-- Pytest configuration should be consolidated (`pytest.ini` vs `pyproject.toml`) to avoid configuration drift.
+Parity status: API and util Screenplay tasks match the other stacks. Remaining work is to align feature tables and make the `world.py` hook instantiate abilities before each scenario (tracked in the backlog).
 
 ---
 
 ## 6. Parity Checklist
 
-| Contract Item | Cypress | Playwright TS | SpecFlow/.NET | Playwright PY | Notes |
+| Contract Item | Cypress | Playwright TS | SpecFlow .NET | Playwright PY | Notes |
 | --- | --- | --- | --- | --- | --- |
-| Actor per scenario | ✅ | ✅ | ✅ | ✅ | |
-| `CallAnApi` ability | ✅ (`cy.request`) | ✅ (Playwright JS) | ✅ (Playwright .NET) | ✅ (Playwright PY) | |
-| `UseTokenParsers` ability | ✅ | ✅ | ✅ | ✅ | |
-| `SendGetRequest` task | ✅ | ✅ | ✅ | ✅ | |
-| Response questions | ✅ (`ResponseStatus`, `ResponseBody`) | ✅ | ✅ | ✅ | |
-| Shared memory keys | ✅ (`memory-keys.ts`) | ✅ | ✅ (constants) | ✅ (Python module) | |
-| Util/API tagging | ✅ (`@UTILTEST`) | ✅ (`@UTILTEST`) | ✅ (`Category=utiltests`) | ⚠️ (`@util` tag aligned, but docs must call out filter) | |
-| Screenplay docs | ✅ (`docs/`) | ✅ (`docs/`) | ✅ (`docs/`) | ✅ (`docs/`) | |
-
-⚠️ = needs follow-up alignment (see backlog).
+| Actor per scenario | Yes | Yes | Yes | Yes | Python hook integration is partially fixture-based. |
+| `CallAnApi` ability | Yes | Yes | Yes | Yes | Uses environment-driven base URLs everywhere. |
+| `UseTokenParsers` ability | Yes | Yes | Yes | Yes | All stacks reuse their local parser ports. |
+| `SendGetRequest` task | Yes | Yes | Yes | Yes | Names and responsibilities match. |
+| Response questions | Yes | Yes | Yes | Yes | Store `APIResponse` instances in shared memory keys. |
+| Shared memory keys | Yes | Yes | Yes | Yes | Keys must remain identical strings. |
+| Util/API tagging | `@UTILTEST` | `@UTILTEST` | `Category=utiltests` | `@util` / `@api` | Python tags are already mapped in the batch runner. |
+| Screenplay docs | `docs/SCREENPLAY_GUIDE.md` | `docs/SCREENPLAY_GUIDE.md` | Screenplay section in docs | `docs/SCREENPLAY_GUIDE.md` | Keep these files in sync with this spec. |
 
 ---
 
-## 7. Backlog / Next Steps
+## 7. Backlog
 
-1. **Synchronize Feature Tables**: Copy DEMOAPP001 Scenario Outline rows into DEMOAPP002/003/004 to keep acceptance criteria identical.
-2. **Consolidate Python Pytest Config**: Choose either `pytest.ini` or `[tool.pytest.ini_options]` to avoid log warnings and config drift.
-3. **Parity CI Check**: Add a script that diffs Screenplay folders (actors/abilities/tasks/questions) across stacks to catch drift automatically.
-4. **Shared Test Data Source**: Move the Scenario Outline tables into a shared YAML/JSON resource consumed by every stack, reducing manual copy errors.
-5. **Document Ability Extensions**: When new abilities/tasks appear (e.g., token caching), update this file and the per-stack docs simultaneously.
+1. Populate DEMOAPP002/003/004 feature tables from the DEMOAPP001 source data to eliminate coverage drift.
+2. Finish `features/step_definitions/world.py` in DEMOAPP004 so actor setup happens through pytest-bdd hooks instead of relying solely on fixtures.
+3. Add a CI check that diffs `screenplay/**` folders (abilities, tasks, questions) across repos to alert on drift.
+4. Move Scenario Outline data into a shared JSON or YAML resource consumed by every stack.
+5. Document future ability/task additions here and in the per-stack docs whenever new workflows are introduced.
 
 ---
 
 ## 8. References
 
 - `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/docs/SCREENPLAY_GUIDE.md`
+- `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/docs/QA_STRATEGY.md` (Screenplay section)
 - `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT/docs/SCREENPLAY_GUIDE.md`
-- `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/docs/` (Screenplay section inside QA/Architecture docs)
 - `_API_TESTING_GHERKIN_/DEMOAPP004_PYTHON_PLAYWRIGHT/docs/SCREENPLAY_GUIDE.md`
 - `API Testing POC/DEMO_DOCS/new_demo_requirements.md`
 - `API Testing POC/DEMO_DOCS/batch_runner_design.md`
+

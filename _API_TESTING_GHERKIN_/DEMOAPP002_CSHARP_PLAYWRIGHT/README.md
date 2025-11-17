@@ -1,44 +1,78 @@
-# DEMOAPP002_CSHARP_PLAYWRIGHT
+# DEMOAPP002 - .NET Token Parser API + SpecFlow Playwright
 
-Short description
+Minimal API host (`TokenParserAPI`) with SpecFlow + Playwright automation (`TokenParserTests`). This stack mirrors the TypeScript implementations while proving Screenplay parity on .NET.
 
-- C#/.NET demo API (TokenParserAPI) with Playwright + NUnit tests (TokenParserTests). The API implements token parsing endpoints and simple services; the test project contains automated checks and browser-driven smoke tests.
+---
 
-Contents
+## Contents
 
-- TokenParserAPI/ - ASP.NET Core Web API project (controllers, services, appsettings)
-- TokenParserTests/ - NUnit test project using Microsoft.Playwright and test helpers
-- TokenParserAPI.sln - Visual Studio solution linking both projects
-- RUN_API.bat, RUN_TESTS.bat - convenience scripts to start the API and run tests
+```
+TokenParserAPI/          # ASP.NET Core Minimal API (Program.cs, utils/, logging/)
+TokenParserTests/        # SpecFlow + NUnit + Playwright Screenplay project
+docs/                    # Architecture, QA strategy, Screenplay guidance
+RUN_API*.bat             # Convenience scripts for local smoke runs
+RUN_TESTS.bat            # Executes TokenParserTests
+```
 
-Prerequisites
+---
 
-- .NET SDK (match project, e.g. .NET 8)
-- PowerShell or CMD on Windows
-- Optional: Visual Studio or Rider for IDE support
-- Playwright browsers (installed when required by tests)
+## Prerequisites
 
-How to run the API (Windows)
+- .NET SDK 8.x
+- PowerShell or Command Prompt
+- Playwright browsers (installed automatically by the tests or via `pwsh playwright.ps1 install`)
 
-1. Open PowerShell or CMD.
-2. Change to the demo folder:
-   - cd /d d:\_UCAS\ucas.automation.smoketests.api.poc\_API_TESTING_GHERKIN_\DEMOAPP002_CSHARP_PLAYWRIGHT
-3. Restore and run the API:
-   - dotnet restore
-   - dotnet run --project TokenParserAPI
-   - Or run the provided batch: RUN_API.bat
+---
 
-How to run the test suite (Playwright + NUnit)
+## Restore and Run the API
 
-- Basic:
-  - dotnet test TokenParserTests
-- If Playwright browsers are required:
-  - npx playwright install
-  - Ensure any test configuration (ports, env vars) matches the running API
-- Or run the provided batch: RUN_TESTS.bat
+```powershell
+cd _API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT
+dotnet restore TokenParserAPI.sln
+dotnet run --project TokenParserAPI --urls http://localhost:5228
+```
 
-Notes
+Swagger endpoints:
 
-- Start the API before running tests unless tests manage the server lifecycle.
-- Inspect TokenParserAPI/appsettings.* and TokenParserTests configuration for ports and environment overrides.
+- UI redirect: `http://localhost:5228/swagger/`
+- JSON: `http://localhost:5228/swagger/v1/swagger.json`
+- YAML: `http://localhost:5228/swagger/v1/swagger.yaml`
 
+You can also run `RUN_API.bat` (builds first) or `RUN_API_BUILD.bat` (explicit build + run).
+
+---
+
+## Running Tests
+
+```powershell
+dotnet test TokenParserTests --no-build
+```
+
+- Util scenarios carry `[Category("utiltests")]` so they can run in isolation.
+- Playwright dependencies are installed by calling the generated `playwright.ps1` script in `TokenParserTests/bin/Debug/net8.0/` (handled automatically by `.batch/RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT`).
+- Screenplay actors are created in `TokenParserTests/Screenplay/Support/ScreenplayHooks.cs`; hooks attach `CallAnApi` and `UseTokenParsers` abilities so the bindings match the TypeScript stacks.
+
+---
+
+## One-Step Automation (Windows)
+
+```bat
+call .batch\RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT
+```
+
+This script:
+
+1. Loads environment defaults (port 5228, base URL).
+2. Starts the API when the port is free and opens Swagger.
+3. Runs util tests (`dotnet test --filter "TestCategory=utiltests"`).
+4. Ensures Playwright browsers are installed.
+5. Runs the full SpecFlow suite and writes logs to `.results/demoapp002_csharp_playwright_<UTC>.txt`.
+6. Stops the API it started.
+
+---
+
+## Documentation
+
+- `docs/ARCHITECTURE.md` - describes the Minimal API, logging, and endpoint contract.
+- `docs/QA_STRATEGY.md` - covers tagging, risk-based prioritisation, and reporting.
+- `docs/SCREENPLAY_GUIDE.md` - explains the hook setup, actors, abilities, and tasks for SpecFlow.

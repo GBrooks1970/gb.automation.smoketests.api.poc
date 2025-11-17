@@ -1,6 +1,6 @@
 # API Automation Smoke Tests POC
 
-**Updated: 16/11/25**
+**Updated: 17/11/25**
 
 This repository hosts four end-to-end API automation demos that exercise a shared Token Parser API idea:
 
@@ -54,8 +54,8 @@ Use `.batch/RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT` to orchestrate t
 ### DEMOAPP004 - Python FastAPI + Playwright Screenplay
 
 1. `cd _API_TESTING_GHERKIN_/DEMOAPP004_PYTHON_PLAYWRIGHT`
-2. `python -m venv .venv && .\.venv\Scriptsctivate`
-3. `pip install -r requirements.txt && python -m playwright install`
+2. `python -m venv .venv && .\.venv\Scripts\Activate`
+3. `pip install -e .[dev] && python -m playwright install`
 4. Start the API: `python -m src.server`  
    - Swagger UI: `http://localhost:3002/docs`  
    - OpenAPI JSON: `http://localhost:3002/openapi.json`
@@ -87,6 +87,14 @@ The orchestrator:
    - `run_metrics_<UTC>.md` - Markdown table suitable for PR comments and documentation.
 
 Use the new metrics files as the single source of truth for automation health; each entry links directly to the underlying suite log. The design of the orchestrator, per-project BAT files, and the metrics renderer is documented in `API Testing POC/DEMO_DOCS/batch_runner_design.md`.
+
+For manual API verification without executing tests, run:
+
+```powershell
+.batch\RUN_ALL_APIS_AND_SWAGGER.BAT
+```
+
+This helper starts the Express and .NET APIs, opens Swagger/Docs, waits for a keypress, then tears everything down.
 
 ---
 
@@ -142,7 +150,8 @@ Generated content under `*/bin`, `*/obj`, `.playwright/`, and `node_modules/` is
 - API Testing POC/DEMO_DOCS/DEMOAPP004_blueprint.md - Blueprint + requirements traceability for the Python stack
 - API Testing POC/testing_guidelines_3_a.md - Process and testing guidance
 - API Testing POC/api_testing_comparison.md - Cross-stack comparisons and rationale
-- API Testing POC/DEMO_DOCS/batch_runner_design.md - Detailed specs for the orchestrator, per-project runners, and metrics artefacts
+- API Testing POC/DEMO_DOCS/batch_runner_design.md - Detailed specs for the orchestrator, API warm-up helper, per-project runners, and metrics artefacts
+- API Testing POC/DEMO_DOCS/screenplay_parity_demoapps.md - Screenplay parity rules across all stacks
 
 ---
 
@@ -150,7 +159,10 @@ Generated content under `*/bin`, `*/obj`, `.playwright/`, and `node_modules/` is
 
 Consult the following when creating or updating a demo:
 
-1. `API Testing POC/DEMO_DOCS/batch_runner_design.md` - orchestrator, per-project runner, and metrics specifications.
+1. `API Testing POC/DEMO_DOCS/batch_runner_design.md` - orchestrator, API warm-up helper, per-project runner, and metrics specifications.
 2. `API Testing POC/DEMO_DOCS/new_demo_requirements.md` - acceptance checklist for any new DEMOAPP.
-3. `API Testing POC/DEMO_DOCS/screenplay_parity_typescript.md` - Screenplay parity decisions across languages (with Python parity snapshot).
+3. `API Testing POC/DEMO_DOCS/screenplay_parity_demoapps.md` - consolidated Screenplay parity matrix.
 4. Per-project docs under `_API_TESTING_GHERKIN_/DEMOAPP00x_*/docs/` - architecture, QA strategy, and Screenplay guides for each stack.
+
+
+

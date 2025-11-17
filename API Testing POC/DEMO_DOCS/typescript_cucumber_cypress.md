@@ -1,47 +1,20 @@
 # DEMOAPP001 - TypeScript / Express / Cypress
 
-**Version 5 - [14/11/25]**
+**Version 6 - [17/11/25]**
 
-The `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS` project hosts the Token Parser API on `http://localhost:3000`. Swagger UI is enabled and the service is validated with Cypress + Cucumber BDD tests powered by the Screenplay pattern. Screenplay source now lives at `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/screenplay` (outside `src/`) to match the Playwright stack.
-
----
-
-## Token Parser API Endpoints
-
-1. **GET `/alive`**
-   - Purpose: Lightweight health probe.
-   - Success (200): `{ "Status": "ALIVE-AND-KICKING" }`
-
-2. **GET `/parse-dynamic-string-token`**
-   - Query: `token` (string, required) in the `[TYPE-LIST]-LEN-<length>[-LINES-<count>]` format.
-   - Success (200): `{ "ParsedToken": "<generated string>" }`
-   - Error (400): `{ "Error": "Invalid string token format" }`
-
-3. **GET `/parse-date-token`**
-   - Query: `token` (string, required) describing anchor dates and adjustments.
-   - Success (200): `{ "ParsedToken": "yyyy-MM-dd HH:mm:ssZ" }`
-   - Error (400): `{ "Error": "Invalid string token format" }`
+`_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS` is the reference implementation for the Token Parser Express API and Cypress + Cucumber Screenplay tests. It exposes the shared endpoints on `http://localhost:3000`, logs contract traffic, and provides util + API suites that seed the other stacks.
 
 ---
 
-## Swagger / OpenAPI
+## Contract Endpoints
 
-- Swagger UI: `http://localhost:3000/swagger/v1/json`
-- Raw OpenAPI JSON: `http://localhost:3000/swagger/v1/swagger.json`
-- Raw OpenAPI YAML: `http://localhost:3000/swagger/v1/swagger.yaml`
+| Path | Notes |
+| --- | --- |
+| `GET /alive` | Returns `{ "Status": "ALIVE-AND-KICKING" }` while the host is reachable. |
+| `GET /parse-dynamic-string-token?token=...` | Generates strings from `[ALPHA|NUMERIC|...]` tokens. Success payload: `{ "ParsedToken": "<string>" }`. Errors return `{ "Error": "Invalid string token format" }`. |
+| `GET /parse-date-token?token=...` | Resolves bracketed date tokens and normalises output to UTC `yyyy-MM-dd HH:mm:ssZ`. |
 
----
-
-## Stack Highlights
-
-- **Runtime**: Node.js + TypeScript served via Express with Swagger and shared parser modules.
-- **Testing**: Cypress 13 with the Badeball Cucumber preprocessor; API and util suites continue to share the seven-row Scenario Outlines used by the Playwright stack.
-- **Screenplay**: Actors, abilities, tasks, questions, and memory helpers mirror DEMOAPP003. Both `api-world.ts` and `util-world.ts` now bootstrap actors per scenario after moving Screenplay code out of `src/`.
-- **Tooling**: ESLint + Prettier scope `src/`, `screenplay/`, and `cypress/**`. Run `npm run lint`, `npm run format`, and `npm run ts:check` before `npm run test:bdd` or `npm run verify`.
-- **Automation**: `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` (and `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT`) use `env_utils.bat` to hydrate `.env`, open Swagger, and stop the API and tests cleanly. The script now logs to `.results/demoapp001_typescript_cypress_<UTC_TIMESTAMP>.txt`.
-- **Orchestrator Support**: `.batch/RUN_ALL_API_AND_TESTS.BAT` invokes this runner as part of the combined smoke test, pushes log metadata into `run_metrics_<UTC>.{metrics,txt,md}`, and publishes per-suite stats outlined in `API Testing POC/DEMO_DOCS/batch_runner_design.md`.
-- **Install Note**: `npx cypress verify` still fails during `postinstall` on certain agents; install with `npm install --ignore-scripts` and run `npx cypress verify` manually when needed.
-- **Documentation**: Project-level references live under `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/docs` (Architecture, QA Strategy, Screenplay Guide) and stay aligned with `API Testing POC/screenplay_parity_typescript.md`.
+Swagger endpoints: `http://localhost:3000/swagger/v1/json`, `.../swagger/v1/swagger.json`, `.../swagger/v1/swagger.yaml`.
 
 ---
 
@@ -49,65 +22,74 @@ The `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS` project hosts the Toke
 
 ```
 _API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/
-|--- docs/                       (Architecture, QA, Screenplay guides)
-|--- screenplay/                 (Actors, abilities, tasks, questions, worlds)
-|--- src/                        (Express host + parser services)
-|--- cypress/
-|     |--- integration/          (API + util feature files)
-|     `--- support/step_definitions/
-|--- .batch/                     (automation scripts)
-|--- .results/                   (timestamped run outputs)
-|--- package.json / tsconfig.json / cypress.config.ts
+  docs/             Architecture, QA strategy, Screenplay guides
+  src/              Express host + parser implementations
+  screenplay/       Actor, ability, task, question, world helpers
+  cypress/          Feature files + step definitions (@API + @UTILTEST)
+  .batch/           Local automation helpers
+  .results/         Timestamped run outputs consumed by the orchestrator
 ```
 
 ---
 
-## Scripts and Automation
+## Quick Start
 
-- `npm start` / `npm run dev` - launch the Express API on port `3000`.
-- `npm run lint`, `npm run format`, `npm run ts:check` - enforce quality gates (matching DEMOAPP003).
-- `npm run test:bdd` / `npm run verify` - execute Cypress BDD suites (verify runs type-check + tests).
-- `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` - start API, open Swagger, run util + API suites, and teardown (logs land in `.results/`).
-- `.batch/RUN_ALL_API_AND_TESTS.BAT` - orchestrate all demo stacks, produce metrics tables, and link back to this project's logs.
-- `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` - start the three demo APIs together; now ensures TypeScript servers shut down when you exit.
+```powershell
+cd _API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS
+npm install
+npm run start
+npx cypress run
+```
+
+Quality gates: `npm run lint`, `npm run format`, `npm run ts:check`. `npm run test:bdd` executes the suite headlessly; `npx cypress open` provides the interactive runner.
 
 ---
 
-## Logging Configuration
+## Automation Scripts
 
-The stack currently relies on direct console output from Express and the token parsers. For quieter CI logs, redirect or filter stdout when invoking the batch script.
+| Script | Description |
+| --- | --- |
+| `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` | Loads `.env`, checks port 3000, starts the API if free, opens Swagger, runs util specs first, then runs the full suite. Stops the API it launched and writes logs to `.results/demoapp001_typescript_cypress_<UTC>.txt`. |
+| `.batch/RUN_ALL_API_AND_TESTS.BAT` | Orchestrates every DEMOAPP, capturing this stack's exit code and log path inside `run_metrics_<UTC>.{metrics,txt,md}`. |
+| `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` | Starts the TypeScript and .NET APIs for exploratory testing; terminates them when the session ends. |
+
+All runners call `env_utils.bat` to hydrate ports and base URLs.
 
 ---
 
 ## Testing Notes
 
-- Feature files under `cypress/integration` mirror the REST contract and util scenarios row-for-row with Playwright and SpecFlow (55 tests per run as of 2025‑11‑12).
-- Assertions rely on UTC-normalised timestamps and Screenplay questions (`ResponseStatus`, `ResponseBody`, util memory helpers) to avoid timezone drift.
-- Utility scenarios exercise parsers via the `UseTokenParsers` ability; Cypress no longer imports parser modules directly.
-- Batch runs open Swagger automatically, capture deterministic timestamps, and leave artefacts under `.results/`.
+- Util scenarios are tagged `@UTILTEST` so automation can fail fast before API tests.
+- API steps answer Screenplay questions (`ResponseStatus`, `ResponseBody`) while util helpers read from `UtilActorMemory` for deterministic UTC comparisons.
+- Feature tables (seven date rows, six dynamic rows, range coverage) are treated as the canonical dataset across stacks.
+- Logs include UTC timestamps (`yyyyMMddTHHmmZ`) to simplify cross-suite correlation inside the metrics renderer.
+
+---
+
+## Screenplay Summary
+
+| Layer | Details |
+| --- | --- |
+| Actors / Worlds | `screenplay/core/api-world.ts` and `screenplay/core/util-world.ts` create per-scenario actors. |
+| Abilities | `CallAnApi` wraps `cy.request`; `UseTokenParsers` exposes the local parser modules. |
+| Tasks | `SendGetRequest` issues HTTP calls; util steps call ability helpers rather than importing parsers directly. |
+| Questions | `ResponseStatus`, `ResponseBody`, and util memory helpers capture assertions. |
+| Memory Keys | `screenplay/support/memory-keys.ts` stays aligned with Playwright, SpecFlow, and Python stacks. |
+
+Parity guidance lives in `API Testing POC/DEMO_DOCS/screenplay_parity_demoapps.md`. Update this doc and the parity matrix in lock-step.
+
+---
+
+## Configuration & Logging
+
+- `TOKENPARSER_LOG_LEVEL` controls Express/parser verbosity (`silent`, `error`, `warn`, `info`, `debug`).
+- `.env.example` documents the default `PORT` and `API_BASE_URL`. Batch scripts call `env_utils.bat load_env_vars` so Screenplay abilities always use the correct host.
 
 ---
 
 ## References
 
-- Main README: `README.md`
-- Project docs: `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/docs`
-- Playwright stack: `API Testing POC/typescript_cucumber_playwright.md`
-- C# stack: `API Testing POC/csharp_specflow_playwright.md`
-- Token contract: `API Testing POC/tokenparser_api_contract.md`
-
----
-
-## Screenplay Parity Status
-
-| Layer | Status | Notes |
-| --- | --- | --- |
-| Actor/World setup | Complete | `api-world.ts` / `util-world.ts` provision actors per scenario with mirrored abilities. |
-| Abilities | Complete | `CallAnApi` + `UseTokenParsers` attach automatically; util steps no longer import parser modules. |
-| Tasks | Complete | `SendGetRequest` drives API calls; parser helpers live beside util steps until additional reuse emerges. |
-| Questions | Complete | Assertions use `ResponseStatus`, `ResponseBody`, and util memory helpers. |
-| Memory | Complete | `UtilActorMemory` stores responses/derived data instead of relying on module scope. |
-
-**Ongoing Work**
-1. Keep this doc, the Playwright doc, and `API Testing POC/screenplay_parity_typescript.md` synced whenever Screenplay helpers change.
-2. Mirror this implementation into DEMOAPP002 once the SpecFlow Screenplay scaffolding (documented in `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/docs`) is ready.
+- Main README
+- `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/docs`
+- Companion stacks: `typescript_cucumber_playwright.md`, `csharp_specflow_playwright.md`, `python_playwright.md`
+- Contract + automation specs: `tokenparser_api_contract.md`, `batch_runner_design.md`
