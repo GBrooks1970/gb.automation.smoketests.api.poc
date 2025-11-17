@@ -1,13 +1,10 @@
-﻿# Batch Runner & Metrics Design
+# Batch Runner and Metrics Design
 
-**Version 2 - 15/11/25**
+**Version 3 - 17/11/25**
 
 This document is the source of truth for the automation scripts that start APIs, execute tests, and collect run metrics. It covers:
 
-1. `.batch/RUN_ALL_API_AND_TESTS.BAT` - the orchestrator invoked locally or in CI.
-2. The four per-project runners.
-3. The helper PowerShell utilities that keep the runners deterministic.
-4. The metrics artefacts written to `.results/run_metrics_<UTC>.{metrics,txt,md}`.
+1. `.batch/RUN_ALL_API_AND_TESTS.BAT` - the orchestrator invoked locally or in CI.`r`n2. `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` - the API warm-up helper.`r`n3. The four per-project runners.`r`n4. The helper PowerShell utilities that keep the runners deterministic.`r`n5. The metrics artefacts written to `.results/run_metrics_<UTC>.{metrics,txt,md}`.
 
 Use this specification whenever a new demo stack is added or an existing runner changes.
 
@@ -60,7 +57,24 @@ Any new runner must call `load_env_vars` before launching its API and call `is_p
 
 ---
 
-## 3. Per-Project Runners
+## 3. API Warm-Up Script: `RUN_ALL_APIS_AND_SWAGGER.BAT`
+
+**Purpose**: Start every API and open documentation endpoints for manual verification.
+
+1. Resolves `_API_TESTING_GHERKIN_` directories for DEMOAPP001, DEMOAPP003, and DEMOAPP002.
+2. Loads environment defaults using `env_utils.bat load_env_vars` so ports and base URLs stay in sync with `.env`.
+3. Checks each port with `is_port_in_use`; starts the API only when the port is free. This prevents duplicate servers when developers already have a local API running.
+4. Launches APIs using the same helpers as the per-project runners:
+   - DEMOAPP001 and DEMOAPP003: `Start-Process cmd.exe /c npm run start`.
+   - DEMOAPP002: `Start-Process dotnet run --no-build --urls http://localhost:<port>`.
+5. Opens Swagger or docs in a browser: `/swagger/v1/json` for the TypeScript stacks and `/swagger/` for the .NET host.
+6. Waits for a keypress, then stops any PIDs it launched via `:stop_process`.
+
+Use this script before exploratory testing sessions or when validating contract documentation without running the test suites.
+
+---
+
+## 4. Per-Project Runners
 
 All four follow the same shape:
 
@@ -68,7 +82,7 @@ All four follow the same shape:
 | --- | --- | --- | --- | --- |
 | `RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` | 3000 | `npm run test:bdd --spec cypress/integration/util-tests/**` | Full Cypress run | `.results/demoapp001_typescript_cypress_<UTC>.txt`, `.results/demoapp001_typescript_cypress_util_<UTC>.txt` |
 | `RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT` | 5228 | `dotnet test ... --filter "TestCategory=utiltests"` | `dotnet test` (full SpecFlow suite) | `.results/demoapp002_csharp_playwright_<UTC>.txt`, `.results/demoapp002_csharp_playwright_util_<UTC>.txt` |
-| `RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` | 3001 | `npm run test:bdd -- --tags @UTILTEST` | Full Playwright + Cucumber run | `.results/demoapp003_typescript_playwright_<UTC>.txt`, `.results/demoapp003_typescript_playwright_util_<UTC>.txt` |
+| `RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` | 3001 | `npm run test:bdd -- --tags @UTILTEST` | `npm run test:bdd` (all tags) | `.results/demoapp003_typescript_playwright_<UTC>.txt`, `.results/demoapp003_typescript_playwright_util_<UTC>.txt` |
 | `RUN_DEMOAPP004_PYTHON_PLAYWRIGHT_API_AND_TESTS.BAT` | 3002 | `python -m pytest -m util` | `python -m pytest -m api` | `.results/demoapp004_python_playwright_<UTC>.txt`, `.results/demoapp004_python_playwright_util_<UTC>.txt` |
 
 ### Common Responsibilities
@@ -96,17 +110,18 @@ All four follow the same shape:
   - Relies on `python -m pytest -m util` and `python -m pytest -m api`, which map to `@util` and `@api` tags in the feature files.
   - Starts the FastAPI host via `python -m src.server` and detects readiness using `Test-NetConnection`.
   - Opens FastAPI docs at `http://localhost:3002/docs` to mirror the parity experience.
+  - Uses the repo-provided `playwright.cmd` so the Python CLI is always invoked, even when the .NET CLI appears earlier on `%PATH%`.
 
 ---
 
-## 4. Metrics Artefacts
+## 5. Metrics Artefacts
 
 Each orchestrator run produces three files sharing the same timestamp:
 
 | File | Purpose |
 | --- | --- |
 | `run_metrics_<UTC>.metrics` | Raw machine-readable key/value pairs (`Suite_Exit=code,Suite_Log=path`, `OverallExit=value`). The orchestrator appends to this file and the renderer consumes it. |
-| `run_metrics_<UTC>.txt` | Human-readable ASCII table summarising each suite (`Time`, `Tests`, `Pass`, `Fail`, `Pending`, `Skip`) followed by the log file locations. |
+| `run_metrics_<UTC>.txt` | Human-readable ASCII table summarising each suite (`Suite`, `Exit`, `Log`, `Pass`, `Fail`, `Skip`, `Pending`). |
 | `run_metrics_<UTC>.md` | Markdown summary with the same fields, used for PR comments or wiki updates. |
 
 ### Raw Metrics Schema
@@ -157,3 +172,4 @@ By following this design, every stack provides a predictable automation experien
    - Starts/stops its API when required.
    - Runs util suite, then API suite, writing logs named `demoapp###_<stack>_<UTC>.txt`.
 4. Orchestrator records exit/log pairs, renders human-readable summaries, and exits with the combined result.
+

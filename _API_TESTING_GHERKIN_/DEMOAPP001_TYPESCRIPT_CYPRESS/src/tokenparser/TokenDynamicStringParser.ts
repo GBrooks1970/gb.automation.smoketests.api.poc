@@ -17,15 +17,6 @@ export class TokenDynamicStringParser {
   private static readonly SPECIAL_CHARS = "!@#$%^&*()_+[]{}|;:,.<>?";
   private static readonly errorInvalidStringTokenFormat = "Invalid string token format ";
 
-  static parseDynamicString(token: string): string {
-    // Placeholder: Implement dynamic string parsing logic based on the token
-    if (token === "HELLO-WORLD") {
-      return "Hello, World!";
-    }
-
-    throw new Error(TokenDynamicStringParser.errorInvalidStringTokenFormat);
-  }
-
   static isValidDynamicStringToken(token: string): boolean {
     try {
       const match = token.match(SymbolsDS.DynamicStringRegex);

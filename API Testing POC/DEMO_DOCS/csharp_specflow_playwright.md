@@ -1,112 +1,90 @@
-# DEMOAPP002 - .NET 8 Web API / SpecFlow / Playwright
+# DEMOAPP002 - .NET 8 Minimal API / SpecFlow / Playwright
 
-**Version 6 - [14/11/25]**
+**Version 7 - [17/11/25]**
 
-The `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT` solution hosts the Token Parser API on `http://localhost:5228`. Swagger UI is enabled and the service is validated through SpecFlow feature files executed with Playwright. Architecture, QA strategy, and Screenplay-alignment guides now live under `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/docs`.
-
----
-
-## Token Parser API Endpoints
-
-1. **GET `/alive`**
-   - Purpose: Confirms the API host is healthy.
-   - Success (200): `{ "Status": "ALIVE-AND-KICKING" }`
-
-2. **GET `/parse-dynamic-string-token`**
-   - Query: `token` (string, required) in the `[TYPE-LIST]-LEN-<length>[-LINES-<count>]` format.
-   - Success (200): `{ "ParsedToken": "<generated string>" }`
-   - Error (400): `{ "Error": "Invalid string token format" }`
-
-3. **GET `/parse-date-token`**
-   - Query: `token` (string, required) describing relative or range-based dates.
-   - Success (200): `{ "ParsedToken": "yyyy-MM-dd HH:mm:ssZ" }`
-   - Error (400): `{ "Error": "Invalid string token format" }`
+`_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT` contains the ASP.NET Core Token Parser API (`TokenParserAPI`) and the SpecFlow + Playwright Screenplay tests (`TokenParserTests`). The host listens on `http://localhost:5228`, exposes Swagger, and reuses the same parser utilities as the TypeScript stacks.
 
 ---
 
-## Swagger / OpenAPI
+## Contract Summary
 
-- Swagger UI: `http://localhost:5228/swagger/v1/json`
-- Raw OpenAPI JSON: `http://localhost:5228/swagger/v1/swagger.json`
-- Raw OpenAPI YAML: `http://localhost:5228/swagger/v1/swagger.yaml`
+| Path | Notes |
+| --- | --- |
+| `GET /alive` | Returns `{ "Status": "ALIVE-AND-KICKING" }`. |
+| `GET /parse-dynamic-string-token` | Accepts `token` query string and returns `{ "ParsedToken": "<string>" }` or `{ "Error": "Invalid string token format" }`. |
+| `GET /parse-date-token` | Resolves date tokens to `yyyy-MM-dd HH:mm:ssZ`. |
 
----
-
-## Stack Highlights
-
-- **Runtime**: .NET 8 Web API with Swashbuckle for Swagger generation.
-- **Testing**: SpecFlow + NUnit scenarios backed by Playwright for HTTP calls; util feature files mirror the TypeScript Scenario Outlines.
-- **Token Utilities**: `TokenDateParser` and `TokenDynamicStringParser` classes reused by the API and tests—the same logic mirrored in the TypeScript stacks.
-- **Automation**: `.batch/RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT` (and `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT`) start the API, ensure Playwright dependencies exist, open Swagger, run tests, and stop the host cleanly.
-- **Orchestrator Support**: `.batch/RUN_ALL_API_AND_TESTS.BAT` executes this runner after the TypeScript suites, recording both util and API log paths plus summary metrics (see `API Testing POC/DEMO_DOCS/batch_runner_design.md`).
-- **Documentation**: `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/docs` captures the current architecture, QA strategy, and the Screenplay migration plan required to align with the TypeScript stacks.
-- **Screenplay Implementation**: All SpecFlow bindings now run through the Screenplay layer (`TokenParserTests/Screenplay/**`). Actors receive `CallAnApi` + `UseTokenParsers` abilities, HTTP/API tasks (`SendGetRequest`) and util tasks (`ParseDateTokenLocally`, `ParseDynamicStringTokenLocally`) mirror the TypeScript stacks.
+Swagger endpoints: `http://localhost:5228/swagger/`, `/swagger/v1/swagger.json`, `/swagger/v1/swagger.yaml`.
 
 ---
 
-## Project Layout
+## Layout
 
 ```
 _API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/
-|--- docs/                     (Architecture, QA, Screenplay alignment)
-|--- TokenParserAPI/           (ASP.NET Core API host + Swagger)
-|--- TokenParserTests/
-|     |--- Features/           (SpecFlow feature files)
-|     |--- Steps/              (Playwright bindings)
-|     `--- Helpers/            (RequestHelper, UrlHelper, etc.)
-|--- .batch/                   (automation scripts)
-|--- .results/                 (timestamped run outputs)
-`--- TokenParserAPI.sln
+  docs/                Architecture, QA, Screenplay guides
+  TokenParserAPI/      Minimal API host, logging, utilities
+  TokenParserTests/    SpecFlow features, Screenplay hooks, tasks, questions
+  .batch/              Automation helpers
+  .results/            Timestamped run outputs
+  TokenParserAPI.sln
 ```
 
 ---
 
-## Scripts and Automation
+## Quick Start
 
-- `dotnet run --project TokenParserAPI --urls http://localhost:5228` - start the API locally.
-- `dotnet test TokenParserTests --no-build --filter "TestCategory=utiltests"` - run util parser coverage (invoked automatically by the batch script).
-- `dotnet test TokenParserTests --no-build` - execute SpecFlow + Playwright API scenarios.
-- `.batch/RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT` - orchestrate API start, Swagger launch, util + API tests, and teardown while logging to `.results/demoapp002_csharp_playwright_<UTC_TIMESTAMP>.txt`.
-- `.batch/RUN_ALL_API_AND_TESTS.BAT` - orchestrate all demos, producing run metrics that link back to this suite's logs.
-- `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` - start all three demo APIs; recent fixes ensure the TypeScript hosts stop when the script exits.
+```powershell
+cd _API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT
+dotnet restore TokenParserAPI.sln
+dotnet run --project TokenParserAPI --urls http://localhost:5228
+```
+
+Run tests:
+
+```powershell
+dotnet test TokenParserTests --no-build
+```
+
+Util-only coverage:
+
+```powershell
+dotnet test TokenParserTests --no-build --filter "TestCategory=utiltests"
+```
+
+`ScreenplayHooks` provisions an actor per scenario, attaching `CallAnApi` (Playwright `HttpClient`) and `UseTokenParsers` abilities. Tasks (`SendGetRequest`, `ParseDateTokenLocally`, `ParseDynamicStringTokenLocally`) and questions (`ResponseStatus`, `ResponseJson`, parser helpers) mirror the TypeScript stacks.
 
 ---
 
-## Logging Configuration
+## Automation Scripts
 
-Logging level is controlled via `TokenParser:Logging:Level` (appsettings) or the `TOKENPARSER_LOG_LEVEL` environment variable. Supported values: `Silent`, `Error`, `Warn`, `Info`, `Debug`.
+| Script | Description |
+| --- | --- |
+| `.batch/RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT` | Loads `.env`, starts the API when port 5228 is free, opens Swagger, runs util tests, installs Playwright browsers if needed, runs the full SpecFlow suite, and stops the API. Logs land in `.results/demoapp002_csharp_playwright_<UTC>.txt`. |
+| `.batch/RUN_ALL_API_AND_TESTS.BAT` | Orchestrates all stacks, capturing this suite's exit code/log path inside `run_metrics_<UTC>.{metrics,txt,md}`. |
+| `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` | Starts the TypeScript API hosts plus this Minimal API for manual verification. |
 
 ---
 
 ## Testing Notes
 
-- Playwright API calls run headlessly; no browser context is required.
-- `TokenDateParserUtil.feature` executes before API scenarios and covers the same range of positive/negative data as the TypeScript projects.
-- Batch runs open Swagger automatically, record util + API results under `.results/`, and fail fast if util coverage regresses.
-- Scenario Outlines for `/parse-date-token` and `/parse-dynamic-string-token` share the identical seven-row data tables used by DEMOAPP001/003.
+- SpecFlow features (`TokenParserTests/Features`) mirror the Cypress/Playwright tables row for row.
+- Playwright API tests run without launching a browser window.
+- Util scenarios tagged `Category=utiltests` run before the API suite in automation to fail fast on parser regressions.
+- Logs are written to `.results/` with UTC timestamps so the metrics renderer can summarise them alongside the other stacks.
+
+---
+
+## Logging & Config
+
+- `TokenParser:Logging:Level` (or `TOKENPARSER_LOG_LEVEL`) controls log verbosity (`Silent`, `Error`, `Warn`, `Info`, `Debug`).
+- `appsettings.Development.json` documents the base URL/port; `env_utils.bat` reads `.env` overrides before automation runs.
 
 ---
 
 ## References
 
-- Main README: `README.md`
-- Cypress stack: `API Testing POC/typescript_cucumber_cypress.md`
-- Playwright TypeScript stack: `API Testing POC/typescript_cucumber_playwright.md`
-- Token contract: `API Testing POC/tokenparser_api_contract.md`
-
----
-
-## Screenplay Parity Plan
-
-| Layer | Current State (DEMOAPP002) | Next Action |
-| --- | --- | --- |
-| Actor abstraction | **Complete** – `ScreenplayHooks` provisions an actor + abilities for every scenario. | Continue extending abilities as new domains appear. |
-| Abilities | **Complete** – `CallAnApi` and `UseTokenParsers` cover HTTP + local parser access. | Add future domain abilities as APIs grow. |
-| Tasks | **Complete** – HTTP (`SendGetRequest`) and util (`Parse*TokenLocally`) tasks mirror TypeScript behaviour. | Introduce POST/PUT tasks when new endpoints land. |
-| Questions | **Complete** – HTTP (`ResponseStatus`, `ResponseJson`) and util (`ParsedDateToken`, `ParsedStringToken`, `ParserExceptionMessage`) support all assertions. | Add domain questions as needed. |
-| Memory | **Complete** – `MemoryKeys` tracks API results, parser output, and exceptions. | Expand only if new data needs to be shared. |
-
-**Milestones**
-1. ✅ Screenplay scaffolding + ability wiring under `TokenParserTests/Screenplay`.  
-2. ✅ All SpecFlow bindings migrated (API + util scenarios).  
-3. 🔁 Keep docs (`API Testing POC/DEMO_DOCS/*`, parity notes) in sync when new Screenplay helpers land.
+- Main README
+- `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/docs`
+- Companion docs: `typescript_cucumber_cypress.md`, `typescript_cucumber_playwright.md`, `python_playwright.md`
+- Contract + automation specs: `tokenparser_api_contract.md`, `batch_runner_design.md`, `screenplay_parity_demoapps.md`

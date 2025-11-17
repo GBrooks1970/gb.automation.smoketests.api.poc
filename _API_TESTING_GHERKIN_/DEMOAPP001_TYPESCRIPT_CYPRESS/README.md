@@ -1,70 +1,76 @@
-# DEMOAPP001_TYPESCRIPT_CYPRESS
+# DEMOAPP001 - TypeScript + Cypress + Screenplay
 
-TypeScript demo API that exposes token parsing endpoints, together with Cypress + Cucumber tests that exercise the same behaviours end to end.
+Token Parser Express API with Cypress Cucumber tests. This stack is the reference implementation for feature tables and Screenplay helpers used by the other demos.
 
-## Repository Layout
+---
 
-- `package.json` - npm scripts (`start`, `test`) and dependencies.
-- `src/server.ts` - Express entry point and Swagger wiring.
-- `src/tokenparser/` - date and dynamic string token parsing logic used by the API and tests.
-- `cypress/` - Cypress feature files, step definitions, and shared support code.
-- `.batch/` - automation scripts (for example `RUN_API_AND_TESTS.BAT`).
-- `.results/` - timestamped run artifacts written by automation.
+## Project Layout
 
-## Prerequisites
-
-- Node.js (use the current LTS release).
-- npm (bundled with Node.js).
-
-Install dependencies once per clone:
-
-```bash
-npm install
+```
+src/server.ts          # Express API host + Swagger endpoints
+src/tokenparser/       # Date and dynamic string parser implementations shared with tests
+cypress/               # Feature files, step definitions, Screenplay helpers
+docs/                  # Architecture, QA strategy, Screenplay guide
+.batch/                # Windows helpers (see repo root for orchestrator)
 ```
 
-## Running the API
+---
 
-```bash
-npm run start
-```
+## Install and Setup
 
-This command starts the Express host on port `3000` and serves Swagger at `/swagger/v1/swagger.json` and `/swagger/v1/swagger.yaml`.
+1. `cd _API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS`
+2. `npm install`
 
-## Running Cypress Tests
+Environment variables live in `.env.example`. The automation scripts call `env_utils.bat load_env_vars` so `PORT` and `API_BASE_URL` stay in sync across stacks.
 
-| Mode        | Command              |
-|-------------|----------------------|
-| Interactive | `npx cypress open`   |
-| Headless    | `npx cypress run`    |
-| npm script  | `npm run test`       |
+---
 
-Make sure the API is available on port `3000` before running the tests, or use the automation script below which handles startup automatically.
+## Common Scripts
 
-## One-Step API + Test Run (Windows)
+| Command | Description |
+| --- | --- |
+| `npm run start` | Launch the Express API on port `3000`. |
+| `npm run dev` | Start the API with `tsx watch` for local debugging. |
+| `npm run ts:check` | TypeScript compile in no-emit mode. |
+| `npm run lint` / `npm run format` | Static analysis and formatting. |
+| `npm run test:bdd` | Headless Cypress run (all specs). |
+| `npx cypress open` | Interactive Cypress runner. |
 
-A helper script is provided at `.batch\RUN_API_AND_TESTS.BAT`. It:
+Swagger endpoints:
 
-1. Starts the API via `npm run start`.
-2. Waits until port `3000` is reachable.
-3. Executes the Cypress suite headlessly.
-4. Captures stdout/stderr to `.results\cy_results_<UTC_TIMESTAMP>.txt`.
-5. Stops the API process and exits with the Cypress status code.
+- UI redirect: `http://localhost:3000/swagger/v1/json`
+- JSON: `http://localhost:3000/swagger/v1/swagger.json`
+- YAML: `http://localhost:3000/swagger/v1/swagger.yaml`
 
-Run it from a command prompt or PowerShell:
+---
+
+## Test Strategy
+
+- **Util suites**: Feature files under `cypress/integration/util-tests/**` tagged with `@UTILTEST`. They exercise the parser classes without hitting the API.
+- **API suites**: Feature files under `cypress/integration/API/**`. Steps call Screenplay tasks (`SendGetRequest`) so the API is validated end to end.
+- **Batch automation**: `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` loads env vars, starts the API if the port is free, runs util specs first, then runs the full Cypress suite. Logs land in `.results/demoapp001_typescript_cypress_<UTC>.txt`.
+- **Logging**: Set `TOKENPARSER_LOG_LEVEL` (silent, error, warn, info, debug) before starting the API or running tests to control parser telemetry volume.
+
+---
+
+## Running Everything With One Command
 
 ```bat
-call .batch\RUN_API_AND_TESTS.BAT
+call .batch\RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT
 ```
 
-Logs use UTC timestamps in `yyyyMMddTHHmmZ` format (for example `cy_results_20251104T1400Z.txt`).
+The helper script:
 
-## Additional Notes
+1. Loads `.env` overrides (port/base URL).
+2. Starts the API if the port is not already in use and opens Swagger.
+3. Executes util specs (`cypress/integration/util-tests/**`).
+4. Executes the full suite.
+5. Stops the API it launched and echoes log locations.
 
-- API responses that contain dates are normalised to UTC to avoid timezone drift between environments.
-- Refer to the Cypress feature files in `cypress/integration` for example token strings and expected outputs.
-- Update environment variables or ports in `src/server.ts` if you need to run multiple instances concurrently.
+---
 
-## Logging Configuration
+## Documentation
 
-Use the `TOKENPARSER_LOG_LEVEL` environment variable (see `.env.example`) to control verbosity. Supported values are `silent`, `error`, `warn`, `info`, and `debug` (default). Adjust the value before running the API or automation script to reduce noise in CI logs or capture detailed parser telemetry during debugging.
-
+- `docs/ARCHITECTURE.md` - detailed view of the Express host and parser modules.
+- `docs/QA_STRATEGY.md` - test coverage, tagging, and reporting guidance.
+- `docs/SCREENPLAY_GUIDE.md` - explains how the actor/ability/task model works within Cypress.
