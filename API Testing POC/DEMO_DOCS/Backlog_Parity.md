@@ -6,9 +6,7 @@ This backlog captures outstanding work needed to keep all DEMOAPP stacks in pari
 
 ## Outstanding Issues and Recommended Refactors
 
-1. **README Quick-Start Drift**: Ensure all stack readmes reference the correct install commands (`pip install -e .[dev]` for Python, etc.) and remove outdated references to non-existent files (for example, `requirements.txt`).
-2. **C# Dynamic String Randomness**: `TokenParserAPI/utils/TokenDynamicStringParser.cs` still uses a static `Random`. Replace it with a thread-safe generator to avoid collisions under load.
-3. **Contract Documentation**: `API Testing POC/DEMO_DOCS/tokenparser_api_contract.md` only lists the first three demo hosts. Update it to mention the FastAPI stack so compliance checks include every runtime.
+_None at this time. Track new findings here as they arise._
 
 ---
 

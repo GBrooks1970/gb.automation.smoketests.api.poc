@@ -1,175 +1,221 @@
 # Batch Runner and Metrics Design
 
-**Version 3 - 17/11/25**
+**Version 4 - 18/11/25**
 
-This document is the source of truth for the automation scripts that start APIs, execute tests, and collect run metrics. It covers:
+This specification is the canonical reference for every automation script that exercises the demo stacks. It documents:
 
-1. `.batch/RUN_ALL_API_AND_TESTS.BAT` - the orchestrator invoked locally or in CI.`r`n2. `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` - the API warm-up helper.`r`n3. The four per-project runners.`r`n4. The helper PowerShell utilities that keep the runners deterministic.`r`n5. The metrics artefacts written to `.results/run_metrics_<UTC>.{metrics,txt,md}`.
+1. Shared helpers (Batch + PowerShell) that keep runners deterministic.
+2. The orchestrator `.batch/RUN_ALL_API_AND_TESTS.BAT`.
+3. The API warm-up helper `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT`.
+4. Individual project runners and their lifecycles.
+5. Metrics artefacts emitted under `.results/run_metrics_<UTC>.*`.
+6. Change-management rules for introducing new demos.
 
-Use this specification whenever a new demo stack is added or an existing runner changes.
-
----
-
-## 1. Shared Helper: `env_utils.bat`
-
-All runners depend on `env_utils.bat` for:
-
-- **Environment hydration** - `load_env_vars <APP_DIR> <defaultPort> <defaultBaseUrl> PORT_VAR URL_VAR`.
-- **Port probing** - `is_port_in_use <PORT> RETURN_VAR` maps to `Test-PortInUse.ps1`.
-- **Process cleanup** - common routines that stop PIDs after the suite completes.
-
-Any new runner must call `load_env_vars` before launching its API and call `is_port_in_use` before attempting to bind to a port.
+Consult this file whenever a runner, helper, or metrics format changes. All documentation, READMEs, and new demo proposals must stay in sync with it.
 
 ---
 
-## 2. Orchestrator: `RUN_ALL_API_AND_TESTS.BAT`
+## 1. Shared Building Blocks
 
-**Purpose**: Execute the four project runners sequentially, capture their logs, and produce summary artefacts.
+### 1.1 `env_utils.bat`
 
-### Inputs
-- Relies on the four per-project BAT files living in `.batch`.
-- Assumes `.results` exists in the repo root (creates if missing).
+Every runner imports `env_utils.bat` to guarantee consistent defaults:
+
+- `load_env_vars <APP_DIR> <defaultPort> <defaultBaseUrl> PORT_VAR URL_VAR`  
+  Hydrates `.env` overrides, sets `API_BASE_URL`, and persists the resolved port/base URL into the calling script.
+- `is_port_in_use <PORT> RETURN_VAR`  
+  Shells into `Test-PortInUse.ps1` to decide whether the API must start locally.
+- `stop_process <Label> <PID>`  
+  Shuts down PIDs collected in the runner.
+
+### 1.2 PowerShell Helpers
+
+`/.batch/.ps` hosts supporting utilities:
+
+| Script | Purpose |
+| --- | --- |
+| `get-latest-log.ps1` | Returns the newest log in `.results` that matches the supplied prefix. |
+| `render-run-metrics.ps1` | Transforms the raw metrics file into `.txt` and `.md` summaries. |
+| `Test-PortInUse.ps1` | Tests whether a TCP port is bound. |
+
+Any new automation must reuse these helpers instead of duplicating logic.
+
+---
+
+## 2. Orchestrator - `RUN_ALL_API_AND_TESTS.BAT`
+
+**Responsibility**: Execute all demo runners sequentially, capture their util + API results, and emit metrics artefacts for CI dashboards.
+
+### 2.1 Inputs & Environment
+
+- Requires all per-project BAT files in `.batch`.
+- Creates `.results` when missing.
+- Key environment variables:
+
+| Variable | Description |
+| --- | --- |
+| `RUN_UTC` | UTC timestamp for the run (for example `20251118T1406Z`). Used in log names and metrics files. |
+| `SKIP_API_START` | Propagated to child runners. When set, runners only execute tests and never launch APIs. |
+| `API_BASE_URL` | Set by `env_utils.bat` for each project so Screenplay abilities share the same entry point. |
+| `OVERALL_EXIT` | Bitwise OR of all runner exit codes. Determines orchestrator exit status. |
+
+### 2.2 Sequence
+
+1. Push repo root, timestamp the run, and initialise the raw metrics file `run_metrics_<UTC>.metrics`.
+2. Resolve script paths for the four demos plus the helper PowerShell scripts.
+3. For each demo (ordered 001 -> 004):
+   1. Record the latest log before execution.
+   2. Call `env_utils.bat load_env_vars` to hydrate `.env` overrides and compose `API_BASE_URL`.
+   3. Probe the configured port; set `SKIP_API_START=1` for the child runner when the port is already bound or when the orchestration is piggybacking on a developer-hosted API.
+   4. Invoke the child BAT, capture `%ERRORLEVEL%`, and log the generated util/API result files.
+   5. Append `<Label>_Exit=<code>` and `<Label>_Log=<path>` pairs to the raw metrics file.
+   6. OR the exit code into `OVERALL_EXIT`.
+4. After all runners finish, append `OverallExit=<code>` to the raw metrics file.
+5. Call `render-run-metrics.ps1` to build the `.txt` and `.md` summaries (section 5), then return to the caller with `%OVERALL_EXIT%`.
+
+### 2.3 Error Handling
+
+- Child runner failures never abort the orchestrator immediately - the next runner still executes. This keeps reporting consistent even when one stack is down.
+- When a runner fails to write a log, the orchestrator still records its exit code. The renderer marks missing logs as `unavailable`.
+- Non-zero `OVERALL_EXIT` propagates to CI, preventing false-positive builds.
+
+---
+
+## 3. API Warm-Up Helper - `RUN_ALL_APIS_AND_SWAGGER.BAT`
+
+**Purpose**: Launch every demo API (001-004) together, open Swagger/Docs, then wait for manual verification. No tests execute.
 
 ### Flow
-1. Timestamp the run (`RUN_UTC`) and initialise raw metrics file `run_metrics_<UTC>.metrics`.
-2. Hydrate helper variables:
-   - `TS/CS/PW/PY_SCRIPT` for the child runners.
-   - `APPx_DIR` to feed `env_utils.bat`.
-   - `RESULT_DIR`, `METRICS_RAW`, `METRICS_FILE`, `METRICS_MD`.
-3. For each project:
-   - Capture the latest log file name before execution using `.batch/.ps/get-latest-log.ps1`.
-   - Load env vars + port defaults, then use `env_utils.bat is_port_in_use` to decide whether to set `SKIP_API_START`.
-   - Invoke the per-project BAT; capture its exit code by reading `%ERRORLEVEL%`.
-   - Capture the latest log file after execution and print a summary via `:report_result`.
-   - OR the exit code into `OVERALL_EXIT`.
-4. Append per-suite lines plus `OverallExit` to the raw metrics file and call `.batch/.ps/render-run-metrics.ps1` to render `.txt` and `.md`.
-5. Pop the pushed directories, return `OVERALL_EXIT`.
 
-### Key Environment Variables
-- `SKIP_API_START` (inherited by child runners) tells them to reuse an already running API.
-- `API_BASE_URL` is set by `env_utils.bat load_env_vars` so Screenplay abilities always point to the correct port.
-- `RUN_UTC` acts as the run identifier for both logs and metrics.
+1. For each demo:
+   - Resolve `<APP_DIR>` under `_API_TESTING_GHERKIN_/`.
+   - Load env defaults via `load_env_vars`.
+   - If the port is free and `SKIP_API_START` is not set, start the API using the same commands that the project runner uses.
+   - Store the process ID for later shutdown.
+2. After every API is online, open the corresponding documentation endpoint:
+   - DEMOAPP001 -> `http://localhost:3000/swagger/v1/json`
+   - DEMOAPP002 -> `http://localhost:5228/swagger/index.html`
+   - DEMOAPP003 -> `http://localhost:3001/swagger/v1/json`
+   - DEMOAPP004 -> `http://localhost:3002/docs`
+3. Wait for any keypress before iterating through collected PIDs and stopping them through `stop_process`.
 
-### Output
-- Individual suite logs referenced by the runners (e.g., `demoapp001_typescript_cypress_<UTC>.txt`).
-- Raw metrics: `run_metrics_<UTC>.metrics`.
-- Formatted summaries described in section 4.
+This helper is mandatory for contract reviews and manual smoke sessions because it ensures every stack shares the same boot process codified in the automated runners.
 
 ---
 
-## 3. API Warm-Up Script: `RUN_ALL_APIS_AND_SWAGGER.BAT`
+## 4. Per-Project Runner Specifications
 
-**Purpose**: Start every API and open documentation endpoints for manual verification.
+Every runner performs the following high-level lifecycle:
 
-1. Resolves `_API_TESTING_GHERKIN_` directories for DEMOAPP001, DEMOAPP003, and DEMOAPP002.
-2. Loads environment defaults using `env_utils.bat load_env_vars` so ports and base URLs stay in sync with `.env`.
-3. Checks each port with `is_port_in_use`; starts the API only when the port is free. This prevents duplicate servers when developers already have a local API running.
-4. Launches APIs using the same helpers as the per-project runners:
-   - DEMOAPP001 and DEMOAPP003: `Start-Process cmd.exe /c npm run start`.
-   - DEMOAPP002: `Start-Process dotnet run --no-build --urls http://localhost:<port>`.
-5. Opens Swagger or docs in a browser: `/swagger/v1/json` for the TypeScript stacks and `/swagger/` for the .NET host.
-6. Waits for a keypress, then stops any PIDs it launched via `:stop_process`.
+1. Create timestamped util/API log names and ensure `.results` exists.
+2. Run util-focused tests first to validate parser helpers without API traffic.
+3. Start the API only when ports are free (or reuse an existing instance when `SKIP_API_START=1` or another developer already has it running).
+4. Execute the full API suite.
+5. Stop any processes launched during the run.
+6. Emit friendly console summaries referencing the log files captured in `.results`.
 
-Use this script before exploratory testing sessions or when validating contract documentation without running the test suites.
+Detailed expectations for each runner:
 
----
+### 4.1 `RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT`
 
-## 4. Per-Project Runners
+- **Port**: 3000 (`http://localhost:3000`).
+- **Util suite**: `npm run test:bdd -- --tags @UTILTEST` (Cypress + Cucumber util scenarios).
+- **API suite**: `npm run test:bdd` (entire Cypress suite).
+- **API start**: `npm run start` launched via `cmd.exe /c` with PID tracking and readiness polling.
+- **Logs**: `.results/demoapp001_typescript_cypress_util_<UTC>.txt` and `.results/demoapp001_typescript_cypress_<UTC>.txt`.
+- **Notes**: Runner exports `CYPRESS_BASE_URL` and `API_BASE_URL` before shelling into Cypress so step definitions share the environment injected by `env_utils.bat`.
 
-All four follow the same shape:
+### 4.2 `RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT`
 
-| Script | API Port | Util Tests | Main Tests | Log Outputs |
-| --- | --- | --- | --- | --- |
-| `RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` | 3000 | `npm run test:bdd --spec cypress/integration/util-tests/**` | Full Cypress run | `.results/demoapp001_typescript_cypress_<UTC>.txt`, `.results/demoapp001_typescript_cypress_util_<UTC>.txt` |
-| `RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT` | 5228 | `dotnet test ... --filter "TestCategory=utiltests"` | `dotnet test` (full SpecFlow suite) | `.results/demoapp002_csharp_playwright_<UTC>.txt`, `.results/demoapp002_csharp_playwright_util_<UTC>.txt` |
-| `RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` | 3001 | `npm run test:bdd -- --tags @UTILTEST` | `npm run test:bdd` (all tags) | `.results/demoapp003_typescript_playwright_<UTC>.txt`, `.results/demoapp003_typescript_playwright_util_<UTC>.txt` |
-| `RUN_DEMOAPP004_PYTHON_PLAYWRIGHT_API_AND_TESTS.BAT` | 3002 | `python -m pytest -m util` | `python -m pytest -m api` | `.results/demoapp004_python_playwright_<UTC>.txt`, `.results/demoapp004_python_playwright_util_<UTC>.txt` |
+- **Port**: 5228 (`http://localhost:5228`).
+- **Util suite**: `dotnet test TokenParserTests --filter "TestCategory=utiltests" --no-build`.
+- **API suite**: `dotnet test TokenParserTests --no-build`.
+- **API start**: `dotnet run --project TokenParserAPI --urls http://localhost:<port>` with PID capture.
+- **Logs**: `.results/demoapp002_csharp_playwright_util_<UTC>.txt` and `.results/demoapp002_csharp_playwright_<UTC>.txt`.
+- **Notes**: Ensures `TokenParser:Logging:Level` is passed via environment variables so util + API suites log identically.
 
-### Common Responsibilities
-1. **Load env vars** via `env_utils.bat`.
-2. **Start the API** unless `SKIP_API_START` is set or the port is already bound.
-3. **Open Swagger** (matching `RUN_ALL_APIS_AND_SWAGGER` behaviour) to validate documentation availability.
-4. **Run util tests first** so failures short-circuit before API suites.
-5. **Run main tests**, capturing logs in `.results`.
-6. **Stop the API** if the runner started it.
-7. **Echo results** (success/failure + log paths) for visibility and for the orchestrator to consume.
+### 4.3 `RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT`
 
-### Script Details
-- **DEMOAPP001 (Cypress)**
-  - Loads `.env` overrides, clears `ELECTRON_RUN_AS_NODE` before calling `npx cypress run`, then restores the variable to avoid side effects.
-  - Util suite scopes `--spec cypress/integration/util-tests/**`, main suite runs everything so API flow reuse is validated.
-  - Swagger automatically opens at `http://localhost:3000/swagger/v1/json`.
-- **DEMOAPP002 (SpecFlow + Playwright)**
-  - Starts/stops the ASP.NET API via `dotnet run --urls http://localhost:5228`.
-  - Executes util tests via `dotnet test --filter "TestCategory=utiltests"` before the full suite.
-  - Calls `playwright.ps1 install` (when available) to ensure browser binaries are present; logs util/API output separately.
-- **DEMOAPP003 (Playwright TS)**
-  - `npm run test:bdd -- --tags @UTILTEST` for util coverage, followed by the default `npm test` run (Cucumber + Playwright).
-  - Uses `env_utils.bat` to populate `API_BASE_URL` so Screenplay abilities can attach to the right endpoint.
-- **DEMOAPP004 (Playwright PY)**
-  - Relies on `python -m pytest -m util` and `python -m pytest -m api`, which map to `@util` and `@api` tags in the feature files.
-  - Starts the FastAPI host via `python -m src.server` and detects readiness using `Test-NetConnection`.
-  - Opens FastAPI docs at `http://localhost:3002/docs` to mirror the parity experience.
-  - Uses the repo-provided `playwright.cmd` so the Python CLI is always invoked, even when the .NET CLI appears earlier on `%PATH%`.
+- **Port**: 3001 (`http://localhost:3001`).
+- **Util suite**: `npm run test:bdd -- --tags @UTILTEST`.
+- **API suite**: `npm run test:bdd`.
+- **API start**: `npm run start` with readiness check using `Test-NetConnection`.
+- **Logs**: `.results/demoapp003_typescript_playwright_util_<UTC>.txt` and `.results/demoapp003_typescript_playwright_<UTC>.txt`.
+- **Notes**: Exposes `PLAYWRIGHT_TEST_BASE_URL` and the Screenplay-specific `API_BASE_URL` prior to invoking Cucumber to align with TypeScript hooks.
+
+### 4.4 `RUN_DEMOAPP004_PYTHON_PLAYWRIGHT_API_AND_TESTS.BAT`
+
+- **Port**: 3002 (`http://localhost:3002`).
+- **Util suite**: `python -m pytest -m util`.
+- **API suite**: `python -m pytest -m api`.
+- **API start**: `python -m src.server` launched in a detached `cmd.exe` session, readiness polled via `Test-NetConnection`.
+- **Docs**: Automatically opens `%API_BASE_URL%/docs` when it starts the FastAPI host.
+- **Logs**: `.results/demoapp004_python_playwright_util_<UTC>.txt` and `.results/demoapp004_python_playwright_<UTC>.txt`.
+- **Notes**: Shares helper fragments `RUN_API.bat` and `RUN_TESTS.bat` inside the Python stack, but this runner remains the canonical entry point for the orchestrator.
 
 ---
 
 ## 5. Metrics Artefacts
 
-Each orchestrator run produces three files sharing the same timestamp:
+Each orchestrated run produces three artefacts located under `.results/`:
 
-| File | Purpose |
-| --- | --- |
-| `run_metrics_<UTC>.metrics` | Raw machine-readable key/value pairs (`Suite_Exit=code,Suite_Log=path`, `OverallExit=value`). The orchestrator appends to this file and the renderer consumes it. |
-| `run_metrics_<UTC>.txt` | Human-readable ASCII table summarising each suite (`Suite`, `Exit`, `Log`, `Pass`, `Fail`, `Skip`, `Pending`). |
-| `run_metrics_<UTC>.md` | Markdown summary with the same fields, used for PR comments or wiki updates. |
+### 5.1 Raw Metrics - `.metrics`
 
-### Raw Metrics Schema
-Each `.metrics` file uses one `key=value` entry per line:
+Plain text key/value pairs (one per line) used as input for renderers:
 
 ```
-RUN UTC: 20251116T1552Z
-Cypress_Exit=0,Cypress_Log=D:\path\demoapp001_typescript_cypress_20251116T1552Z.txt
-Playwright TS_Exit=0,Playwright TS_Log=D:\path\demoapp003_typescript_playwright_20251116T1553Z.txt
-Playwright PY_Exit=0,Playwright PY_Log=D:\path\demoapp004_python_playwright_20251116T1554Z.txt
-.NET Playwright_Exit=0,.NET Playwright_Log=D:\path\demoapp002_csharp_playwright_20251116T1554Z.txt
+Cypress_Exit=0
+Cypress_Log=D:\repo\.results\demoapp001_typescript_cypress_20251118T1406Z.txt
+PlaywrightTS_Exit=0
+PlaywrightTS_Log=D:\repo\.results\demoapp003_typescript_playwright_20251118T1407Z.txt
+DotNetPlaywright_Exit=0
+DotNetPlaywright_Log=D:\repo\.results\demoapp002_csharp_playwright_20251118T1408Z.txt
+PlaywrightPY_Exit=0
+PlaywrightPY_Log=D:\repo\.results\demoapp004_python_playwright_20251118T1409Z.txt
 OverallExit=0
 ```
 
-- Suite labels must be unique (no spaces except when reporting labels such as `Playwright TS`), because the renderer looks for `<suite>_Exit` and `<suite>_Log`.
-- Every run must end with `OverallExit=<code>` so dashboards can tell whether the orchestrator succeeded even if a suite failed to produce logs.
+- Suite labels must be unique and must not contain whitespace.
+- Exit codes are written immediately after each runner completes.
+- Log paths are absolute so downstream tooling can fetch artefacts regardless of working directory.
+- The trailing `OverallExit` entry is mandatory.
 
-### Renderer: `.batch/.ps/render-run-metrics.ps1`
+### 5.2 ASCII Summary - `.txt`
 
-1. Parses the raw metrics file and loads each log to extract:
-   - Duration (where available).
-   - Total tests, passes, fails, pending, skips.
-2. Generates the ASCII block and Markdown table.
-3. Writes the `.txt` and `.md` outputs to `.results`.
+`render-run-metrics.ps1` parses the raw file, inspects each referenced log, and emits an aligned table suitable for console or build logs. Columns include Suite, Exit, Tests, Passed, Failed, Skipped, Duration, and Log Path. Missing logs appear as `-` with `unavailable`.
 
-If a suite fails to produce a log, the renderer marks the entry with `-` and `unavailable` so missing data is obvious.
+### 5.3 Markdown Summary - `.md`
 
----
+The renderer also outputs a Markdown table with the same columns. This file is designed for PR comments or Confluence pastes - no additional formatting is required.
 
-## 5. Adding or Updating a Runner
+### 5.4 Renderer Behaviour
 
-1. Copy one of the existing scripts as a template.
-2. Update the `APP_DIR`, ports, util/main commands, and log file names.
-3. Ensure the new runner is invoked from `RUN_ALL_API_AND_TESTS.BAT` and from `RUN_ALL_APIS_AND_SWAGGER.BAT` (if appropriate).
-4. Update this design document, the README, and `new_demo_requirements.md` to include the new stack.
-5. Extend `.batch/.ps/render-run-metrics.ps1` to parse the new log format if necessary.
+The renderer:
 
-By following this design, every stack provides a predictable automation experience and consistent reporting, reducing surprises across runtimes.
+1. Validates that every `<suite>_Exit` has a matching `<suite>_Log`.
+2. Attempts to parse each log using stack-specific heuristics (Cypress JSON summary, Playwright reporters, pytest output, or SpecFlow TRX summaries).
+3. Falls back to `-` when counts are unavailable so consumers can detect incomplete artefacts.
+
+Any change to log formats must be reflected in `render-run-metrics.ps1` and recorded in this document.
 
 ---
 
-## 6. Appendix: Execution Sequence Summary
+## 6. Adding or Modifying Runners
 
-1. Developer or CI agent runs `.batch/RUN_ALL_API_AND_TESTS.BAT`.
-2. Orchestrator validates the presence of all per-project scripts and initialises `.results`.
-3. Each runner:
-   - Loads environment defaults and checks ports.
-   - Starts/stops its API when required.
-   - Runs util suite, then API suite, writing logs named `demoapp###_<stack>_<UTC>.txt`.
-4. Orchestrator records exit/log pairs, renders human-readable summaries, and exits with the combined result.
+1. Copy the closest existing runner as a template.
+2. Update `APP_DIR`, port defaults, util/API commands, and log prefixes.
+3. Register the runner inside `RUN_ALL_API_AND_TESTS.BAT` (maintaining util-first ordering) and, when relevant, the warm-up script.
+4. Update the per-stack README, the root README, and `new_demo_requirements.md`.
+5. Add or adjust parsing logic in `render-run-metrics.ps1` if log formats differ.
+6. Update this document's version/date along with summary bullets in the repo CHANGELOG (or PR description).
 
+---
+
+## 7. Execution Sequence Snapshot
+
+1. Developer or CI triggers `.batch/RUN_ALL_API_AND_TESTS.BAT`.
+2. The orchestrator sequentially calls each runner, ensuring `.env` overrides, API lifecycle management, util-first ordering, and log creation are consistent.
+3. The renderer builds `.metrics`, `.txt`, and `.md` summaries tied to the UTC identifier.
+4. `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` remains available for manual verification and mirrors the same API boot logic, guaranteeing no drift between manual and automated flows.
+
+This closed loop keeps diagnostics predictable, aligns Screenplay hooks across stacks (via shared `API_BASE_URL` handling), and guarantees that future demo projects inherit a tested automation foundation.

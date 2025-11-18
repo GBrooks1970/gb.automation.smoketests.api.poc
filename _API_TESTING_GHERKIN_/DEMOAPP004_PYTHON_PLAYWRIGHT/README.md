@@ -63,6 +63,7 @@ Recent updates:
 - API feature tables now mirror DEMOAPP001/003; assertions reuse the shared parser modules to verify real UTC timestamps and generated strings rather than placeholder shapes.
 - Step definitions validate dynamic string character sets/lengths so contract regressions surface immediately.
 - The new `tooling/run_bdd.py` CLI (plus `tooling/summary_renderer.py`) provides a single entry point that the batch orchestrator can call when it needs pytest logs and machine-readable summaries. Use the `--marker` flag to target util or api suites.
+- `features/step_definitions/world.py` now resets the Screenplay actor between scenarios so pytest-bdd hooks behave like the Cypress/Playwright stacks.
 
 ---
 
@@ -82,8 +83,8 @@ The runner:
 
 ---
 
-## Backlog and Tooling Notes
+## Tooling Notes
 
-- `tooling/run_bdd.py` and `tooling/summary_renderer.py` are placeholders; finishing them lets the orchestrator delegate to a single entry point similar to the TypeScript stack.
-- `features/step_definitions/world.py` still needs to instantiate the Screenplay actor through pytest-bdd hooks instead of leaving the fixture empty.
+- `tooling/run_bdd.py --marker <expr>` mirrors the per-project batch runner (util first, then API) and writes human + machine readable logs to `.results/`.
+- `features/step_definitions/world.py` hooks reset the Screenplay actor and scenario context around each pytest-bdd scenario.
 - Use `playwright.cmd` when installing browsers so the Python CLI is always used even if the .NET Playwright CLI appears earlier on `%PATH%`.

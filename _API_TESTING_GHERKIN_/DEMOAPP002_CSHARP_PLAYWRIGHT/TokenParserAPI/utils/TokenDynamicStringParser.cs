@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using TokenParserAPI.Logging;
@@ -20,7 +21,6 @@ namespace TokenParserAPI.utils
     public class TokenDynamicStringParser
     {
         private static readonly TokenParserLogger Logger = TokenParserLogger.For(nameof(TokenDynamicStringParser));
-        private static readonly Random _random = new Random();
         private const string AlphaChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
         private const string NumericChars = "0123456789";
         private const string PunctuationChars = ".,!?;:";
@@ -85,10 +85,10 @@ namespace TokenParserAPI.utils
         private string GenerateRandomStringFromPool(string charPool, int count)
         {
             Logger.Debug("Generating random string from pool length {0} with count {1}", charPool.Length, count);
-            var result = new StringBuilder();
+            var result = new StringBuilder(count);
             for (int i = 0; i < count; i++)
             {
-                int randomIndex = _random.Next(charPool.Length);
+                int randomIndex = RandomNumberGenerator.GetInt32(charPool.Length);
                 result.Append(charPool[randomIndex]);
             }
             return result.ToString();
@@ -126,7 +126,7 @@ namespace TokenParserAPI.utils
             var array = input.ToCharArray();
             for (int i = array.Length - 1; i > 0; i--)
             {
-                int randomIndex = _random.Next(i + 1);
+                int randomIndex = RandomNumberGenerator.GetInt32(i + 1);
                 var temp = array[i];
                 array[i] = array[randomIndex];
                 array[randomIndex] = temp;

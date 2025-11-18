@@ -35,7 +35,7 @@ if "%SKIP_API_START%"=="1" (
         set "EXIT_CODE=1"
         goto cleanup
     )
-    powershell -NoProfile -Command "Start-Process('%API_BASE_URL%/swagger/v1/json')" >nul 2>&1
+    powershell -NoProfile -Command "Start-Process('%API_BASE_URL%/docs')" >nul 2>&1
 )
 
 call :run_pytest "api" "%APP_DIR%" "%API_LOG%" "api"
