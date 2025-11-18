@@ -12,15 +12,13 @@ namespace TokenParserTests.Helpers
 {
     public class RequestHelper(string baseAddress)
     {
-        private HttpClient _client;
-        private string _responseContent;
+        private readonly Uri _baseAddressUri = new(baseAddress ?? throw new ArgumentNullException(nameof(baseAddress)));
 
-
-        public HttpClient CreateClient(string baseAddress) => _client = new HttpClient { BaseAddress = new Uri(baseAddress) };
+        private HttpClient CreateClient() => new() { BaseAddress = _baseAddressUri };
 
         public async Task<HttpResponseMessage> GetAsyncToEndpoint(string uri, bool authenticated = false)
         {
-            var client = CreateClient(baseAddress);
+            var client = CreateClient();
             if (authenticated)
             {
                 AddAuthorizationHeader(client);
@@ -35,7 +33,7 @@ namespace TokenParserTests.Helpers
             bool authenticated = false
             )
         {
-            var client = CreateClient(baseAddress);
+            var client = CreateClient();
             if (authenticated)
             {
                 AddAuthorizationHeader(client);
@@ -66,11 +64,10 @@ namespace TokenParserTests.Helpers
             return token;
         }
 
-        private void AddAuthorizationHeader(HttpClient _httpClient)
+        private void AddAuthorizationHeader(HttpClient httpClient)
         {
             var apiToken = GetToken();
-            //_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiToken);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiToken);
         }
 
         // Validate status code
@@ -114,13 +111,13 @@ namespace TokenParserTests.Helpers
             return false;
         }
 
-        public static object GetPropertyValue<T>(T obj, string propertyName)
+        public static object? GetPropertyValue<T>(T obj, string propertyName)
         {
             // Get the type of the object
             Type type = typeof(T);
 
             // Get the property by name
-            PropertyInfo property = type.GetProperty(propertyName);
+            PropertyInfo? property = type.GetProperty(propertyName);
 
             if (property == null)
             {

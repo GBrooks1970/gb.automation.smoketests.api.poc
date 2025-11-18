@@ -10,6 +10,20 @@ _None at this time. Track new findings here as they arise._
 
 ---
 
+## Migration Plan - ONE Typescript API (5 bullets)
+- Consolidate DEMOAPP001/003 server code into a single shared Express/TypeScript API package published via npm workspace.
+- Update both stacks' batch runners to call the shared API start script, controlled by env var port selection (3000 vs 3001).
+- Refactor parser modules into shared workspace references; adjust tsconfig path mapping for both projects.
+- Harmonize logging + configuration files so tests read from a single `.env.demoapp_ts_api` template.
+- Gradually retire duplicate API folders by re-pointing tests to the shared package and removing redundant assets once parity confirmed.
+
+## Migration Plan - Establish single source of truth for features (5 bullets)
+- Consolidate features into a single shared folder
+- Create shared feature repository
+- Used by both Typescript DEMOs (DEMOAPP001/003)
+- Eventually used by DEMOAPP002/004
+- Gradually retire duplicate Feature folders by re-pointing tests to the single shared folder and removing redundant assets once parity confirmed.
+
 ## Potential Next Steps and Improvements
 
 1. **Shared Test Data Source**: Move Scenario Outline tables into a versioned JSON or YAML file that each stack imports, eliminating copy/paste drift and enabling automated parity checks.
