@@ -1,0 +1,13 @@
+{
+  "name": "gb.automation.smoketests.api.poc",
+  "version": "1.0.0",
+  "description": "**Updated: 18/11/25**",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'Error: no test specified' && exit 1",
+    "shared:build": "npm run build --prefix packages/tokenparser-api-shared"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

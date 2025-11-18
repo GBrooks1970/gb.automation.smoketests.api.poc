@@ -12,7 +12,11 @@
     "resolveJsonModule": true,
     "types": ["node", "@cucumber/cucumber"],
     "outDir": "dist",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "tokenparser-api-shared": ["../../packages/tokenparser-api-shared/src"],
+      "tokenparser-api-shared/*": ["../../packages/tokenparser-api-shared/src/*"]
+    }
   },
   "include": [
     "src/**/*.ts",
