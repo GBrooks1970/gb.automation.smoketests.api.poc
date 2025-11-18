@@ -149,3 +149,22 @@ def format_date_utc(dt: datetime) -> str:
     """Return `yyyy-MM-dd HH:mm:ssZ` formatted string."""
     iso = dt.astimezone(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
     return f"{iso}Z"
+
+
+def parse_date_range_token(token: str) -> tuple[datetime, datetime]:
+    """
+    Parse a date range token in the form
+    [MONTHENDSTART-MONTH-YEAR<->MONTHENDSTART-MONTH-YEAR].
+    """
+    if not token or not BRACKETED_TOKEN.fullmatch(token):
+        raise DateTokenError("Invalid string token format")
+
+    inner = token[1:-1]
+    parts = inner.split("<->")
+    if len(parts) != 2:
+        raise DateTokenError("Invalid string token format")
+
+    start_inner, end_inner = parts
+    start = _parse_month_start_end(start_inner)
+    end = _parse_month_start_end(end_inner)
+    return start, end

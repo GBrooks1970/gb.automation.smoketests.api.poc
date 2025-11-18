@@ -17,5 +17,9 @@ class ActorMemory:
     def recall(self, key: str) -> Any:
         return self._store.get(key)
 
+    def forget(self, key: str) -> None:
+        if key in self._store:
+            del self._store[key]
+
     def reset(self) -> None:
         self._store.clear()

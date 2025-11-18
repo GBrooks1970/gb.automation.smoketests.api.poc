@@ -1,6 +1,6 @@
 # API Automation Smoke Tests POC
 
-**Updated: 17/11/25**
+**Updated: 18/11/25**
 
 This repository hosts four end-to-end API automation demos that exercise a shared Token Parser API idea:
 
@@ -82,11 +82,11 @@ The orchestrator:
 2. Starts/stops APIs unless the relevant port is already in use (`SKIP_API_START` safeguards shared dev environments).
 3. Captures log paths and exit codes for each suite.
 4. Produces three artefacts per run inside `.results/`:
-   - `run_metrics_<UTC>.metrics` - raw key/value pairs consumed by tooling (`LABEL_Exit=<code>,LABEL_Log=<path>`).
-   - `run_metrics_<UTC>.txt` - ASCII summary table including test counts and pass/fail info.
-   - `run_metrics_<UTC>.md` - Markdown table suitable for PR comments and documentation.
+   - `run_metrics_<UTC>.metrics` – raw key/value pairs (`<Label>_Exit=<code>`, `<Label>_Log=<path>`, `OverallExit=<code>`).
+   - `run_metrics_<UTC>.txt` – ASCII summary table (Suite, Exit, Tests, Passed, Failed, Skipped, Duration, Log).
+   - `run_metrics_<UTC>.md` – Markdown version of the summary table for PR comments or Confluence.
 
-Use the new metrics files as the single source of truth for automation health; each entry links directly to the underlying suite log. The design of the orchestrator, per-project BAT files, and the metrics renderer is documented in `API Testing POC/DEMO_DOCS/batch_runner_design.md`.
+Treat these files as the single source of truth for automation health; each entry links directly to the underlying suite log. A full design spec (orchestrator, warm-up helper, per-project runners, renderer expectations, and change-management rules) lives in `API Testing POC/DEMO_DOCS/batch_runner_design.md`.
 
 For manual API verification without executing tests, run:
 
@@ -94,7 +94,7 @@ For manual API verification without executing tests, run:
 .batch\RUN_ALL_APIS_AND_SWAGGER.BAT
 ```
 
-This helper starts the Express and .NET APIs, opens Swagger/Docs, waits for a keypress, then tears everything down.
+This helper starts the Express, FastAPI, and .NET APIs, opens Swagger/Docs, waits for a keypress, then tears everything down. It shares the same boot logic described in the batch-runner design spec so manual workflows match automated ones.
 
 ---
 
@@ -159,9 +159,9 @@ Generated content under `*/bin`, `*/obj`, `.playwright/`, and `node_modules/` is
 
 Consult the following when creating or updating a demo:
 
-1. `API Testing POC/DEMO_DOCS/batch_runner_design.md` - orchestrator, API warm-up helper, per-project runner, and metrics specifications.
+1. `API Testing POC/DEMO_DOCS/batch_runner_design.md` - orchestrator, API warm-up helper, per-project runner, and metrics specifications (Version 4).
 2. `API Testing POC/DEMO_DOCS/new_demo_requirements.md` - acceptance checklist for any new DEMOAPP.
-3. `API Testing POC/DEMO_DOCS/screenplay_parity_demoapps.md` - consolidated Screenplay parity matrix.
+3. `API Testing POC/DEMO_DOCS/screenplay_parity_demoapps.md` - consolidated Screenplay parity matrix and dataset source of truth (Version 3).
 4. Per-project docs under `_API_TESTING_GHERKIN_/DEMOAPP00x_*/docs/` - architecture, QA strategy, and Screenplay guides for each stack.
 
 

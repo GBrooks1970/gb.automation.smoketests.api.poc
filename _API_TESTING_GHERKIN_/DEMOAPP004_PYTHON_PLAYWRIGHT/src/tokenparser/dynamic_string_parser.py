@@ -21,7 +21,7 @@ class DynamicStringTokenError(ValueError):
 ALPHA_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 NUMERIC_CHARS = "0123456789"
 PUNCTUATION_CHARS = ".,!?;:"
-SPECIAL_CHARS = "!@#$%^&*()_+[]{}|;:,.<>?~`\\/"
+SPECIAL_CHARS = "!@#$%^&*()_+[]{}|;:,.<>?"
 
 # Regex copied from `SymbolsDS.DynamicStringRegex`.
 TOKEN_PATTERN = re.compile(
@@ -58,14 +58,14 @@ def _parse_token(token: str) -> ParsedDynamicStringToken:
         "SPECIAL": SPECIAL_CHARS,
     }
 
-    seen = []
+    char_pool_parts = []
     for token_type in types:
         chars = pool_lookup.get(token_type)
         if not chars:
             raise DynamicStringTokenError("Invalid token type")
-        seen.append(chars)
+        char_pool_parts.append(chars)
 
-    char_pool = "".join(dict.fromkeys("".join(seen)))  # preserve order, dedupe
+    char_pool = "".join(char_pool_parts)
     if not char_pool:
         raise DynamicStringTokenError("No valid character types found in token")
 
