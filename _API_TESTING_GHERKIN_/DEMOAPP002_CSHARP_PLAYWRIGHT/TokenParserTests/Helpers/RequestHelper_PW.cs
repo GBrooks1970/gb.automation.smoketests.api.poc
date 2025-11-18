@@ -76,9 +76,9 @@ namespace TokenParserTests.Helpers
             return response;
         }
 
-        public async Task<JsonElement?> GetResponseString(IAPIResponse response)
+        public async Task<string> GetResponseString(IAPIResponse response)
         {
-            var responseString = await response.JsonAsync();
+            var responseString = await response.TextAsync();
             Console.WriteLine($"responseString '{responseString}' ");
             return responseString;
         }
@@ -100,7 +100,7 @@ namespace TokenParserTests.Helpers
         {
             var jsonResponse = await GetResponseString(response);
 
-            var actualMessage = jsonResponse.ToString();
+            var actualMessage = jsonResponse ?? string.Empty;
             Console.WriteLine($"actualMessage '{actualMessage}' ");
 
             Assert.That(expectedMessage, Is.EqualTo(actualMessage), $"Expected string: {expectedMessage}, but got: {actualMessage}");
@@ -131,13 +131,13 @@ namespace TokenParserTests.Helpers
             return false;
         }
 
-        public static object GetPropertyValue<T>(T obj, string propertyName)
+        public static object? GetPropertyValue<T>(T obj, string propertyName)
         {
             // Get the type of the object
             Type type = typeof(T);
 
             // Get the property by name
-            PropertyInfo property = type.GetProperty(propertyName);
+            PropertyInfo? property = type.GetProperty(propertyName);
 
             if (property == null)
             {

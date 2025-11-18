@@ -2,10 +2,14 @@ namespace TokenParserTests.Helpers
 {
     public class UrlHelper
     {
-        public static string BuildEncodedUrl(string baseUrl, Dictionary<string, string> queryParams)
+        public static string BuildEncodedUrl(string baseUrl, Dictionary<string, string>? queryParams)
         {
-            // Build the base URI, using Uri.EscapeUriString to encode the path if needed
-            string encodedUrl = Uri.EscapeUriString(baseUrl);
+            if (!Uri.TryCreate(baseUrl, UriKind.Absolute, out var parsedBaseUri))
+            {
+                throw new ArgumentException("The supplied baseUrl is not a valid absolute URI.", nameof(baseUrl));
+            }
+
+            var encodedUrl = parsedBaseUri.GetComponents(UriComponents.SchemeAndServer | UriComponents.Path, UriFormat.UriEscaped);
 
             // Build the query string with encoded parameters
             if (queryParams != null && queryParams.Count > 0)
