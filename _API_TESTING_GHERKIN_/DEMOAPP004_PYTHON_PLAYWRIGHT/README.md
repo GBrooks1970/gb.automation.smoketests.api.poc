@@ -54,6 +54,7 @@ Defaults:
 | `pytest -m util` | Run parser util scenarios (`@util`). |
 | `pytest -m api` | Run API scenarios (`@api`). |
 | `pytest -q` | Run everything. |
+| `python tooling/run_bdd.py --marker api` | Orchestrated run that writes logs + JSON summaries to `.results/`. |
 
 Screenplay actors are created via the `actor` fixture in `tests/conftest.py`. Tasks and questions write to `screenplay/support/memory_keys.py`, mirroring the TypeScript key names.
 
@@ -61,6 +62,7 @@ Recent updates:
 
 - API feature tables now mirror DEMOAPP001/003; assertions reuse the shared parser modules to verify real UTC timestamps and generated strings rather than placeholder shapes.
 - Step definitions validate dynamic string character sets/lengths so contract regressions surface immediately.
+- The new `tooling/run_bdd.py` CLI (plus `tooling/summary_renderer.py`) provides a single entry point that the batch orchestrator can call when it needs pytest logs and machine-readable summaries. Use the `--marker` flag to target util or api suites.
 
 ---
 

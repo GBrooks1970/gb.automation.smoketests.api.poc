@@ -71,6 +71,13 @@ def assert_status(actor, status: int):
     assert actual == status
 
 
+@then(parsers.parse('the response body field "{field}" should equal "{expected}"'))
+def assert_body_field(actor, field: str, expected: str):
+    body = ResponseBody.answered_by(actor)
+    assert field in body, f"Response missing field '{field}'"
+    assert str(body[field]) == expected
+
+
 def _expected_date_string(token: str) -> str:
     parsed = parse_date_token(token)
     return format_date_utc(parsed)
