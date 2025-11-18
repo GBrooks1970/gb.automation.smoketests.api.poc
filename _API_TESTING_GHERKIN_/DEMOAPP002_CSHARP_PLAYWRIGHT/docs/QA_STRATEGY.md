@@ -1,56 +1,59 @@
-# QA Strategy for DEMOAPP002 (C# Playwright/SpecFlow)
+# QA Strategy – DEMOAPP002 (C# + SpecFlow + Playwright)
 
-**Version 1 - [12/11/25]**
+**Version 2 – 18/11/25**
 
-## Purpose
-Ensure the .NET reference stack protecting the Token Parser API remains in lock-step with the TypeScript suites while embracing ISTQB-aligned practices (risk analysis, verification gates, and traceability).
+## 1. Goals
+1. Provide a .NET validation layer for the Token Parser API that mirrors the TypeScript stacks.
+2. Keep SpecFlow feature files, examples, and expected payloads identical to DEMOAPP001/003/004.
+3. Deliver deterministic logs/metrics for `.batch/RUN_ALL_API_AND_TESTS.BAT`.
 
-## Guiding Principles
-1. **Parity Coverage** – feature wording, examples, and expected payloads must match DEMOAPP001/003 to keep Screenplay parity metrics honest.
-2. **Shift-Left Verification** – `dotnet format`, analyzers, and `dotnet test` run locally before pushing changes; CI mirrors the same workflow.
-3. **Risk-Based Prioritisation** – date parsing and dynamic string tokens are treated as high risk; health checks and low-impact endpoints receive smoke-only coverage.
-4. **Deterministic Data** – SpecFlow helpers normalise UTC output and limit flakiness (e.g., `AssertRelativeDate` using `DateTime.Today`).
-5. **Observability & Reporting** – TRX outputs (`TokenParserTests/TestResults/*.trx`) and any Playwright traces should be attached to CI runs for rapid diagnostics.
+## 2. Test Portfolio
+| Layer | Coverage | Tooling | Notes |
+| --- | --- | --- | --- |
+| Static analysis | Formatting, analyzers | `dotnet format`, Roslyn rules via `.editorconfig` | Run before committing. |
+| Component | Parser utilities | Unit tests (roadmap) + direct invocation in steps | Align with shared parser logic. |
+| Util Scenarios | Parser behaviour w/out HTTP | SpecFlow scenarios tagged `@utiltests` | Executed first in batch runs. |
+| API Scenarios | `/alive`, `/parse-date-token`, `/parse-dynamic-string-token` | SpecFlow + Playwright `RequestHelper_PW` | Use `API_BASE_URL` from `.env`. |
+| Integration | API start/stop, Swagger check | `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` | Ensures Windows automation parity. |
 
-## Test Levels & Scope
-| Level | Goal | Execution |
-| --- | --- | --- |
-| Component | Validate parser services in isolation | .NET unit tests (to be expanded) + direct invocation inside SpecFlow steps |
-| API / Contract | Confirm endpoints return correct status/body | SpecFlow scenarios invoking `RequestHelper` |
-| Integration | Ensure Express-equivalent host is wired to services & config | `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` starts this API alongside TS servers |
-| UI / e2e (future) | Browser validation | Placeholder Playwright bindings; enable once UI exists |
+## 3. Quality Gates
+1. `dotnet restore && dotnet build` (fail fast on compiler warnings).
+2. `dotnet format --verify-no-changes` + analyzers.
+3. `dotnet test TokenParserTests --filter "TestCategory=utiltests"` (util focus).
+4. `dotnet test TokenParserTests --no-build` (full suite).
+5. `.batch/RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT` (util + api + Swagger launch).
+6. Repository orchestrator `.batch/RUN_ALL_API_AND_TESTS.BAT`.
 
-## Tooling & Gates
-- **Static Analysis**: `dotnet format --verify-no-changes` + Roslyn analyzers (enable in `.editorconfig`) before merging.
-- **Unit/BDD Tests**: `dotnet test` with `--logger "trx"` to collect results; reruns allowed to root-cause flaky behaviour.
-- **Playwright Assets**: `npx playwright install` invoked from `RUN_TESTS.bat` when tests require browsers.
-- **Batch Harness**: `RUN_API.bat` + `RUN_TESTS.bat` provide consistent local repro steps and feed into `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` for cross-stack runs.
+## 4. Metrics
+- **Suite Counts**: Captured in `.results/run_metrics_<UTC>.txt` with `.NET Playwright` label.
+- **Exit Codes**: Each batch invocation records `<Label>_Exit=<code>`; keep `0` before merging.
+- **Parity Lag**: Use `API Testing POC/DEMO_DOCS/Backlog_Parity.md` to log pending SpecFlow updates after TypeScript changes.
+- **Flake Tracking**: Record reruns in pipeline logs; target <2% rerun rate.
 
-## Execution Matrix
-- **Local**:
-  1. `dotnet restore`
-  2. `dotnet format`
-  3. `dotnet test TokenParserTests`
-  4. If UI steps are added, run `npx playwright test` and capture traces.
-- **CI**:
-  - Use `dotnet build --configuration Release`, `dotnet format --verify-no-changes`, and `dotnet test --logger trx --results-directory TokenParserTests/TestResults`.
-  - Publish `.trx` plus Playwright artifacts.
-- **Cross-Stack Smoke**:
-  - Run repository-level `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` after changing ports/env values to ensure the PowerShell harness still starts/stops the C# API cleanly.
+## 5. Risks & Mitigations
+| Risk | Mitigation |
+| --- | --- |
+| Date token drift vs TS stacks | Reuse shared Scenario Outline data and `DateFormatting.CanonicalFormat`. |
+| HTTP helper nullability | Request helpers now guard against null responses (see Helpers folder). |
+| Environment skew (Playwright install missing) | `RUN_TESTS.bat` checks for browsers and guides developers to run `npx playwright install`. |
+| Swagger contract drift | Run `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` before publishing contract doc updates. |
 
-## Risk Matrix
-| Tier | Examples | Mitigation |
-| --- | --- | --- |
-| High | `/parse-date-token`, `/parse-dynamic-string-token`, Swagger contracts | Automated SpecFlow scenarios + nightly regression runs |
-| Medium | `/alive` health, logging middlewares | Smoke coverage + monitoring hooks |
-| Low | Static files, doc endpoints | Manual verifications |
+## 6. Execution Recipes
+### Local
+```
+dotnet restore
+dotnet format
+dotnet test TokenParserTests --filter "TestCategory=utiltests"
+dotnet test TokenParserTests
+```
+Optional: `RUN_API.bat` and `RUN_TESTS.bat` wrappers for a single command loop.
 
-## Metrics
-- **Automation Rate**: % of feature files with executable steps vs. backlog.
-- **Flake %**: number of rerun scenarios / total executed (target <2%).
-- **Lead Time**: time between API change and updated parity across all stacks (tracked in `API Testing POC/screenplay_parity_typescript.md`).
+### CI
+- Pipeline steps: `dotnet build`, `dotnet format --verify-no-changes`, `dotnet test --logger trx --results-directory TokenParserTests/TestResults`.
+- Publish `.trx` files and `.results/*.txt` for diagnostics.
 
-## Open Improvements
-1. Introduce Screenplay-friendly abstractions (actors/abilities) in C# to align with the TypeScript docs (see `docs/SCREENPLAY_GUIDE.md`).
-2. Add contract checks against the Swagger schema using FluentAssertions + Swashbuckle-generated clients.
-3. Wire Playwright traces/snapshots into SpecFlow hooks for richer diagnostics once UI flows exist.
+## 7. Next Improvements
+1. Add FluentAssertions-based contract checks that compare responses to the documented schema.
+2. Capture Playwright traces for failing API requests.
+3. Introduce SpecFlow living documentation output to show parity state in CI.
+4. Expand unit tests around random token generation (now using `RandomNumberGenerator`).

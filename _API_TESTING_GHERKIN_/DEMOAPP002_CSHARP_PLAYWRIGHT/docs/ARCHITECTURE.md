@@ -1,57 +1,51 @@
-# DEMOAPP002 C# Architecture Blueprint
+# DEMOAPP002 – .NET Playwright Architecture Guide
 
-**Version 1 - [12/11/25]**
+**Version 2 – 18/11/25**
 
-## Stack Snapshot
-- **Runtime**: .NET 8 (C#) solution containing an ASP.NET Core Web API (`TokenParserAPI`) and a SpecFlow + NUnit test project (`TokenParserTests`).
-- **Pattern**: BDD-style feature files executed through SpecFlow bindings. Tests currently rely on helper classes (`RequestHelper`, `UrlHelper`) rather than the Screenplay abstraction, but follow the same business narratives as the TypeScript stacks.
-- **API Host**: `TokenParserAPI` exposes the `/alive`, `/parse-date-token`, and `/parse-dynamic-string-token` endpoints that every stack consumes for parity.
-- **Automation Alignment**: Batch scripts (`RUN_API.bat`, `RUN_TESTS.bat`, solution-level `.batch` harnesses) keep execution consistent with the TypeScript projects so parity checks can run from a single command.
+## 1. Overview
+- **API Host**: .NET 8 Minimal API (`TokenParserAPI`) hosting the Token Parser endpoints plus Swagger.
+- **Automation Stack**: SpecFlow + .NET Playwright bindings running Screenplay-inspired steps (actors built inside SpecFlow hooks).
+- **Role in Parity**: Serves as the .NET counterpart to DEMOAPP001/003, consuming the same Scenario Outline data and logging requirements.
 
-## Solution Layout
+## 2. Key Components
+| Component | Location | Notes |
+| --- | --- | --- |
+| Token Parser services | `TokenParserAPI/utils/*.cs` | Date/dynamic string parsers; logging level via `TokenParser:Logging:Level`. |
+| HTTP Host | `TokenParserAPI/Program.cs` | Minimal API wiring, Swagger, health endpoints. |
+| Test Project | `TokenParserTests/` | SpecFlow feature files, generated glue, Screenplay helpers, Playwright request helpers. |
+| Batch scripts | `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/*.bat` | Start API (`RUN_API.bat`) and execute tests (`RUN_TESTS.bat`). |
+
+## 3. Architecture Walkthrough
+1. `dotnet run --project TokenParserAPI` boots the API (default port 5228) and exposes `/swagger` + parser endpoints.
+2. SpecFlow/Playwright tests (driven by `.batch/RUN_DEMOAPP002_CSHARP_PLAYWRIGHT_API_AND_TESTS.BAT`) run util scenarios first (`TestCategory=utiltests`) then full API suites.
+3. Request helpers (`RequestHelper.cs` for HttpClient, `RequestHelper_PW.cs` for Playwright) encapsulate HTTP interactions and align with Screenplay patterns.
+4. Logs from both API and SpecFlow runs are piped into `.results/demoapp002_csharp_playwright_*.txt`; orchestrator consumes these for metrics.
+
+## 4. Folder Map
 ```
 DEMOAPP002_CSHARP_PLAYWRIGHT
-|--- docs/
-|    |--- ARCHITECTURE.md
-|    |--- QA_STRATEGY.md
-|    `--- SCREENPLAY_GUIDE.md        <- documents current BDD binding pattern + gaps to Screenplay
-|--- TokenParserAPI/
-|    |--- Program.cs
-|    |--- Controllers/
-|    |--- Services/
-|    `--- appsettings*.json
-|--- TokenParserTests/
-|    |--- Features/                  <- SpecFlow .feature files
-|    |--- Steps/                     <- Binding classes (NUnit assertions + helpers)
-|    |--- Helpers/                   <- HttpClient wrappers, date utilities, memory helpers
-|    |--- specflow.json              <- generator & glue configuration
-|    `--- TokenParserTests.csproj
-|--- TokenParserAPI.sln
-|--- RUN_API.bat / RUN_API_BUILD.bat
-|--- RUN_TESTS.bat / TokenParserTests/TestResults
+├─ docs/ (architecture, QA, Screenplay)
+├─ TokenParserAPI/
+│  ├─ Program.cs
+│  ├─ utils/
+│  └─ Properties/launchSettings.json
+├─ TokenParserTests/
+│  ├─ Features/*.feature
+│  ├─ Screenplay/ (actors, abilities, hooks)
+│  ├─ Helpers/RequestHelper(_PW).cs
+│  └─ specflow.json
+├─ RUN_API.bat / RUN_TESTS.bat
+└─ .results/ (created by batch runs)
 ```
 
-## Tooling & Automation
-- **dotnet CLI**:
-  - `dotnet restore` and `dotnet run --project TokenParserAPI` for the API.
-  - `dotnet test TokenParserTests` executes the SpecFlow suite, producing TRX files under `TokenParserTests/TestResults/`.
-- **Playwright Dependency**: Tests reference Microsoft.Playwright packages to enable future browser/API automation. Run `npx playwright install` (or `pwsh .\RUN_TESTS.bat`, which invokes `dotnet test`) when browsers are needed.
-- **Batch files**:
-  - `RUN_API.bat` starts the API (optionally via `RUN_API_BUILD.bat` to pre-build).
-  - `RUN_TESTS.bat` wraps `dotnet test` and ensures Playwright drivers exist.
-  - Repository-level `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` uses these scripts (through `env_utils.bat`) so the C# host participates in multi-stack smoke runs.
+## 5. Integration Points
+- **Batch Orchestrator**: `.batch/RUN_ALL_API_AND_TESTS.BAT` calls this stack last. Ports are probed before launching to honour `SKIP_API_START`.
+- **Swagger Contracts**: `API Testing POC/DEMO_DOCS/tokenparser_api_contract.md` references this host. Keep OpenAPI annotations in sync.
+- **Screenplay Parity**: `API Testing POC/DEMO_DOCS/screenplay_parity_demoapps.md` lists required abilities/tasks/memory keys. Update docs/code when changes land.
+- **Logging Review**: `API Testing POC/DEMO_DOCS/logging_review_v1_20251112.md` covers the .NET logging abstraction (Serilog-style structured fields). Ensure new middleware honours those rules.
 
-## Shared Concepts with TypeScript Stacks
-- **Feature Files**: `TokenParserTests/Features/ParseDateToken_Endpoint.feature` mirrors the Cypress and Playwright BDD specs, ensuring wording remains identical for parity reporting.
-- **Token Parser Logic**: Source-of-truth lives in the C# API; TypeScript stacks consume cloned implementations for local util tests, so any change here must be ported to `_API_TESTING_GHERKIN_/DEMOAPP00{1,3}` `src/tokenparser`.
-- **Ports & Env Vars**: Default port `5228` must match `.env` values consumed by `RUN_ALL_APIS_AND_SWAGGER.BAT` and TypeScript `.env` files. Update `TokenParserAPI/appsettings.Development.json` and `.batch/env_utils.bat` together.
-
-## Extension Hooks
-- **Swagger / Contracts**: `TokenParserAPI` uses Swashbuckle. Swagger docs should remain aligned with `API Testing POC/tokenparser_api_contract.md`.
-- **Telemetry**: Add Serilog or Application Insights instrumentation if richer observability is required; share the approach in the QA strategy doc for consistency across stacks.
-- **Screenplay Future**: While the C# suite currently uses direct helper calls, the docs highlight how to migrate to a Screenplay-like abstraction (see `docs/SCREENPLAY_GUIDE.md`) to keep all stacks conceptually aligned.
-
-## References
-- TypeScript parity overview: `API Testing POC/screenplay_parity_typescript.md`.
-- Cypress docs: `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/docs`.
-- Playwright docs: `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT/docs`.
+## 6. Operational Notes
+- Use `dotnet format --verify-no-changes` and Roslyn analyzers before test runs.
+- `npx playwright install` must be executed once per environment (documented in README and invoked when the BAT script detects missing browsers).
+- When swapping parser implementations, update both `TokenParserAPI/utils` and SpecFlow assertion helpers to keep deterministic UTC formatting.
+- Metrics rely on TRX results and console summaries; avoid changing logger message formats without updating `.batch/.ps/render-run-metrics.ps1`.

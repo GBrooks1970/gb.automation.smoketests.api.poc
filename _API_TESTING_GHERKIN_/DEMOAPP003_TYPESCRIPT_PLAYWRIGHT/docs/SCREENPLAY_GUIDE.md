@@ -1,51 +1,47 @@
-# Screenplay Pattern Reference
+# Screenplay Guide – DEMOAPP003 (Playwright)
 
-**Version 2 - [12/11/25]**
+**Version 2 – 18/11/25**
 
-## Actors
-- `Actor` encapsulates abilities and scenario memory. Use `actor.whoCan(...)` to compose behaviours (API calls, parser utilities).
-- `remember/recall` functions store transient data (e.g., last API response). Prefer descriptive keys such as `last-response` or `parsed-date`.
+## 1. Actor Lifecycle
+- `screenplay/core/custom-world.ts` wires Cucumber worlds to Playwright's test fixtures.
+- Each scenario receives `Actor.named("Playwright API Tester")` plus abilities defined below.
+- `Before`/`After` hooks tear down the Playwright `APIRequestContext` and clear memory to avoid cross-test bleed.
 
-## Abilities
-- `CallAnApi` (`screenplay/abilities/CallAnApi.ts`) – wraps Playwright `APIRequestContext`, centralises base URL management, and disposes contexts in `After` hooks (see `features/step_definitions/world.ts`).
-- `UseTokenParsers` (`screenplay/abilities/UseTokenParsers.ts`) – exposes `TokenDateParser` and `TokenDynamicStringParser` with feature-flag friendly extension points.
+## 2. Abilities
+| Ability | Location | Description |
+| --- | --- | --- |
+| `CallAnApi` | `screenplay/abilities/CallAnApi.ts` | Wraps Playwright `APIRequestContext` for HTTP verbs. |
+| `UseTokenParsers` | `screenplay/abilities/UseTokenParsers.ts` | Imports parser helpers from `src/tokenparser`. |
+| Additional Abilities | `screenplay/abilities/*` | New abilities must be registered in `custom-world.ts` and mirrored in DEMOAPP001. |
 
-### Adding a New Ability
-1. Create class under `screenplay/abilities` implementing `Ability` interface.
-2. Provide factory/constructor to configure dependencies (e.g., credentials, clients).
-3. Register ability in `CustomWorld.enableApiAbility()` or in scenario-specific hooks.
+## 3. Tasks & Questions
+- Tasks reside in `screenplay/tasks/` (e.g., `SendGetRequest.ts`, `ParseTokenLocally.ts`). They are async functions returning `Promise<void>`.
+- Questions live in `screenplay/questions/` (e.g., `ResponseStatus.ts`, `ResponseBody.ts`) and should be used in step definitions instead of inline assertions.
+- Compose steps as:
+```ts
+Given('the API is alive', async function () {
+  await this.actor.attemptsTo(SendGetRequest.to('/alive'));
+});
+```
 
-## Tasks
-- `SendGetRequest` (`screenplay/tasks/SendGetRequest.ts`) issues GET requests and stores the response under `LAST_RESPONSE`.
-- Parser helpers for util flows currently live beside the relevant step definitions; prefer adding thin Screenplay tasks if reuse expands.
-- Tasks should orchestrate behaviour only—assertions belong in Questions or dedicated step helpers.
+## 4. Memory & Utilities
+- Memory keys: `screenplay/support/memory-keys.ts`.
+- Helpers: `screenplay/support/UtilActorMemory.ts` exposes typed getters/setters.
+- Shared between DEMOAPP001 and DEMOAPP003; changes must be coordinated.
 
-### Task Guidelines
-- Implement `performAs(actor: Actor)` and use `actor.abilityTo(...)` to access abilities.
-- Keep tasks small; chain multiple tasks inside `actor.attemptsTo()` to narrate behaviour.
+## 5. Hooks & Fixtures
+- `screenplay/core/custom-world.ts`:
+  - Creates the actor.
+  - Registers abilities (`CallAnApi`, `UseTokenParsers`).
+  - Provides helper methods such as `actor()` and `memory` for step definitions.
+- `features/support/hooks.ts` (if present) should be limited to logging; most logic belongs in Screenplay worlds.
 
-## Questions
-- `ResponseStatus`, `ResponseBody`, and JSON helpers (`screenplay/questions/*.ts`) expose assertions while preserving Screenplay vocabulary.
-- When adding new questions (e.g., `ParsedTokenDate`), read shared keys from `screenplay/support/memory-keys.ts` to remain parity-aligned with Cypress.
+## 6. Parity Requirements
+1. Tags – Util scenarios must remain tagged `@UTILTEST`; API scenarios stay default or `@api`.
+2. Memory keys, tasks, and abilities must mirror DEMOAPP001 to keep `API Testing POC/DEMO_DOCS/screenplay_parity_demoapps.md` accurate.
+3. When adding new steps or helpers, update Docs + parity tables and notify DEMOAPP002/004 owners.
 
-## World & Hooks
-- `screenplay/core/custom-world.ts` defines the `CustomWorld` consumed by Cucumber. It instantiates an actor per scenario and stores it on `this.actor`.
-- `features/step_definitions/world.ts` wires `Before`/`After` hooks: attaches `CallAnApi`, injects feature tags (e.g., `@utiltest`), and ensures contexts are disposed.
-- Shared utilities such as `screenplay/support/UtilActorMemory.ts` centralise `remember/recall` helpers; reference them rather than duplicating string literals.
-
-## Step Definition Style Guide
-- Keep step definitions declarative. Delegate to Screenplay tasks/questions instead of imperative code.
-- Always await asynchronous operations; use TypeScript generics on `Given/When/Then` to retain `CustomWorld` typing.
-- Use helper utilities for repetitive assertions (e.g., `formatDateUtc`).
-
-## Extending the Framework
-1. **New Feature Area** - create feature file mirroring business language, add step definitions calling existing tasks/questions.
-2. **Complex API Workflow** - add new task (maybe combine multiple API calls), capture intermediate data via `remember`/`recall`.
-3. **UI Coverage** - create Playwright page objects, wrap them in abilities (`UseTheWeb`) and questions (e.g., `DisplayedMessage`).
-4. **Shared State** - prefer explicit Screenplay `remember` keys; avoid global variables to maintain scenario isolation.
-
-## Troubleshooting Tips
-- If `CallAnApi` fails to resolve base URL, confirm `.env` (or `env_utils.bat`) exposes `API_BASE_URL` before scenarios run.
-- For flaky time-based assertions, sync the host clock or inject reference dates via `UseTokenParsers`.
-- When debugging, prefer Screenplay-friendly logging: `actor.remember("debug:last-response", response)` then surface via `UtilActorMemory.dumpLatestResponse()`.
-
+## 7. Troubleshooting
+- Missing actor: ensure step definitions extend `CustomWorld` typings (see `features/support/world.ts`).
+- API base URL wrong: confirm `.env` or batch script sets `API_BASE_URL` to `http://localhost:3001`.
+- Failing util tests due to timezone: use `DateFormatting.CanonicalFormat` from `src/tokenparser`.

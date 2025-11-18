@@ -1,42 +1,57 @@
-# Cypress Screenplay Guide
+# Screenplay Guide – DEMOAPP001 (Cypress)
 
-**Version 1 - [12/11/25]**
+**Version 2 – 18/11/25**
 
-## Actors
-- Defined in `screenplay/actors/Actor.ts`.
-- Cypress actors wrap synchronous command chains; always return Cypress chainables to keep the command queue intact.
-- Access actors via helpers exported from `screenplay/core/api-world.ts` and `screenplay/core/util-world.ts` (`apiActor()`, `utilActor()`).
+## 1. Actor Lifecycle
+- Actor factory lives in `screenplay/actors/Actor.ts`.
+- `screenplay/core/api-world.ts` registers `"Cypress API Actor"` for API-tagged scenarios; `screenplay/core/util-world.ts` registers `"Cypress Util Actor"` for `@UTILTEST`.
+- Worlds run automatically through `cypress/support/e2e.ts`. Step definitions obtain the current actor via `apiActor()` / `utilActor()` helpers; avoid constructing actors manually.
 
-## Abilities
-- `CallAnApi` (`screenplay/abilities/CallAnApi.ts`) uses `cy.request` behind the scenes; base URL comes from `Cypress.env("API_BASE_URL")` or `.env` defaults.
-- `UseTokenParsers` (`screenplay/abilities/UseTokenParsers.ts`) exposes `TokenDateParser` and `TokenDynamicStringParser` sourced from `src/tokenparser`.
-- Add new abilities under `screenplay/abilities` and register them in the relevant world helper so every scenario receives a consistent capability set.
+## 2. Abilities
+| Ability | Location | Notes |
+| --- | --- | --- |
+| `CallAnApi` | `screenplay/abilities/CallAnApi.ts` | Wraps `cy.request`, injects `API_BASE_URL` from `.env`/batch scripts. |
+| `UseTokenParsers` | `screenplay/abilities/UseTokenParsers.ts` | Surfaces `TokenDateParser` + `TokenDynamicStringParser` from `src/tokenparser`. |
+| Future abilities | `screenplay/abilities/*` | Register new abilities inside both world helpers to maintain parity with DEMOAPP003. |
 
-## Tasks
-- `SendGetRequest` (`screenplay/tasks/SendGetRequest.ts`) issues GET calls and stores the response under `LAST_RESPONSE`.
-- Tasks should be very small; chain multiple tasks via `actor.attemptsTo(...)` rather than writing imperative logic in step definitions.
-- Keep side effects inside abilities; tasks simply orchestrate calls.
+## 3. Tasks & Questions
+- **Tasks**: `screenplay/tasks/SendGetRequest.ts`, `ParseTokenLocally.ts`, etc. Tasks remain synchronous (return Cypress chainables) to respect the command queue. Compose tasks with `actor.attemptsTo(...)`.
+- **Questions**: `screenplay/questions/ResponseStatus.ts`, `ResponseBody.ts`, `ParsedToken.ts`. Questions read from memory keys and assert via Chai.
+- **Guidelines**:
+  - Keep step definitions declarative: they should simply call tasks/questions.
+  - Any HTTP interaction must flow through `CallAnApi`; local parser assertions must use `UseTokenParsers`.
 
-## Questions
-- `ResponseStatus` and `ResponseBody` (`screenplay/questions/*.ts`) read from actor memory and assert via Chai expect.
-- Add new questions for domain-specific assertions (e.g., `ParsedDateMatches`) so steps remain declarative.
+## 4. Memory Keys & Utilities
+- Constants defined in `screenplay/support/memory-keys.ts` (e.g., `LAST_RESPONSE`, `LAST_PARSED_DATE`, `LAST_PARSED_DYNAMIC`).
+- Helper functions inside `screenplay/support/UtilActorMemory.ts` provide strongly typed getters/setters for Cypress-friendly use.
+- Never use string literals in steps; import memory helpers to avoid parity drift with DEMOAPP003/002/004.
 
-## Memory & Utilities
-- Shared keys live in `screenplay/support/memory-keys.ts`.
-- `screenplay/support/UtilActorMemory.ts` centralises helper methods (e.g., `rememberResponse`, `lastResponseJson`).
-- Avoid hard-coded strings in step definitions; import keys/utilities instead.
+## 5. Hooks & Fixtures
+- Badeball Cucumber hooks declared in `screenplay/core/*.ts` handle:
+  - Actor creation per scenario.
+  - Ability acquisition/release.
+  - Memory reset via `Before`/`After` hooks.
+- No additional `beforeEach` logic is required in Cypress because the worlds self-register.
 
-## Worlds & Hooks
-- `screenplay/core/api-world.ts` creates `"Cypress API Actor"` per scenario and equips it with `CallAnApi` + `UseTokenParsers`.
-- `screenplay/core/util-world.ts` creates `"Cypress Util Actor"` for `@UTILTEST` scenarios to isolate parser-only contexts.
-- Step definitions import `apiActor()` / `utilActor()` directly to access the current actor; no extra glue files are required because the worlds self-register through Cypress support hooks.
+## 6. Step Definition Guidance
+```
+Given('the API is alive', () => {
+  apiActor().attemptsTo(SendGetRequest.to('/alive'));
+});
 
-## Step Definition Style
-- Keep steps declarative: `Given('the API is alive', () => apiActor().attemptsTo(SendGetRequest.to('/alive')));`
-- Prefer Screenplay Questions for assertions rather than inline `expect`.
-- Reuse helper modules from `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/screenplay/support`.
+Then('the response status is {int}', (code) => {
+  apiActor().shouldSee(ExpectResponseStatus.toEqual(code));
+});
+```
+- Prefer reusing shared tasks/questions rather than inlining assertions.
+- Util scenarios must carry `@UTILTEST`; API scenarios remain untagged or `@api`.
 
-## Parity Tips
-- Mirror any change made here in the Playwright docs/code (and vice versa) to avoid drift.
-- Update `API Testing POC/screenplay_parity_typescript.md` whenever you add abilities, tasks, or memory keys.
-- Reference `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` when documenting new execution paths so automation scripts stay in sync.
+## 7. Parity Checklist
+1. Whenever you add a task/ability/question, mirror it in DEMOAPP003 (TypeScript Playwright) and update the parity doc `API Testing POC/DEMO_DOCS/screenplay_parity_demoapps.md`.
+2. Update DEMOAPP002 (SpecFlow) and DEMOAPP004 (pytest-bdd) docs when new memory keys or scenario outlines appear.
+3. Confirm `.batch/RUN_ALL_API_AND_TESTS.BAT` still reports the correct test counts after modifications.
+
+## 8. Troubleshooting
+- If actors appear undefined, ensure the relevant world helper is imported inside `cypress/support/e2e.ts`.
+- When adding asynchronous helpers, wrap them inside Cypress commands to avoid breaking the command queue.
+- Enable verbose logging by setting `TOKENPARSER_LOG_LEVEL=debug` and use `.results/demoapp001_typescript_cypress_<UTC>.txt` for diagnostics.

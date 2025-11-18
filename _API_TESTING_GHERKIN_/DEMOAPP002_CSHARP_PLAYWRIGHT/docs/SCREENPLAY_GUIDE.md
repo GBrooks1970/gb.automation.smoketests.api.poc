@@ -1,36 +1,50 @@
-# SpecFlow & Screenplay Alignment Guide (DEMOAPP002)
+# Screenplay Guide – DEMOAPP002 (SpecFlow + Playwright)
 
-**Version 1 - [12/11/25]**
+**Version 2 – 18/11/25**
 
-Although the C# suite does not yet implement the Screenplay pattern, the structure below documents how existing SpecFlow bindings map to Screenplay primitives and what is required to reach parity with the TypeScript stacks.
+## 1. Actor & Hook Model
+- Actors are created inside `TokenParserTests/Screenplay/Support/ScreenplayHooks.cs`.
+- `[BeforeScenario]` inspects tags (`utiltests`, `apitests`) and provisions the correct abilities.
+- `[AfterScenario]` disposes Playwright request contexts and clears memory keys.
+- Access the current actor via helper extensions stored in `Screenplay/Support/ScenarioContextExtensions.cs`.
 
-## Current Binding Structure
-- **Feature Files**: `TokenParserTests/Features/*.feature` mirror the scenarios present in the Cypress/Playwright projects.
-- **Step Definitions**: Classes under `TokenParserTests/Steps` (e.g., `DateTokenParser_Steps.cs`) hold both orchestration and assertions.
-- **Helpers**: `TokenParserTests/Helpers/RequestHelper.cs`, `UrlHelper.cs`, etc., wrap HttpClient requests, response parsing, and assertion helpers.
-- **State Management**: Scenario state is stored as private fields inside step classes (`_response`, `_Token`, `_responseContent`), which SpecFlow constructs per-scenario.
-
-## Mapping to Screenplay Concepts
-| Screenplay Concept | Current Equivalent | Notes / Gaps |
+## 2. Abilities
+| Ability | Location | Description |
 | --- | --- | --- |
-| Actor | SpecFlow step class instance | Introduce an `Actor` class encapsulating helpers instead of storing fields per step file. |
-| Ability | `RequestHelper`, `TokenParserClient` | Convert helpers into reusable abilities (e.g., `CallTheApi`) injected via dependency container. |
-| Task | Inline step logic (e.g., building URLs, sending requests) | Extract into `Task` classes that receive an Actor and perform operations. |
-| Question | Assertions embedded in step definitions | Move assertions into dedicated question classes returning strongly typed results. |
-| Memory Keys | Private fields | Replace with a shared `Memory` abstraction so future abilities/tasks stay decoupled. |
+| `CallAnApi` | `Screenplay/Abilities/CallAnApi.cs` | Wraps Playwright `.APIRequestContext` for HTTP calls. |
+| `UseTokenParsers` | `Screenplay/Abilities/UseTokenParsers.cs` | Exposes shared parser classes (`TokenDynamicStringParser`, `TokenDateParser`). |
+| Future abilities | `Screenplay/Abilities/*` | Register in ScreenplayHooks and update parity doc. |
 
-## Recommended Migration Path
-1. **Introduce Actor & Memory**: Create `Screenplay/Actor.cs` + `Screenplay/MemoryKeys.cs` in the test project; register them via SpecFlow dependency injection.
-2. **Wrap Helpers as Abilities**: For example, `CallTokenParserApi` ability exposing `GetAsync`, `PostAsync`, etc., backed by `HttpClient` or Playwright `APIRequestContext`.
-3. **Extract Tasks**: Move logic from `When` steps into `SendGetRequest.To(endpoint)` tasks shared across bindings.
-4. **Encapsulate Questions**: Assertions like `ValidateStatusCode` or `ParsedTokenShouldEqual` become questions invoked via `actor.Asks(...)`.
-5. **Share Parity Docs**: Update `API Testing POC/screenplay_parity_typescript.md` whenever new abilities/questions exist so TypeScript stacks can mirror them.
+## 3. Tasks, Questions, Memory
+- Tasks live under `Screenplay/Tasks/` (e.g., `SendGetRequest.cs`, `ParseTokenLocally.cs`).
+- Questions live under `Screenplay/Questions/` (e.g., `ResponseStatus.cs`, `ParsedToken.cs`).
+- Memory keys defined in `Screenplay/Support/MemoryKeys.cs` (`LAST_RESPONSE`, `LAST_PARSED_DATE`, etc.).
+- Helpers in `Screenplay/Support/UtilActorMemory.cs` provide typed getters/setters.
 
-## Hooks & Dependency Injection
-- Configure SpecFlow hooks (e.g., `BeforeScenario`) to construct an `Actor` with the required abilities.
-- Dispose resources (HttpClient, Playwright contexts) inside `AfterScenario` to match the lifecycle behaviour already documented for the TypeScript projects.
+## 4. Request Helpers
+- `Helpers/RequestHelper.cs` (HttpClient) and `Helpers/RequestHelper_PW.cs` (Playwright) centralise HTTP logic. They now enforce nullable safety to avoid warnings.
+- Use the helpers inside tasks only; step definitions should never instantiate HTTP clients directly.
 
-## References
-- Cypress Screenplay guide: `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/docs/SCREENPLAY_GUIDE.md`.
-- Playwright Screenplay guide: `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT/docs/SCREENPLAY_GUIDE.md`.
-- Parity tracker: `API Testing POC/screenplay_parity_typescript.md`.
+## 5. Step Definition Guidance
+- Step bindings sit under `TokenParserTests/StepDefinitions/**`. Each binding should:
+  1. Resolve the actor from `ScenarioContext`.
+  2. Invoke a task or question from the Screenplay folders.
+  3. Avoid ad-hoc assertions; rely on Questions for consistency with other stacks.
+- Example:
+```csharp
+[Given(@"the API is alive")]
+public async Task GivenTheApiIsAlive()
+{
+    await _actor.AttemptsTo(SendGetRequest.To("/alive"));
+}
+```
+
+## 6. Parity Checklist
+1. Mirror abilities/tasks/memory keys documented here with DEMOAPP001/003/004 and update `API Testing POC/DEMO_DOCS/screenplay_parity_demoapps.md`.
+2. Re-run `.batch/RUN_ALL_API_AND_TESTS.BAT` after adding new features to ensure metrics capture the updated counts.
+3. When feature tables change in DEMOAPP001, regenerate SpecFlow bindings (build task) and review `*.feature.cs` files for drift.
+
+## 7. Troubleshooting
+- If actors are null, confirm that `ScreenplayHooks` is decorated with `[Binding]` and registered in `specflow.json`.
+- To inspect Playwright traffic, enable `APIRequestContextOptions.Trace` inside `RequestHelper_PW`.
+- Logging level mismatches can be fixed by setting `TokenParser:Logging:Level` in `appsettings.Development.json` or `.env`.
