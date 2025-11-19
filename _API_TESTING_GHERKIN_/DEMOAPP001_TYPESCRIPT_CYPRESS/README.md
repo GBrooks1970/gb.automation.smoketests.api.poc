@@ -7,11 +7,11 @@ Token Parser Express API with Cypress Cucumber tests. This stack is the referenc
 ## Project Layout
 
 ```
-src/server.ts          # Express API host + Swagger endpoints
-src/tokenparser/       # Date and dynamic string parser implementations shared with tests
+src/server.ts          # Thin entry point that boots the shared Express API
 cypress/               # Feature files, step definitions, Screenplay helpers
 docs/                  # Architecture, QA strategy, Screenplay guide
 .batch/                # Windows helpers (see repo root for orchestrator)
+packages/tokenparser-api-shared/ # Workspace package with the API + parser logic
 ```
 
 ---
@@ -71,6 +71,6 @@ The helper script:
 
 ## Documentation
 
-- `docs/ARCHITECTURE.md` - detailed view of the Express host and parser modules.
+- `docs/ARCHITECTURE.md` - detailed view of the shared Express host and parser modules.
 - `docs/QA_STRATEGY.md` - test coverage, tagging, and reporting guidance.
 - `docs/SCREENPLAY_GUIDE.md` - explains how the actor/ability/task model works within Cypress.

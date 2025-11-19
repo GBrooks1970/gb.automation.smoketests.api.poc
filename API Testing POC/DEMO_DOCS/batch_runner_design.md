@@ -40,6 +40,17 @@ Every runner imports `env_utils.bat` to guarantee consistent defaults:
 
 Any new automation must reuse these helpers instead of duplicating logic.
 
+### 1.3 Runner Dependency Bootstrap Scripts
+
+Runner hosts must install the same headless browser dependencies before any demo executes:
+
+| Script | Platform | Purpose |
+| --- | --- | --- |
+| `./scripts/install-runner-deps.sh` | Linux/macOS | Installs Xvfb + GUI libraries, runs `npx playwright install --with-deps`, and verifies the Cypress binary so TypeScript demos can run inside CI containers. |
+| `.\scripts\install-runner-deps.ps1` | Windows | Ensures Chocolatey + VC runtimes are present, installs Playwright browsers, and runs `npx cypress verify` for parity with local developer laptops. |
+
+> Always execute the appropriate installer before invoking `.batch/RUN_ALL_API_AND_TESTS.BAT` on a new machine to avoid `spawn Xvfb ENOENT` or missing-browser failures.
+
 ---
 
 ## 2. Orchestrator - `RUN_ALL_API_AND_TESTS.BAT`

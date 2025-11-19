@@ -9,7 +9,7 @@
 
 ## 2. Application Composition
 ### API Host
-- Location: `src/server.ts` bootstraps the Express host, Swagger, logging middleware, and two parser endpoints (`/parse-date-token`, `/parse-dynamic-string-token`) backed by `src/tokenparser`.
+- Location: `src/server.ts` bootstraps the shared Express host (implemented in `packages/tokenparser-api-shared`) with Swagger, logging middleware, and two parser endpoints (`/parse-date-token`, `/parse-dynamic-string-token`).
 - Configuration: `.env` (and `.env.example`) define `PORT`, `SWAGGER_URL`, and logging flags. Batch helpers hydrate these settings via `env_utils.bat`.
 - Logging: Uses the shared token parser logger abstraction (`TOKENPARSER_LOG_LEVEL`). Structured logs bubble into `.results` when the batch runner redirects output.
 
@@ -36,7 +36,8 @@ DEMOAPP001_TYPESCRIPT_CYPRESS
 │  ├─ e2e/features/api|util
 │  └─ support/step_definitions + screenplay glue
 ├─ screenplay/  (shared Screenplay implementation)
-├─ src/         (Express host + token parser services)
+├─ src/         (Thin entry point delegating to the shared Express host)
+├─ ../../packages/tokenparser-api-shared/ (workspace folder with API + parser logic)
 ├─ .results/    (created by batch tooling)
 ├─ cypress.config.ts
 ├─ tsconfig.json (path aliases for src + screenplay)
@@ -45,8 +46,8 @@ DEMOAPP001_TYPESCRIPT_CYPRESS
 ```
 
 ## 4. Runtime Interactions
-1. `.batch` script loads env vars, probes port 3000, and launches `npm run start` if needed.
-2. Express host exposes Swagger and tokens; Cypress util tests hit parser modules directly, API tests hit the HTTP endpoints.
+1. `.batch` script loads env vars, probes port 3000, and launches the shared workspace via `npm run start:shared -- --port=3000` if needed.
+2. Express host exposes Swagger and tokens; Cypress util tests call the shared parser package directly, API tests hit the HTTP endpoints.
 3. Screenplay actors store responses/memory under `screenplay/support/memory-keys.ts`.
 4. Test results stream to stdout; orchestrator pipes them into `.results` and aggregates metrics via `.batch/.ps/render-run-metrics.ps1`.
 

@@ -7,11 +7,12 @@ TypeScript demo that mirrors DEMOAPP001 but uses Playwright request contexts and
 ## Structure
 
 ```
-src/                    # Express API + token parser implementations (port 3001)
+src/                    # Thin entry point that boots the shared Express API (port 3001)
 features/               # Gherkin specs (API + @UTILTEST)
 screenplay/             # Actors, abilities, tasks, questions, world hooks
 tooling/                # Cucumber config, summary renderer, Playwright config
 docs/                   # Architecture, QA strategy, Screenplay guide
+packages/tokenparser-api-shared/ # Workspace package with Express host + parser logic
 ```
 
 ---

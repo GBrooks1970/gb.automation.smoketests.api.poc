@@ -65,7 +65,7 @@ if "%PORT_IN_USE%"=="1" (
 )
 
 for /f "usebackq" %%I in (
-    `powershell -NoProfile -Command "$p = Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','npm','run','start' -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"`
+    `powershell -NoProfile -Command "$p = Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','npm','run','start:shared','--','--port=%CURRENT_PORT%','--label=%LABEL%' -WorkingDirectory '%ROOT_DIR%' -PassThru; $p.Id"`
 ) do set "%~4_PID=%%I"
 if not defined %~4_PID (
     echo Failed to start %LABEL% API.

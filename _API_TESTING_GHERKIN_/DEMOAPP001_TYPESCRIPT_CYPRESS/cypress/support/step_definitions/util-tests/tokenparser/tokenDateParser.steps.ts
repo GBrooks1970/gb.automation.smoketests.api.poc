@@ -1,6 +1,6 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 import { expect } from "chai";
-import CommonUtils from "../../../../../src/services/common-utils";
+import { CommonUtils } from "tokenparser-api-shared";
 import { utilActor } from "../../../../../screenplay/core/util-world";
 import { UseTokenParsers } from "../../../../../screenplay/abilities/UseTokenParsers";
 import { UtilActorMemory } from "../../../../../screenplay/support/UtilActorMemory";
