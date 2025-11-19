@@ -3,7 +3,7 @@
 **Version 2 – 18/11/25**
 
 ## 1. Overview
-- **API Host**: Express + TypeScript (`src/server.ts`) identical to DEMOAPP001 but listening on port 3001 by default.
+- **API Host**: Shared Express + TypeScript package (`packages/tokenparser-api-shared`) with a thin `src/server.ts` bootstrap listening on port 3001 by default.
 - **Automation Stack**: Playwright + Cucumber (cucumber-js) with Screenplay abstractions (`@serenity-js` style) reusing the same modules as the Cypress stack.
 - **Objective**: Demonstrate parity between Cypress and Playwright implementations while exercising the same parser logic and feature tables.
 
