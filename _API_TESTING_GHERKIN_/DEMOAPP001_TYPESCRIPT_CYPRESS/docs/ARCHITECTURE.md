@@ -9,7 +9,7 @@
 
 ## 2. Application Composition
 ### API Host
-- Location: `src/server.ts` bootstraps the Express host, Swagger, logging middleware, and two parser endpoints (`/parse-date-token`, `/parse-dynamic-string-token`) backed by `src/tokenparser`.
+- Location: `src/server.ts` bootstraps the shared Express host, Swagger, logging middleware, and two parser endpoints (`/parse-date-token`, `/parse-dynamic-string-token`) backed by the workspace package `packages/tokenparser-api-shared`.
 - Configuration: `.env` (and `.env.example`) define `PORT`, `SWAGGER_URL`, and logging flags. Batch helpers hydrate these settings via `env_utils.bat`.
 - Logging: Uses the shared token parser logger abstraction (`TOKENPARSER_LOG_LEVEL`). Structured logs bubble into `.results` when the batch runner redirects output.
 

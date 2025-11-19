@@ -1,6 +1,6 @@
 import { CustomWorld } from "../core/custom-world";
 import { LAST_GENERATED_STRING, LAST_PARSE_ERROR, LAST_PARSED_RANGE } from "./memory-keys";
-import { DateRange } from "../../src/tokenparser/TokenDateParser";
+import { DateRange } from "@demo/tokenparser-api-shared";
 
 export class UtilActorMemory {
   static rememberDate = (world: CustomWorld, key: string, value: Date) => {

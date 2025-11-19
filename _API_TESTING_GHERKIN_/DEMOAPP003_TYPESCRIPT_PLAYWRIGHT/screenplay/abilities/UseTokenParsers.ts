@@ -1,6 +1,9 @@
 import type { Ability } from "../core/types";
-import { TokenDateParser, DateRange } from "../../src/tokenparser/TokenDateParser";
-import { TokenDynamicStringParser } from "../../src/tokenparser/TokenDynamicStringParser";
+import {
+  TokenDateParser,
+  DateRange,
+  TokenDynamicStringParser,
+} from "@demo/tokenparser-api-shared";
 
 export class UseTokenParsers implements Ability {
   get description(): string {

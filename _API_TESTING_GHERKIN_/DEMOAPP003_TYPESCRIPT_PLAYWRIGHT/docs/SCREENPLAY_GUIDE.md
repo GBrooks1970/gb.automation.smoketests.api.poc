@@ -11,7 +11,7 @@
 | Ability | Location | Description |
 | --- | --- | --- |
 | `CallAnApi` | `screenplay/abilities/CallAnApi.ts` | Wraps Playwright `APIRequestContext` for HTTP verbs. |
-| `UseTokenParsers` | `screenplay/abilities/UseTokenParsers.ts` | Imports parser helpers from `src/tokenparser`. |
+| `UseTokenParsers` | `screenplay/abilities/UseTokenParsers.ts` | Imports parser helpers from `@demo/tokenparser-api-shared`. |
 | Additional Abilities | `screenplay/abilities/*` | New abilities must be registered in `custom-world.ts` and mirrored in DEMOAPP001. |
 
 ## 3. Tasks & Questions
@@ -44,4 +44,4 @@ Given('the API is alive', async function () {
 ## 7. Troubleshooting
 - Missing actor: ensure step definitions extend `CustomWorld` typings (see `features/support/world.ts`).
 - API base URL wrong: confirm `.env` or batch script sets `API_BASE_URL` to `http://localhost:3001`.
-- Failing util tests due to timezone: use `DateFormatting.CanonicalFormat` from `src/tokenparser`.
+- Failing util tests due to timezone: use `DateFormatting.CanonicalFormat` from the shared `@demo/tokenparser-api-shared` package.
