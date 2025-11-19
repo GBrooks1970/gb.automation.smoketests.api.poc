@@ -44,6 +44,8 @@ DEMOAPP001_TYPESCRIPT_CYPRESS
 └─ .env / .env.example
 ```
 
+> **Shared API Note:** `src/server.ts` and `src/tokenparser/*` now proxy to the `tokenparser-api-shared` workspace package so Express + parser logic is maintained in a single source of truth.
+
 ## 4. Runtime Interactions
 1. `.batch` script loads env vars, probes port 3000, and launches `npm run start` if needed.
 2. Express host exposes Swagger and tokens; Cypress util tests hit parser modules directly, API tests hit the HTTP endpoints.

@@ -116,15 +116,15 @@ Shared implementations now emit structured log messages through the logging abst
 
 - `README.md` (this guide)
 - `_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/`
-  - `src/server.ts` - Express API entry point with Swagger configuration and logging
-  - `src/tokenparser/` - Date and dynamic string parser implementations
+  - `src/server.ts` - Express API entry point (delegates to `tokenparser-api-shared`)
+  - `src/tokenparser/` - Re-exports of shared date and dynamic string parser implementations
   - `cypress/` - BDD feature files, step definitions, and Cypress config
 - `_API_TESTING_GHERKIN_/DEMOAPP002_CSHARP_PLAYWRIGHT/`
   - `TokenParserAPI/Program.cs` - Minimal API host with Swagger UI and logging configuration
   - `TokenParserAPI/utils/` - Token parsing utilities with logger integration
   - `TokenParserTests/` - SpecFlow feature files and Playwright test project
 - `_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT/`
-  - `src/server.ts`, `src/tokenparser/`, `features/` - Playwright BDD server and Screenplay test harness
+  - `src/server.ts`, `src/tokenparser/`, `features/` - Playwright BDD server (shared API) and Screenplay test harness
   - `tooling/` - Cucumber + Playwright configs and reporting scripts
   - `docs/` - Architecture, QA strategy, and Screenplay guidelines
 - `_API_TESTING_GHERKIN_/DEMOAPP004_PYTHON_PLAYWRIGHT/`

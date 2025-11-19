@@ -8,7 +8,7 @@ Token Parser Express API with Cypress Cucumber tests. This stack is the referenc
 
 ```
 src/server.ts          # Express API host + Swagger endpoints
-src/tokenparser/       # Date and dynamic string parser implementations shared with tests
+src/tokenparser/       # Re-exports of shared date and dynamic string parser implementations
 cypress/               # Feature files, step definitions, Screenplay helpers
 docs/                  # Architecture, QA strategy, Screenplay guide
 .batch/                # Windows helpers (see repo root for orchestrator)
@@ -29,12 +29,23 @@ Environment variables live in `.env.example`. The automation scripts call `env_u
 
 | Command | Description |
 | --- | --- |
-| `npm run start` | Launch the Express API on port `3000`. |
+| `npm run start` | Launch the Express API (shared package) on port `3000`. |
 | `npm run dev` | Start the API with `tsx watch` for local debugging. |
 | `npm run ts:check` | TypeScript compile in no-emit mode. |
 | `npm run lint` / `npm run format` | Static analysis and formatting. |
 | `npm run test:bdd` | Headless Cypress run (all specs). |
 | `npx cypress open` | Interactive Cypress runner. |
+
+### Shared Token Parser API
+
+Both DEMOAPP001 and DEMOAPP003 consume the shared Express host + parser implementation published inside this repository at `packages/tokenparser-api-shared`. Key facts:
+
+- **Contents**: `server.ts` (Express host + Swagger), `tokenparser/*`, `services/logger|common-utils|symbol-consts`, and `utils/date-utils`.
+- **Build**: run `npm run shared:build` from the repo root or `npm run build` inside the package to emit `dist/`.
+- **Imports**: this app points to the compiled output via `tsconfig.json` path aliases, so local files under `src/tokenparser`, `src/services`, etc., are thin re-exports.
+- **Batch scripts**: continue to call `npm run start`/`dev` here; the shared host honours `PORT` so DEMOAPP003 can launch simultaneously on port `3001`.
+
+When you modify the shared code, rebuild it and ensure both TypeScript stacks still pass `npm run ts:check` / `npm run test:bdd`.
 
 Swagger endpoints:
 

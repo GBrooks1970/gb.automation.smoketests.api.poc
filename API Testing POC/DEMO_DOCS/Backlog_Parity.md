@@ -26,10 +26,12 @@ _None at this time. Track new findings here as they arise._
    - Move common Express host + parser code into the shared package while keeping per-project entry points that simply consume the package.  
    - Ensure unit tests (ts-jest or equivalent) cover exported modules before wiring Cypress/Playwright.  
    - Acceptance: both servers compile using shared imports with no behaviour change.
+   - _Status 18/11/25_: shared package (`packages/tokenparser-api-shared`) now contains the Express host + parsers; DEMOAPP001/003 consume it via re-export shims and workspace paths.
 3. **Batch Runner Alignment**  
-   - Introduce a single start script (e.g., `npm run start:shared -- --port=<PORT>`) inside the shared package.  
-   - Update `.batch/RUN_DEMOAPP001_*.BAT` and `.batch/RUN_DEMOAPP003_*.BAT` to call the shared script, passing `PORT=3000/3001` via env vars.  
-   - Acceptance: batch runs start/stop the shared API without editing per-app `src/`.
+    - Introduce a single start script (e.g., `npm run start:shared -- --port=<PORT>`) inside the shared package.  
+    - Update `.batch/RUN_DEMOAPP001_*.BAT` and `.batch/RUN_DEMOAPP003_*.BAT` to call the shared script, passing `PORT=3000/3001` via env vars.  
+    - Acceptance: batch runs start/stop the shared API without editing per-app `src/`.  
+    - _Status 18/11/25_: both batch runners now call `node packages/tokenparser-api-shared/dist/cli/start.js` with the desired port/label and capture PIDs for teardown.
 4. **Logging & Configuration Harmonisation**  
    - Create `.env.demoapp_ts_api` template with logging level, Swagger URLs, and port defaults.  
    - Point both stacks’ `.env` loaders (including `env_utils.bat`) to this template or ensure they import from the shared package.  

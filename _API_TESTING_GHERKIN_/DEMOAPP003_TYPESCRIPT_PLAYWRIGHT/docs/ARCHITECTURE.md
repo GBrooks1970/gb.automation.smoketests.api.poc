@@ -40,6 +40,8 @@ DEMOAPP003_TYPESCRIPT_PLAYWRIGHT
 └─ .results/
 ```
 
+> **Shared API Note:** Express host and parser modules are sourced from `packages/tokenparser-api-shared` with `src/server.ts` acting as a thin bootstrap (port 3001 by default).
+
 ## 5. Automation Hooks
 - `npm run start`: API host.
 - `npm run test:bdd`: `NODE_OPTIONS=--loader ts-node/esm cucumber-js` harness executing features.

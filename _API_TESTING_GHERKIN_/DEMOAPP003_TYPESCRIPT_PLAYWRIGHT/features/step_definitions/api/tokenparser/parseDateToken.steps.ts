@@ -12,17 +12,17 @@ let tokenString = "";
 const toApiProperty = (propertyName: string): string =>
   propertyName ? propertyName.charAt(0).toUpperCase() + propertyName.slice(1) : propertyName;
 
-Given<CustomWorld>("a valid or invalid date token {string}", function (this, inputToken: string) {
+Given<CustomWorld>("a valid or invalid date token {string}", function (this: CustomWorld, inputToken: string) {
   tokenString = inputToken;
 });
 
-When<CustomWorld>("a GET request is made to the ParseDateToken Endpoint", async function (this) {
+When<CustomWorld>("a GET request is made to the ParseDateToken Endpoint", async function (this: CustomWorld) {
   await this.actor.attemptsTo(SendGetRequest.to("/parse-date-token", { token: tokenString }));
 });
 
 Then<CustomWorld>(
   "the API response for the ParseDateToken Endpoint should return a status code of {int}",
-  async function (this, statusCode: number) {
+  async function (this: CustomWorld, statusCode: number) {
     const status = await this.actor.answer(ResponseStatus.code());
     expect(status).toBe(statusCode);
   },
@@ -30,7 +30,7 @@ Then<CustomWorld>(
 
 Then<CustomWorld>(
   "the response body should contain {string} with the value {string}",
-  async function (this, propertyName: string, expected: string) {
+  async function (this: CustomWorld, propertyName: string, expected: string) {
     const propertyKey = toApiProperty(propertyName);
     const body = await this.actor.answer(ResponseBody.json());
     expect(body[propertyKey]).toBeDefined();

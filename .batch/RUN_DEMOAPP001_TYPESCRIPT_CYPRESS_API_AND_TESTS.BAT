@@ -33,7 +33,7 @@ if "%SKIP_API_START%"=="1" (
 ) else if "%PORT_IN_USE%"=="1" (
     echo Port %SERVER_PORT% already in use. Assuming %SUITE_LABEL% API is running.
 ) else (
-    call :start_node_api "%SUITE_LABEL%" "%APP_DIR%" %SERVER_PORT% API
+    call :start_shared_api "%SUITE_LABEL%" "%ROOT_DIR%" %SERVER_PORT% API
     if errorlevel 1 (
         set "EXIT_CODE=1"
         goto cleanup
@@ -78,12 +78,9 @@ if "%EXIT_CODE%"=="0" (
 popd
 endlocal & exit /b %EXIT_CODE%
 
-rem ---------------------------------------------------------------------------
-rem Helper: start a Node API (shared design from RUN_ALL_APIS_AND_SWAGGER.BAT)
-rem ---------------------------------------------------------------------------
-:start_node_api
+:start_shared_api
 set "LABEL=%~1"
-set "PROJECT_DIR=%~2"
+set "ROOT_PATH=%~2"
 set "PORT=%~3"
 set "PREFIX=%~4"
 
@@ -94,7 +91,7 @@ if "%PORT_IN_USE%"=="1" (
 )
 
 for /f "usebackq" %%I in (
-    `powershell -NoProfile -Command "$p = Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','npm','run','start' -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"`
+    `powershell -NoProfile -Command "$p = Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','node','packages/tokenparser-api-shared/dist/cli/start.js','--port','%PORT%','--label','%LABEL%' -WorkingDirectory '%ROOT_PATH%' -PassThru; $p.Id"`
 ) do set "%PREFIX%_PID=%%I"
 if not defined %PREFIX%_PID (
     echo Failed to start %LABEL% API.
