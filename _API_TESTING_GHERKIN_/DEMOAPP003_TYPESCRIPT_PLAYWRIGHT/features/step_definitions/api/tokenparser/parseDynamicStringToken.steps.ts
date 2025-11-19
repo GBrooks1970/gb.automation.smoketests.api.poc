@@ -33,7 +33,7 @@ Given<CustomWorld>("the ParseDynamicStringToken endpoint is running", function (
 
 When<CustomWorld>(
   "A request with dynamic string token {string} to the ParseDynamicStringToken endpoint",
-  async function (this, inputToken: string) {
+  async function (this: CustomWorld, inputToken: string) {
     token = inputToken;
     await this.actor.attemptsTo(SendGetRequest.to("/parse-dynamic-string-token", { token }));
   },
@@ -41,7 +41,7 @@ When<CustomWorld>(
 
 Then<CustomWorld>(
   "the API response should return a status code of {int} for the ParseDynamicStringToken endpoint",
-  async function (this, statusCode: number) {
+  async function (this: CustomWorld, statusCode: number) {
     const status = await this.actor.answer(ResponseStatus.code());
     expect(status).toBe(statusCode);
   },
@@ -49,7 +49,7 @@ Then<CustomWorld>(
 
 Then<CustomWorld>(
   "the response should contain {string} with the value {string}",
-  async function (this, propertyName: string, expected: string) {
+  async function (this: CustomWorld, propertyName: string, expected: string) {
     const body = await this.actor.answer(ResponseBody.json());
     const parsedToken =
       body[propertyName] ?? body[propertyName.charAt(0).toUpperCase() + propertyName.slice(1)];

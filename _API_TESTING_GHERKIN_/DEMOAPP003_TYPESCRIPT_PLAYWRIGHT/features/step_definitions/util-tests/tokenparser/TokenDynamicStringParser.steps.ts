@@ -8,11 +8,11 @@ let token = "";
 
 const parser = (world: CustomWorld) => world.actor.abilityTo(UseTokenParsers);
 
-Given<CustomWorld>("a token {string}", function (this, inputToken: string) {
+Given<CustomWorld>("a token {string}", function (this: CustomWorld, inputToken: string) {
   token = inputToken;
 });
 
-When<CustomWorld>("I parse and generate the string", function (this) {
+When<CustomWorld>("I parse and generate the string", function (this: CustomWorld) {
   UtilActorMemory.clearError(this);
   UtilActorMemory.rememberGenerated(this, "");
   try {
@@ -25,9 +25,9 @@ When<CustomWorld>("I parse and generate the string", function (this) {
 
 Then<CustomWorld>(
   "the generated string should have a length of {int}",
-  function (this, expectedLength: number) {
+  function (this: CustomWorld, expectedLength: number) {
     const error = UtilActorMemory.getParseError(this);
-    expect(error, "Unexpected parsing error").toBeFalsy();
+    expect(error).toBeFalsy();
     const generated = UtilActorMemory.getGenerated(this).replace(/\r\n/g, "");
     expect(generated.length).toBe(expectedLength);
   },
@@ -35,9 +35,9 @@ Then<CustomWorld>(
 
 Then<CustomWorld>(
   "the generated string should match the character set {string}",
-  function (this, characterSet: string) {
+  function (this: CustomWorld, characterSet: string) {
     const error = UtilActorMemory.getParseError(this);
-    expect(error, "Unexpected parsing error").toBeFalsy();
+    expect(error).toBeFalsy();
     const generated = UtilActorMemory.getGenerated(this);
 
     const regex = (() => {
@@ -71,9 +71,9 @@ Then<CustomWorld>(
 
 Then<CustomWorld>(
   "the generated string should have {int} lines",
-  function (this, expectedLines: number) {
+  function (this: CustomWorld, expectedLines: number) {
     const error = UtilActorMemory.getParseError(this);
-    expect(error, "Unexpected parsing error").toBeFalsy();
+    expect(error).toBeFalsy();
     const lines = UtilActorMemory.getGenerated(this).split("\r\n");
     expect(lines.length).toBe(expectedLines);
   },
@@ -81,9 +81,9 @@ Then<CustomWorld>(
 
 Then<CustomWorld>(
   "a dynamic string parser error should be thrown with message {string}",
-  function (this, expectedMessage: string) {
+  function (this: CustomWorld, expectedMessage: string) {
     const error = UtilActorMemory.getParseError(this);
-    expect(error, "Expected parsing to fail").toBeTruthy();
+    expect(error).toBeTruthy();
     expect(error?.message ?? "").toContain(expectedMessage);
   },
 );

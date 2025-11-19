@@ -65,7 +65,17 @@ Consumers *do not* need to install these packages directly—the compiled output
 
 ---
 
-## 6. Future Enhancements
+## 6. Automation Hooks / CLI
+
+- The package ships with `dist/cli/start.js`, invoked via `node packages/tokenparser-api-shared/dist/cli/start.js --port <port> --label <label>`.
+- `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` and `.batch/RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` now call this CLI instead of maintaining their own `npm run start` logic.
+- Ports/logging categories are passed via CLI arguments (or `PORT` / `TOKENPARSER_LOGGER_CATEGORY` env vars) so both demos can start the same host with different settings.
+
+When extending the CLI, keep arguments backward compatible—batch scripts rely on them.
+
+---
+
+## 7. Future Enhancements
 
 - Publish the package to an internal npm feed so other repositories can consume it.
 - Add unit tests (ts-jest or vitest) covering the parser logic directly inside the shared package.

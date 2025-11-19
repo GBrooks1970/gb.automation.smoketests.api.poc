@@ -9,13 +9,19 @@
       ".",
       "../../packages/tokenparser-api-shared/dist"
     ],
+    "noImplicitThis": false,
     "allowJs": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "types": ["node", "@cucumber/cucumber"],
+    "typeRoots": [
+      "./node_modules/@types",
+      "../../packages/tokenparser-api-shared/node_modules/@types",
+      "../../node_modules/@types"
+    ],
+    "types": ["node"],
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
@@ -27,7 +33,8 @@
     "src/**/*.ts",
     "features/**/*.ts",
     "screenplay/**/*.ts",
-    "tooling/**/*.ts"
+    "tooling/**/*.ts",
+    "types/**/*.d.ts"
   ],
   "exclude": [
     "node_modules",

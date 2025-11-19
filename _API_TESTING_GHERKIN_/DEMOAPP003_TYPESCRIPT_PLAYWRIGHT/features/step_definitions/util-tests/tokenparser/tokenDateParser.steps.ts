@@ -34,16 +34,16 @@ const compareWithExpected = (world: CustomWorld, adjuster: (expected: Date) => v
   expect(result.toUTCString()).toBe(expectedDate.toUTCString());
 };
 
-Given<CustomWorld>("A date token {string}", function (this, inputToken: string) {
+Given<CustomWorld>("A date token {string}", function (this: CustomWorld, inputToken: string) {
   token = inputToken;
 });
 
-Given<CustomWorld>("An invalid date range string {string}", function (this, inputToken: string) {
+Given<CustomWorld>("An invalid date range string {string}", function (this: CustomWorld, inputToken: string) {
   token = inputToken;
   dateRangeTokenString = inputToken;
 });
 
-When<CustomWorld>("I parse the token", function (this) {
+When<CustomWorld>("I parse the token", function (this: CustomWorld) {
   UtilActorMemory.rememberDate(this, LAST_PARSED_DATE, new Date(0));
   UtilActorMemory.clearError(this);
   try {
@@ -56,16 +56,16 @@ When<CustomWorld>("I parse the token", function (this) {
 
 Then<CustomWorld>(
   "an error should be thrown with message {string}",
-  function (this, expectedMessage: string) {
+  function (this: CustomWorld, expectedMessage: string) {
     const error = UtilActorMemory.getParseError(this);
-    expect(error, "Expected parsing to throw").toBeTruthy();
+    expect(error).toBeTruthy();
     expect(error?.message ?? "").toContain(expectedMessage);
   },
 );
 
 Then<CustomWorld>(
   "the result should be today's date minus two year and four month",
-  function (this) {
+  function (this: CustomWorld) {
     compareWithExpected(this, (expected) => {
       expected.setUTCFullYear(expected.getUTCFullYear() - 2);
       expected.setUTCMonth(expected.getUTCMonth() - 4);
@@ -75,7 +75,7 @@ Then<CustomWorld>(
 
 Then<CustomWorld>(
   "the result should be today's date minus one year and one month",
-  function (this) {
+  function (this: CustomWorld) {
     compareWithExpected(this, (expected) => {
       expected.setUTCFullYear(expected.getUTCFullYear() - 1);
       expected.setUTCMonth(expected.getUTCMonth() - 1);
@@ -83,25 +83,25 @@ Then<CustomWorld>(
   },
 );
 
-Then<CustomWorld>("the result should be today's date", function (this) {
+Then<CustomWorld>("the result should be today's date", function (this: CustomWorld) {
   compareWithExpected(this, () => undefined);
 });
 
-Then<CustomWorld>("the result should be tomorrow's date", function (this) {
+Then<CustomWorld>("the result should be tomorrow's date", function (this: CustomWorld) {
   compareWithExpected(this, (expected) => expected.setUTCDate(expected.getUTCDate() + 1));
 });
 
-Then<CustomWorld>("the result should be yesterday's date", function (this) {
+Then<CustomWorld>("the result should be yesterday's date", function (this: CustomWorld) {
   compareWithExpected(this, (expected) => expected.setUTCDate(expected.getUTCDate() - 1));
 });
 
-Then<CustomWorld>("the result should be today's date minus two years", function (this) {
+Then<CustomWorld>("the result should be today's date minus two years", function (this: CustomWorld) {
   compareWithExpected(this, (expected) => expected.setUTCFullYear(expected.getUTCFullYear() - 2));
 });
 
 Then<CustomWorld>(
   "the result should be today's date minus one year, two months, and three days",
-  function (this) {
+  function (this: CustomWorld) {
     compareWithExpected(this, (expected) => {
       expected.setUTCFullYear(expected.getUTCFullYear() - 1);
       expected.setUTCMonth(expected.getUTCMonth() - 2);
@@ -112,7 +112,7 @@ Then<CustomWorld>(
 
 Then<CustomWorld>(
   "the result should be today's date plus one year, minus one month, and plus one day",
-  function (this) {
+  function (this: CustomWorld) {
     compareWithExpected(this, (expected) => {
       expected.setUTCFullYear(expected.getUTCFullYear() + 1);
       expected.setUTCMonth(expected.getUTCMonth() - 1);
@@ -121,15 +121,15 @@ Then<CustomWorld>(
   },
 );
 
-Then<CustomWorld>("the result should be today's date plus two years", function (this) {
+Then<CustomWorld>("the result should be today's date plus two years", function (this: CustomWorld) {
   compareWithExpected(this, (expected) => expected.setUTCFullYear(expected.getUTCFullYear() + 2));
 });
 
-Then<CustomWorld>("the result should be today's date plus five months", function (this) {
+Then<CustomWorld>("the result should be today's date plus five months", function (this: CustomWorld) {
   compareWithExpected(this, (expected) => expected.setUTCMonth(expected.getUTCMonth() + 5));
 });
 
-Then<CustomWorld>("the result should be tomorrow's date plus five months", function (this) {
+Then<CustomWorld>("the result should be tomorrow's date plus five months", function (this: CustomWorld) {
   compareWithExpected(this, (expected) => {
     expected.setUTCDate(expected.getUTCDate() + 1);
     expected.setUTCMonth(expected.getUTCMonth() + 5);
@@ -138,7 +138,7 @@ Then<CustomWorld>("the result should be tomorrow's date plus five months", funct
 
 Then<CustomWorld>(
   "the result should be yesterday's date plus five months and minus one year",
-  function (this) {
+  function (this: CustomWorld) {
     compareWithExpected(this, (expected) => {
       expected.setUTCDate(expected.getUTCDate() - 1);
       expected.setUTCMonth(expected.getUTCMonth() + 5);
@@ -149,7 +149,7 @@ Then<CustomWorld>(
 
 Then<CustomWorld>(
   "the result should equal today plus {int} years {int} months {int} days",
-  function (this, years: number, months: number, days: number) {
+  function (this: CustomWorld, years: number, months: number, days: number) {
     compareWithExpected(this, (expected) => {
       expected.setUTCFullYear(expected.getUTCFullYear() + years);
       expected.setUTCMonth(expected.getUTCMonth() + months);
@@ -162,18 +162,18 @@ Given<CustomWorld>("A null or invalid date token", function () {
   token = "INVALID";
 });
 
-Then<CustomWorld>("the result should be the Unix zero date", function (this) {
+Then<CustomWorld>("the result should be the Unix zero date", function (this: CustomWorld) {
   const result = UtilActorMemory.getRememberedDate(this, LAST_PARSED_DATE);
   const expectedDate = new Date(0);
   expectedDate.setUTCHours(0, 0, 0, 0);
   expect(result.toUTCString()).toBe(expectedDate.toUTCString());
 });
 
-Given<CustomWorld>("A date string {string}", function (this, input: string) {
+Given<CustomWorld>("A date string {string}", function (this: CustomWorld, input: string) {
   dateStringToken = input;
 });
 
-When<CustomWorld>("I parse the date string token", function (this) {
+When<CustomWorld>("I parse the date string token", function (this: CustomWorld) {
   UtilActorMemory.clearError(this);
   try {
     const parsed = parser(this).parseDateStringToken(dateStringToken);
@@ -183,18 +183,18 @@ When<CustomWorld>("I parse the date string token", function (this) {
   }
 });
 
-Then<CustomWorld>("the result should be {string}", function (this, expectedDateStr: string) {
+Then<CustomWorld>("the result should be {string}", function (this: CustomWorld, expectedDateStr: string) {
   const parsedDate = UtilActorMemory.getRememberedDate(this, SECONDARY_PARSED_DATE);
   const [year, month, day] = expectedDateStr.split("-").map(Number);
   const expectedDate = new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0));
   expect(parsedDate.toUTCString()).toBe(expectedDate.toUTCString());
 });
 
-Given<CustomWorld>("A date range string {string}", function (this, input: string) {
+Given<CustomWorld>("A date range string {string}", function (this: CustomWorld, input: string) {
   dateRangeTokenString = input;
 });
 
-When<CustomWorld>("I parse the date range string", function (this) {
+When<CustomWorld>("I parse the date range string", function (this: CustomWorld) {
   UtilActorMemory.clearError(this);
   try {
     const range = parser(this).parseDateRangeToken(dateRangeTokenString);
@@ -206,7 +206,7 @@ When<CustomWorld>("I parse the date range string", function (this) {
 
 Then<CustomWorld>(
   "the start date should be {string} and the end date should be {string}",
-  function (this, startDate: string, endDate: string) {
+  function (this: CustomWorld, startDate: string, endDate: string) {
     const range = UtilActorMemory.getRange(this);
     const [startYear, startMonth, startDay] = startDate.split("-").map(Number);
     const [endYear, endMonth, endDay] = endDate.split("-").map(Number);

@@ -5,24 +5,24 @@ import { ResponseStatus } from "../../../../screenplay/questions/ResponseStatus"
 import { ResponseBody } from "../../../../screenplay/questions/ResponseBody";
 import type { CustomWorld } from "../../../../screenplay/core/custom-world";
 
-Given<CustomWorld>("the API is available", async function (this) {
+Given<CustomWorld>("the API is available", async function (this: CustomWorld) {
   await this.actor.attemptsTo(SendGetRequest.to("/alive"));
   const status = await this.actor.answer(ResponseStatus.code());
   expect(status).toBe(200);
 });
 
-When<CustomWorld>("a GET request is made to the Alive Endpoint", async function (this) {
+When<CustomWorld>("a GET request is made to the Alive Endpoint", async function (this: CustomWorld) {
   await this.actor.attemptsTo(SendGetRequest.to("/alive"));
 });
 
-Then<CustomWorld>("the API response should return a status code of 200", async function (this) {
+Then<CustomWorld>("the API response should return a status code of 200", async function (this: CustomWorld) {
   const status = await this.actor.answer(ResponseStatus.code());
   expect(status).toBe(200);
 });
 
 Then<CustomWorld>(
   'the Health Check response body should contain "Status" with the value "ALIVE-AND-KICKING"',
-  async function (this) {
+  async function (this: CustomWorld) {
     const body = await this.actor.answer(ResponseBody.json());
     expect(body.Status).toBe("ALIVE-AND-KICKING");
   },
