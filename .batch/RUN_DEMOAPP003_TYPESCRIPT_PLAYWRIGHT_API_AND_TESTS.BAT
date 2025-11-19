@@ -82,7 +82,7 @@ endlocal & exit /b %EXIT_CODE%
 set "LABEL=%~1"
 set "ROOT_PATH=%~2"
 set "PORT=%~3"
-set "PREFIX=%~4"
+set "PID_PREFIX=%~4"
 
 call "%SCRIPT_DIR%env_utils.bat" is_port_in_use %PORT% PORT_IN_USE
 if "%PORT_IN_USE%"=="1" (
@@ -92,8 +92,8 @@ if "%PORT_IN_USE%"=="1" (
 
 for /f "usebackq" %%I in (
     `powershell -NoProfile -Command "$p = Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','node','packages/tokenparser-api-shared/dist/cli/start.js','--port','%PORT%','--label','%LABEL%' -WorkingDirectory '%ROOT_PATH%' -PassThru; $p.Id"`
-) do set "%PREFIX%_PID=%%I"
-if not defined %PREFIX%_PID (
+) do set "%PID_PREFIX%_PID=%%I"
+if not defined %PID_PREFIX%_PID (
     echo Failed to start %LABEL% API.
     exit /b 1
 )
@@ -105,7 +105,7 @@ if errorlevel 1 (
     exit /b 1
 )
 
-echo %LABEL% API started (PID=!%PREFIX%_PID!) on port %PORT%.
+echo %LABEL% API started (PID=!%PID_PREFIX%_PID!) on port %PORT%.
 exit /b 0
 
 rem ---------------------------------------------------------------------------
