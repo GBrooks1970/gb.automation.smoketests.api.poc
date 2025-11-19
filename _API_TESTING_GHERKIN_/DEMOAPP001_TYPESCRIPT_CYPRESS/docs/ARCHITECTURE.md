@@ -9,7 +9,7 @@
 
 ## 2. Application Composition
 ### API Host
-- Location: `src/server.ts` bootstraps the Express host, Swagger, logging middleware, and two parser endpoints (`/parse-date-token`, `/parse-dynamic-string-token`) backed by `src/tokenparser`.
+- Location: `packages/tokenparser-api-shared/src/server.ts` bootstraps the Express host, Swagger, logging middleware, and the parser endpoints (`/parse-date-token`, `/parse-dynamic-string-token`). This workspace is consumed via the `@demoapps/tokenparser-api-shared` dependency.
 - Configuration: `.env` (and `.env.example`) define `PORT`, `SWAGGER_URL`, and logging flags. Batch helpers hydrate these settings via `env_utils.bat`.
 - Logging: Uses the shared token parser logger abstraction (`TOKENPARSER_LOG_LEVEL`). Structured logs bubble into `.results` when the batch runner redirects output.
 
@@ -20,7 +20,7 @@
 
 ### Tooling & Automation
 - `package.json` scripts:
-  - `npm run start` / `npm run dev`: start the Express API.
+  - `npm run start`: proxy to the shared `tokenparser-api-shared` CLI (set `PORT` before running to avoid conflicts with DEMOAPP003).
   - `npm run ts:check`: `tsc --noEmit` covering `src`, `screenplay`, and `cypress`.
   - `npm run lint` / `lint:fix` (ESLint) and `npm run format` / `format:fix` (Prettier) across all TS folders.
   - `npm run test:bdd`: Cypress headless run with default reporters.
@@ -36,17 +36,16 @@ DEMOAPP001_TYPESCRIPT_CYPRESS
 │  ├─ e2e/features/api|util
 │  └─ support/step_definitions + screenplay glue
 ├─ screenplay/  (shared Screenplay implementation)
-├─ src/         (Express host + token parser services)
 ├─ .results/    (created by batch tooling)
 ├─ cypress.config.ts
-├─ tsconfig.json (path aliases for src + screenplay)
+├─ tsconfig.json (path aliases for screenplay; parser imports resolve from the workspace)
 ├─ package.json / lockfile
-└─ .env / .env.example
+└─ .env / .env.example (inherit defaults from ../../.env.demoapp_ts_api)
 ```
 
 ## 4. Runtime Interactions
-1. `.batch` script loads env vars, probes port 3000, and launches `npm run start` if needed.
-2. Express host exposes Swagger and tokens; Cypress util tests hit parser modules directly, API tests hit the HTTP endpoints.
+1. `.batch` script loads env vars, probes port 3000, and launches `npm run start` (shared workspace CLI) if needed.
+2. Express host exposes Swagger and tokens from the shared workspace; Cypress util tests hit parser modules directly via Screenplay abilities, API tests hit the HTTP endpoints.
 3. Screenplay actors store responses/memory under `screenplay/support/memory-keys.ts`.
 4. Test results stream to stdout; orchestrator pipes them into `.results` and aggregates metrics via `.batch/.ps/render-run-metrics.ps1`.
 

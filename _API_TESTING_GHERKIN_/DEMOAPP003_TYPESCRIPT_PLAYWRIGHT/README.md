@@ -7,19 +7,20 @@ TypeScript demo that mirrors DEMOAPP001 but uses Playwright request contexts and
 ## Structure
 
 ```
-src/                    # Express API + token parser implementations (port 3001)
-features/               # Gherkin specs (API + @UTILTEST)
-screenplay/             # Actors, abilities, tasks, questions, world hooks
-tooling/                # Cucumber config, summary renderer, Playwright config
-docs/                   # Architecture, QA strategy, Screenplay guide
+../../packages/tokenparser-api-shared/   # Shared Express API + parser workspace (port 3001 when PORT overrides)
+features/                                # Gherkin specs (API + @UTILTEST)
+screenplay/                              # Actors, abilities, tasks, questions, world hooks
+tooling/                                 # Cucumber config, summary renderer, Playwright config
+docs/                                    # Architecture, QA strategy, Screenplay guide
 ```
 
 ---
 
 ## Install and Setup
 
-1. `cd _API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT`
-2. `npm install`
+1. `cd <repo-root>`
+2. `npm install` (installs all npm workspaces including `@demoapps/tokenparser-api-shared`)
+3. `cd _API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT`
 3. Install Playwright browsers: `npm run pw:install`
 
 Default ports and base URLs come from `.env`; automation scripts call `env_utils.bat load_env_vars` so Screenplay abilities pick up overrides automatically.
@@ -30,8 +31,7 @@ Default ports and base URLs come from `.env`; automation scripts call `env_utils
 
 | Command | Description |
 | --- | --- |
-| `npm run start` | Start the Express API on port `3001`. |
-| `npm run dev` | Start the API with hot reload. |
+| `npm run start` | Start the shared `@demoapps/tokenparser-api-shared` API (set `PORT=3001`). |
 | `npm run ts:check` | Type-check without emitting. |
 | `npm run test:bdd` (alias `npm test`) | Run Cucumber specs through Playwright request fixtures. |
 | `npm run verify` | `ts:check` + `test:bdd`. |

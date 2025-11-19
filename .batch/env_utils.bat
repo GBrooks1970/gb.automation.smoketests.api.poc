@@ -11,9 +11,11 @@ set "ENV_DEFAULT_PORT=%~2"
 set "ENV_DEFAULT_BASE=%~3"
 set "ENV_PORT_VAR=%~4"
 set "ENV_BASE_VAR=%~5"
+set "ENV_LOG_VAR=%~6"
 
 set "%ENV_PORT_VAR%="
 if not "%ENV_BASE_VAR%"=="" set "%ENV_BASE_VAR%="
+if not "%ENV_LOG_VAR%"=="" set "%ENV_LOG_VAR%="
 
 set "ENV_FILE=%ENV_PROJECT_DIR%\.env"
 if not exist "%ENV_FILE%" set "ENV_FILE=%ENV_PROJECT_DIR%\.env.example"
@@ -24,6 +26,7 @@ if exist "%ENV_FILE%" (
   `) do (
     if /I "%%A"=="PORT" set "%ENV_PORT_VAR%=%%B"
     if /I "%%A"=="API_BASE_URL" if not "%ENV_BASE_VAR%"=="" set "%ENV_BASE_VAR%=%%B"
+    if /I "%%A"=="TOKENPARSER_LOG_LEVEL" if not "%ENV_LOG_VAR%"=="" set "%ENV_LOG_VAR%=%%B"
   )
 )
 
@@ -36,6 +39,9 @@ if not "%ENV_BASE_VAR%"=="" (
       set "%ENV_BASE_VAR%=%ENV_DEFAULT_BASE%"
     )
   )
+)
+if not "%ENV_LOG_VAR%"=="" (
+  if not defined %ENV_LOG_VAR% set "%ENV_LOG_VAR%=debug"
 )
 exit /b 0
 

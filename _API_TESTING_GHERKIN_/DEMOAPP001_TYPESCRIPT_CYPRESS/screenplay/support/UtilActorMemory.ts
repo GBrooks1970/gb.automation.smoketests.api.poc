@@ -5,7 +5,7 @@ import {
   LAST_PARSE_ERROR,
   LAST_GENERATED_STRING,
 } from "./memory-keys";
-import { DateRange } from "../../src/tokenparser/TokenDateParser";
+import { type DateRange } from "@demoapps/tokenparser-api-shared";
 import { utilActor } from "../core/util-world";
 
 export class UtilActorMemory {

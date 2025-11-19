@@ -7,19 +7,19 @@ Token Parser Express API with Cypress Cucumber tests. This stack is the referenc
 ## Project Layout
 
 ```
-src/server.ts          # Express API host + Swagger endpoints
-src/tokenparser/       # Date and dynamic string parser implementations shared with tests
-cypress/               # Feature files, step definitions, Screenplay helpers
-docs/                  # Architecture, QA strategy, Screenplay guide
-.batch/                # Windows helpers (see repo root for orchestrator)
+../../packages/tokenparser-api-shared/   # Shared Express API + parser workspace
+cypress/                                 # Feature files, step definitions, Screenplay helpers
+docs/                                    # Architecture, QA strategy, Screenplay guide
+.batch/                                  # Windows helpers (see repo root for orchestrator)
 ```
 
 ---
 
 ## Install and Setup
 
-1. `cd _API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS`
-2. `npm install`
+1. `cd <repo-root>`
+2. `npm install` (installs all npm workspaces, including the shared API)
+3. `cd _API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS`
 
 Environment variables live in `.env.example`. The automation scripts call `env_utils.bat load_env_vars` so `PORT` and `API_BASE_URL` stay in sync across stacks.
 
@@ -29,8 +29,7 @@ Environment variables live in `.env.example`. The automation scripts call `env_u
 
 | Command | Description |
 | --- | --- |
-| `npm run start` | Launch the Express API on port `3000`. |
-| `npm run dev` | Start the API with `tsx watch` for local debugging. |
+| `npm run start` | Launch the shared `@demoapps/tokenparser-api-shared` API (honours `PORT`). |
 | `npm run ts:check` | TypeScript compile in no-emit mode. |
 | `npm run lint` / `npm run format` | Static analysis and formatting. |
 | `npm run test:bdd` | Headless Cypress run (all specs). |

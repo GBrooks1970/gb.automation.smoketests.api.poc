@@ -1,0 +1,48 @@
+{
+  "name": "@demoapps/tokenparser-api-shared",
+  "version": "1.0.0",
+  "description": "Shared TokenParser API host plus parser utilities consumed by all TypeScript demo apps.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "tokenparser-api-shared": "dist/bin/start-server.js"
+  },
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "npm run clean && tsc -p tsconfig.json",
+    "prepare": "npm run build",
+    "start": "node dist/bin/start-server.js",
+    "start:dev": "tsx watch src/bin/start-server.ts",
+    "test:unit": "tsc --noEmit",
+    "verify": "npm run build && npm run test:unit"
+  },
+  "keywords": [
+    "tokenparser",
+    "demoapps",
+    "shared-api"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^4.21.0",
+    "js-yaml": "^4.1.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.5.5",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.6",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.2"
+  }
+}

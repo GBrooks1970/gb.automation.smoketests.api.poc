@@ -11,7 +11,7 @@
 | Ability | Location | Notes |
 | --- | --- | --- |
 | `CallAnApi` | `screenplay/abilities/CallAnApi.ts` | Wraps `cy.request`, injects `API_BASE_URL` from `.env`/batch scripts. |
-| `UseTokenParsers` | `screenplay/abilities/UseTokenParsers.ts` | Surfaces `TokenDateParser` + `TokenDynamicStringParser` from `src/tokenparser`. |
+| `UseTokenParsers` | `screenplay/abilities/UseTokenParsers.ts` | Surfaces `TokenDateParser` + `TokenDynamicStringParser` from the shared `@demoapps/tokenparser-api-shared` workspace. |
 | Future abilities | `screenplay/abilities/*` | Register new abilities inside both world helpers to maintain parity with DEMOAPP003. |
 
 ## 3. Tasks & Questions

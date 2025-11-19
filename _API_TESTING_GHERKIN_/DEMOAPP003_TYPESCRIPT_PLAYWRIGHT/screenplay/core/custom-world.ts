@@ -9,7 +9,7 @@ import { Actor } from "../actors/Actor";
 import { CallAnApi } from "../abilities/CallAnApi";
 import { UseTokenParsers } from "../abilities/UseTokenParsers";
 
-const DEFAULT_API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:3000";
+const DEFAULT_API_BASE_URL = process.env.API_BASE_URL ?? "http://localhost:3001";
 const DEFAULT_STEP_TIMEOUT_MS = Number(process.env.CUCUMBER_TIMEOUT ?? 30_000);
 
 setDefaultTimeout(DEFAULT_STEP_TIMEOUT_MS);
