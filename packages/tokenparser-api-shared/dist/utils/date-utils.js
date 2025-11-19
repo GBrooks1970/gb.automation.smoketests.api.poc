@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DateUtils = void 0;
+class DateUtils {
+    /**
+     * Formats a date using the canonical UTC string for Token Parser responses.
+     * Example: 2025-11-12 13:45:12Z
+     */
+    static formatDateUtc(date) {
+        const iso = date.toISOString(); // Always UTC
+        return `${iso.slice(0, 19).replace("T", " ")}Z`; // Trim milliseconds and keep trailing Z
+    }
+}
+exports.DateUtils = DateUtils;

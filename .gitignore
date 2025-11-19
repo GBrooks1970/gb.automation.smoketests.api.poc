@@ -6,6 +6,8 @@
 # Node artifact files
 node_modules/
 dist/
+!packages/tokenparser-api-shared/dist/
+!packages/tokenparser-api-shared/dist/**
 
 # Compiled Java class files
 *.class
@@ -21,7 +23,6 @@ dist/
 
 # Maven
 target/
-dist/
 
 # JetBrains IDE
 .idea/
