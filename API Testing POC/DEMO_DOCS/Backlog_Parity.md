@@ -34,12 +34,14 @@ _None at this time. Track new findings here as they arise._
     - _Status 18/11/25_: both batch runners now call `node packages/tokenparser-api-shared/dist/cli/start.js` with the desired port/label and capture PIDs for teardown.
 4. **Logging & Configuration Harmonisation**  
    - Create `.env.demoapp_ts_api` template with logging level, Swagger URLs, and port defaults.  
-   - Point both stacks’ `.env` loaders (including `env_utils.bat`) to this template or ensure they import from the shared package.  
-   - Acceptance: toggling `TOKENPARSER_LOG_LEVEL` in one place affects both stacks.
+   - Point both stacks' `.env` loaders (including `env_utils.bat`) to this template or ensure they import from the shared package.  
+   - Acceptance: toggling `TOKENPARSER_LOG_LEVEL` in one place affects both stacks.  
+   - _Status 19/11/25_: shared template created, `env_utils` loads it ahead of per-app `.env`, and both batch scripts document the new single source; orchestrator still succeeds.
 5. **Retire Duplicate Assets**  
    - Remove now-redundant `src/` copies from DEMOAPP001/003, keeping only app-specific README/docs referencing the shared API.  
    - Update documentation (README, architecture guides, parity doc) to reflect the shared package.  
-   - Acceptance: repository passes full orchestrator run using the shared API; PR closes with doc updates.
+   - Acceptance: repository passes full orchestrator run using the shared API; PR closes with doc updates.  
+   - _Status_: README/docs already aligned, but redundant `src/` folders remain; keep open until duplicates can be deleted safely.
 
 ## Migration Plan - Establish single source of truth for features (5 bullets)
 - Consolidate features into a single shared folder

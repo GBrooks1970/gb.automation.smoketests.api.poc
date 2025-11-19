@@ -19,7 +19,7 @@ set "APP_DIR=%ROOT_DIR%\_API_TESTING_GHERKIN_\DEMOAPP001_TYPESCRIPT_CYPRESS"
 set "SUITE_LABEL=DEMOAPP001"
 
 rem Load env vars (PORT/API_BASE_URL) just like RUN_ALL_APIS... helper does
-call "%SCRIPT_DIR%env_utils.bat" load_env_vars "%APP_DIR%" 3000 "http://localhost:3000" SERVER_PORT API_BASE_URL
+call "%SCRIPT_DIR%env_utils.bat" load_env_vars "%APP_DIR%" 3000 "http://localhost:3000" SERVER_PORT API_BASE_URL "%ROOT_DIR%\.env.demoapp_ts_api"
 
 rem Timestamped log files for util + main suite
 for /f %%I in ('powershell -NoProfile -Command "(Get-Date).ToUniversalTime().ToString(\"yyyyMMddTHHmmZ\")"') do set "UTC_TIMESTAMP=%%I"

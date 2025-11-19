@@ -60,7 +60,7 @@ Swagger endpoints:
 - **Util suites**: Feature files under `cypress/integration/util-tests/**` tagged with `@UTILTEST`. They exercise the parser classes without hitting the API.
 - **API suites**: Feature files under `cypress/integration/API/**`. Steps call Screenplay tasks (`SendGetRequest`) so the API is validated end to end.
 - **Batch automation**: `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` loads env vars, starts the API if the port is free, runs util specs first, then runs the full Cypress suite. Logs land in `.results/demoapp001_typescript_cypress_<UTC>.txt`.
-- **Logging**: Set `TOKENPARSER_LOG_LEVEL` (silent, error, warn, info, debug) before starting the API or running tests to control parser telemetry volume.
+- **Logging**: `.batch/env_utils.bat` now loads the shared `.env.demoapp_ts_api` template before the local `.env`, so update that file (same for DEMOAPP003) to adjust `TOKENPARSER_LOG_LEVEL` and keep both TypeScript stacks in sync.
 
 ---
 

@@ -22,7 +22,7 @@ docs/                   # Architecture, QA strategy, Screenplay guide
 2. `npm install`
 3. Install Playwright browsers: `npm run pw:install`
 
-Default ports and base URLs come from `.env`; automation scripts call `env_utils.bat load_env_vars` so Screenplay abilities pick up overrides automatically.
+Default ports and base URLs come from `.env`; automation scripts call `env_utils.bat load_env_vars` so Screenplay abilities pick up overrides automatically. The loader also includes the shared `.env.demoapp_ts_api` template from the repo root, so adjusting `TOKENPARSER_LOG_LEVEL` there updates logging for both TypeScript stacks.
 
 ---
 
