@@ -4,6 +4,11 @@
     "module": "Node16",
     "moduleResolution": "Node16",
     "lib": ["ES2022"],
+    "rootDir": ".",
+    "rootDirs": [
+      ".",
+      "../../packages/tokenparser-api-shared/dist"
+    ],
     "allowJs": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -14,8 +19,8 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "tokenparser-api-shared": ["../../packages/tokenparser-api-shared/src"],
-      "tokenparser-api-shared/*": ["../../packages/tokenparser-api-shared/src/*"]
+      "tokenparser-api-shared": ["../../packages/tokenparser-api-shared/dist"],
+      "tokenparser-api-shared/*": ["../../packages/tokenparser-api-shared/dist/*"]
     }
   },
   "include": [

@@ -1,4 +1,4 @@
-/// <reference types="cypress" />
+/// <reference path="../../types/cypress-shim.d.ts" />
 import { Before, After } from "@badeball/cypress-cucumber-preprocessor";
 import { Actor } from "../actors/Actor";
 import { CallAnApi } from "../abilities/CallAnApi";

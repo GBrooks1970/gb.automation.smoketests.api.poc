@@ -24,18 +24,22 @@
     /* Modules */
     "module": "es2020", /* Specify what module code is generated. */
     "rootDir": ".", /* Specify the root folder within your source files. */
+    "rootDirs": [
+      ".",
+      "../../packages/tokenparser-api-shared/dist"
+    ],
     "moduleResolution": "node",                     /* Specify how TypeScript looks up a file from a given module specifier. */
     "baseUrl": ".",                                  /* Specify the base directory to resolve non-relative module names. */
     "paths": {
       "@src/*": ["src/*"],
       "@screenplay/*": ["screenplay/*"],
-      "tokenparser-api-shared": ["../../packages/tokenparser-api-shared/src"],
-      "tokenparser-api-shared/*": ["../../packages/tokenparser-api-shared/src/*"]
+      "tokenparser-api-shared": ["../../packages/tokenparser-api-shared/dist"],
+      "tokenparser-api-shared/*": ["../../packages/tokenparser-api-shared/dist/*"]
     },                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
-    // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     "typeRoots": [
-      "../node_modules/@types"
-    ], /* Specify multiple folders that act like './node_modules/@types'. */
+      "../../node_modules/@types"
+    ],
+    "types": [],
     // "allowUmdGlobalAccess": true,                     /* Allow accessing UMD globals from modules. */
     // "moduleSuffixes": [],                             /* List of file name suffixes to search when resolving a module. */
     // "allowImportingTsExtensions": true,               /* Allow imports to include TypeScript file extensions. Requires '--moduleResolution bundler' and either '--noEmit' or '--emitDeclarationOnly' to be set. */
@@ -107,7 +111,8 @@
   },
   "include": [
     "src/**/*",
-    "screenplay/**/*"
+    "screenplay/**/*",
+    "types/**/*"
     ],
   "exclude": [
     "node_modules"

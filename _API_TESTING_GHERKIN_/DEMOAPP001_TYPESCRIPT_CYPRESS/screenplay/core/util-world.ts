@@ -1,3 +1,4 @@
+/// <reference path="../../types/cypress-shim.d.ts" />
 import { Before, After } from "@badeball/cypress-cucumber-preprocessor";
 import { Actor } from "../actors/Actor";
 import { UseTokenParsers } from "../abilities/UseTokenParsers";
