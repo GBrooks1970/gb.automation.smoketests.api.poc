@@ -1,0 +1,15 @@
+{
+  "name": "gb.automation.smoketests.api.poc",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS",
+    "_API_TESTING_GHERKIN_/DEMOAPP003_TYPESCRIPT_PLAYWRIGHT"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "verify": "npm run verify --workspaces",
+    "start:shared": "npm run start --workspace @demoapps/tokenparser-api-shared"
+  }
+}

@@ -3,8 +3,7 @@ import { expect } from "@playwright/test";
 import { SendGetRequest } from "../../../../screenplay/tasks/SendGetRequest";
 import { ResponseStatus } from "../../../../screenplay/questions/ResponseStatus";
 import { ResponseBody } from "../../../../screenplay/questions/ResponseBody";
-import { TokenDateParser } from "../../../../src/tokenparser/TokenDateParser";
-import { DateUtils } from "../../../../src/utils/date-utils";
+import { TokenDateParser, DateUtils } from "@demoapps/tokenparser-api-shared";
 import type { CustomWorld } from "../../../../screenplay/core/custom-world";
 
 let tokenString = "";

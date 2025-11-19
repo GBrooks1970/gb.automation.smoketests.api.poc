@@ -10,7 +10,7 @@
 ## 2. Test Inventory
 | Layer | Scope | Implementation | Frequency |
 | --- | --- | --- | --- |
-| Unit | Parser behaviours, logging helpers | `src/tokenparser/**` with Jest-style `npm run test:unit` (roadmap) | Optional / PR |
+| Unit | Parser behaviours, logging helpers | `packages/tokenparser-api-shared/src/tokenparser/**` with Jest-style `npm run test:unit` (roadmap) | Optional / PR |
 | Component | Token parser modules without HTTP | `@UTILTEST` Scenario Outlines executed via Screenplay abilities | Every run |
 | API / Contract | `/alive`, `/parse-date-token`, `/parse-dynamic-string-token` | Cypress API features (`cypress/e2e/features/api`) | Every run |
 | Integration | Batch warm-up & Swagger verification | `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT` | Before parity pushes |
@@ -53,7 +53,7 @@ Optional: `npm run cy:open` for GUI exploration.
 3. Upload `.results/demoapp001_typescript_cypress*_*.txt` as artefacts for traceability.
 
 ## 7. Open Improvements
-1. Formalise parser unit tests under `src/tokenparser/__tests__`.
+1. Formalise parser unit tests under `packages/tokenparser-api-shared/src/tokenparser/__tests__`.
 2. Capture Cypress screenshots/video and attach to logs for failing scenarios.
 3. Add coverage instrumentation (Istanbul) to quantify parser/API hit rates.
 4. Automate parity validation via script that diffs DEMOAPP001 feature tables against down-stream stacks.

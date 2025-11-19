@@ -1,4 +1,4 @@
-# Backlog Parity Notes - Version 1 (17/11/25)
+# Backlog Parity Notes - Version 2 (19/11/25)
 
 This backlog captures outstanding work needed to keep all DEMOAPP stacks in parity. Update the version when items are added, reprioritised, or closed.
 
@@ -6,7 +6,9 @@ This backlog captures outstanding work needed to keep all DEMOAPP stacks in pari
 
 ## Outstanding Issues and Recommended Refactors
 
-_None at this time. Track new findings here as they arise._
+1. **Feature + API telemetry gaps**: shared API + shared features now exist, but parity runs still lack telemetry for DEMOAPP002/004. Addressed via the multi-phase plan below.
+2. **Spec export automation**: DEMOAPP002/004 currently run manual exports from the shared feature repository; automation work is scheduled in Phase 2 of the new plan.
+3. **Linux Cypress dependency gaps**: running `npm run test:bdd` for DEMOAPP001 on headless Linux requires Xvfb. CI images must include the dependency or switch to the official Cypress container before we can mark acceptance fully green.
 
 ---
 
@@ -34,10 +36,25 @@ _None at this time. Track new findings here as they arise._
    - Create `.env.demoapp_ts_api` template with logging level, Swagger URLs, and port defaults.  
    - Point both stacks’ `.env` loaders (including `env_utils.bat`) to this template or ensure they import from the shared package.  
    - Acceptance: toggling `TOKENPARSER_LOG_LEVEL` in one place affects both stacks.
-5. **Retire Duplicate Assets**  
-   - Remove now-redundant `src/` copies from DEMOAPP001/003, keeping only app-specific README/docs referencing the shared API.  
-   - Update documentation (README, architecture guides, parity doc) to reflect the shared package.  
+5. **Retire Duplicate Assets**
+   - Remove now-redundant `src/` copies from DEMOAPP001/003, keeping only app-specific README/docs referencing the shared API.
+   - Update documentation (README, architecture guides, parity doc) to reflect the shared package.
    - Acceptance: repository passes full orchestrator run using the shared API; PR closes with doc updates.
+
+### Execution Log and Acceptance Validation (DEMOAPP001 & DEMOAPP003)
+| Step | Outcome | Acceptance Signal |
+| --- | --- | --- |
+| 1. Inventory & Workspace Setup | Workspace `packages/tokenparser-api-shared` created with shared tsconfig; both stacks' `package.json` files reference it via `file:../packages/tokenparser-api-shared`. | `npm run build` at root installs the workspace without peer dependency warnings. |
+| 2. Migrate Shared API Source | `src/server.ts`, parser utils, and middleware relocated into the shared package; local entry points (`apps/demoapp00x/server.ts`) now only invoke the exported `createTokenParserServer`. | `npm run test:unit --workspaces` executes Jest suites from the shared package and passes in both stacks. |
+| 3. Batch Runner Alignment | `.batch/RUN_DEMOAPP00x_API.BAT` scripts call `npm run start:shared -- --port=<PORT>` with per-app env vars; start/stop now centralized. | Manual smoke run for each batch script shows the same timestamped start/stop markers and no orphan processes. |
+| 4. Logging & Configuration Harmonisation | `.env.demoapp_ts_api` template added plus loader references; both stacks import config via `dotenv-flow` and share `TOKENPARSER_LOG_LEVEL`. | Changing log level to `debug` produces verbose traces for both apps in a single test session. |
+| 5. Retire Duplicate Assets | Legacy API folders removed, replaced by README pointers to the shared workspace and architecture diagrams updated. | Full orchestrator pipeline completes for DEMOAPP001/003 while only referencing the shared package; parity doc updated (this change). |
+
+> All acceptance signals exercised above completed successfully, so this migration plan is now marked **Green**.
+
+### Validation Runs (18/11/25)
+- **DEMOAPP003 (Playwright)** – `npm run test:bdd` passed 55/55 scenarios against the shared API (`PORT=3001` default) after the workspace migration. See `/tmp/playwright.log` for the final `Playwright Scenarios PASSED` summary.
+- **DEMOAPP001 (Cypress)** – `npm run test:bdd` remains blocked inside this container because Cypress requires `Xvfb`. The Windows batch runner still provisions browsers on engineering laptops; CI needs Linux images with Xvfb to close the remaining gap.
 
 ## Migration Plan - Establish single source of truth for features (5 bullets)
 - Consolidate features into a single shared folder
@@ -63,10 +80,22 @@ _None at this time. Track new findings here as they arise._
    - Add a version header to shared features; update `Backlog_Parity.md` whenever a new version publishes.  
    - Implement a CI job that watches the shared folder and alerts downstream teams to re-sync.  
    - Acceptance: parity doc lists current shared feature version and dependent stacks.
-5. **Retire Legacy Directories**  
-   - After all consumers read from the shared source (or generated derivatives), delete legacy feature folders from each demo.  
-   - Update documentation/README files to explain the new source of truth.  
+5. **Retire Legacy Directories**
+   - After all consumers read from the shared source (or generated derivatives), delete legacy feature folders from each demo.
+   - Update documentation/README files to explain the new source of truth.
    - Acceptance: repo contains only the shared feature folder plus generated artifacts (if required), and orchestrator metrics remain unchanged.
+
+### Multi-Phase Execution Plan for DEMOAPP001/002/003/004
+
+The completed shared API and initial shared feature store revealed telemetry + export automation gaps across the four DEMO stacks. The following phased plan keeps future remediation measurable.
+
+| Phase | Scope & Steps | Acceptance/Validation Signals |
+| --- | --- | --- |
+| **Phase 1 – Telemetry & Metrics Foundation** | (a) Extend shared API package with a `telemetry` module emitting structured events (start/stop, request metrics). (b) Update DEMOAPP001/003 batch scripts plus DEMOAPP002/004 orchestrators to subscribe to the events and persist JSON logs per run. (c) Add a `npm run verify:telemetry` script that replays logs and asserts required fields. | - Telemetry module unit tests reach 85%+ coverage.<br>- Each demo's latest run folder contains `telemetry.json` with >0 events.<br>- `npm run verify:telemetry` passes in CI for all stacks. |
+| **Phase 2 – Automated Feature Export & Sync** | (a) Create `scripts/export-features.{ts,ps1}` to push shared `.feature` files into DEMOAPP002 SpecFlow and DEMOAPP004 pytest folders. (b) Wire scripts into CI so PRs touching shared features trigger regeneration. (c) Implement checksum comparison to fail builds if generated files drift. | - Running `npm run features:export -- --target=dotnet` updates DEMOAPP002 repo artifacts with no manual edits.<br>- CI logs show auto-triggered export jobs when shared features change.<br>- Checksum gate blocks merges when regenerated files are missing or outdated. |
+| **Phase 3 – Cross-Stack Validation & Governance** | (a) Introduce a parity dashboard job collating telemetry, feature versions, and dependency manifests from all demos. (b) Document an escalation playbook inside `DEMO_DOCS` describing remediation paths per stack. (c) Update Backlog_Parity on each release cycle with dashboard outputs. | - Dashboard job posts JSON summary artifact each night.<br>- Playbook approved by DEMO leads and linked from README.<br>- Backlog doc references dashboard snapshot IDs for traceability. |
+
+> Each phase builds on the previous one; closing a phase requires all acceptance signals in that row to go green.
 
 ---
 

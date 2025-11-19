@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "start": "tsx src/server.ts",
-    "dev": "tsx watch src/server.ts",
+    "start": "npm run api:start",
+    "api:start": "tokenparser-api-shared",
     "ts:check": "tsc --noEmit",
     "lint": "eslint \"src/**/*.{ts,tsx}\" \"screenplay/**/*.ts\" \"cypress/**/*.ts\"",
     "lint:fix": "npm run lint -- --fix",
@@ -14,8 +14,7 @@
     "test:bdd": "cypress run",
     "test": "npm run test:bdd",
     "verify": "npm run ts:check && npm run test:bdd",
-    "cy:test": "cypress open",
-    "postinstall": "npx cypress verify"
+    "cy:test": "cypress open"
   },
   "keywords": [],
   "author": "",
@@ -26,10 +25,7 @@
     "@typescript-eslint/eslint-plugin": "^8.3.0",
     "@typescript-eslint/parser": "^8.3.0",
     "@types/chai": "^5.2.3",
-    "@types/express": "^4.17.21",
     "@types/node": "^22.5.5",
-    "@types/swagger-jsdoc": "^6.0.4",
-    "@types/swagger-ui-express": "^4.1.6",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-cypress": "^3.4.0",
@@ -40,13 +36,7 @@
     "typescript": "^5.6.2"
   },
   "dependencies": {
-    "@types/js-yaml": "^4.0.9",
-    "body-parser": "^1.20.3",
-    "chai": "^6.2.0",
-    "date-fns": "^4.1.0",
-    "express": "^4.21.0",
-    "js-yaml": "^4.1.0",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1"
+    "@demoapps/tokenparser-api-shared": "file:../../packages/tokenparser-api-shared",
+    "chai": "^6.2.0"
   }
 }

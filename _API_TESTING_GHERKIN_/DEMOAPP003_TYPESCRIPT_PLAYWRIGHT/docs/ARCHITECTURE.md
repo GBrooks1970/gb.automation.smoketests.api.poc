@@ -3,14 +3,14 @@
 **Version 2 – 18/11/25**
 
 ## 1. Overview
-- **API Host**: Express + TypeScript (`src/server.ts`) identical to DEMOAPP001 but listening on port 3001 by default.
+- **API Host**: Shared Express + TypeScript workspace (`packages/tokenparser-api-shared/src/server.ts`) identical to DEMOAPP001 but listening on port 3001 by default when launched from this app's scripts.
 - **Automation Stack**: Playwright + Cucumber (cucumber-js) with Screenplay abstractions (`@serenity-js` style) reusing the same modules as the Cypress stack.
 - **Objective**: Demonstrate parity between Cypress and Playwright implementations while exercising the same parser logic and feature tables.
 
 ## 2. Components
 | Component | Location | Notes |
 | --- | --- | --- |
-| Express API | `src/` | Shared logging, Swagger, parser modules. |
+| Express API | `packages/tokenparser-api-shared/` | Shared logging, Swagger, parser modules referenced via `@demoapps/tokenparser-api-shared`. |
 | Feature files | `features/` | BDD scenarios for util (`@UTILTEST`) and API flows. |
 | Screenplay | `screenplay/` | Shared with DEMOAPP001 via workspace linking; Playwright-specific glue under `screenplay/core`. |
 | Tooling | `tooling/` | Playwright config, custom summary renderer, CLI wrappers for cucumber-js. |
@@ -33,7 +33,7 @@ DEMOAPP003_TYPESCRIPT_PLAYWRIGHT
 │  ├─ tasks/
 │  ├─ questions/
 │  └─ core/custom-world.ts
-├─ src/ (Express API + token parser)
+├─ (shared) ../../packages/tokenparser-api-shared/ (Express API + token parser)
 ├─ tooling/ (run_bdd script, summary renderer)
 ├─ package.json
 ├─ cucumber.mjs / playwright.config.ts
@@ -41,7 +41,7 @@ DEMOAPP003_TYPESCRIPT_PLAYWRIGHT
 ```
 
 ## 5. Automation Hooks
-- `npm run start`: API host.
+- `npm run start`: shared API host (set `PORT=3001` before running locally).
 - `npm run test:bdd`: `NODE_OPTIONS=--loader ts-node/esm cucumber-js` harness executing features.
 - `npm run lint`, `npm run format`, `npm run ts:check`: align with DEMOAPP001 for parity.
 - `tooling/run_bdd.ts`: CLI entry point used by `.batch/RUN_DEMOAPP003_TYPESCRIPT_PLAYWRIGHT_API_AND_TESTS.BAT` to ensure consistent reporters and `.results` output.

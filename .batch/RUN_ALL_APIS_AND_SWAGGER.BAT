@@ -53,10 +53,12 @@ set "PREFIX=%~4"
 
 set "PORT_VAR=%~4_PORT"
 set "BASE_VAR=%~4_BASE"
-call "%SCRIPT_DIR%env_utils.bat" load_env_vars "%PROJECT_DIR%" %DEFAULT_PORT% "http://localhost:%DEFAULT_PORT%" %PORT_VAR% %BASE_VAR%
+set "LOG_VAR=%~4_LOG"
+call "%SCRIPT_DIR%env_utils.bat" load_env_vars "%PROJECT_DIR%" %DEFAULT_PORT% "http://localhost:%DEFAULT_PORT%" %PORT_VAR% %BASE_VAR% %LOG_VAR%
 
 call set "CURRENT_PORT=%%%PORT_VAR%%%"
 call set "CURRENT_BASE=%%%BASE_VAR%%%"
+call set "CURRENT_LOG=%%%LOG_VAR%%%"
 
 call "%SCRIPT_DIR%env_utils.bat" is_port_in_use %CURRENT_PORT% PORT_IN_USE
 if "%PORT_IN_USE%"=="1" (
@@ -65,7 +67,7 @@ if "%PORT_IN_USE%"=="1" (
 )
 
 for /f "usebackq" %%I in (
-    `powershell -NoProfile -Command "$p = Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','npm','run','start' -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"`
+    `powershell -NoProfile -Command "$command = \"set PORT=%CURRENT_PORT%\"; if ('!CURRENT_LOG!' -ne '') { $command += ' && set TOKENPARSER_LOG_LEVEL=!CURRENT_LOG!' }; $command += ' && npm run start'; $p = Start-Process -FilePath 'cmd.exe' -ArgumentList '/c',$command -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"`
 ) do set "%~4_PID=%%I"
 if not defined %~4_PID (
     echo Failed to start %LABEL% API.

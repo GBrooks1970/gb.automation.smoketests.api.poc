@@ -10,6 +10,10 @@ export interface AppConfig {
 
 const LOG_LEVELS: LogLevel[] = ["silent", "error", "warn", "info", "debug"];
 
+type CypressEnv = {
+  env: (key: string) => string | undefined;
+};
+
 const readEnv = (key: string): string | undefined => {
   if (typeof process !== "undefined" && process.env && process.env[key]) {
     return process.env[key];
@@ -17,9 +21,10 @@ const readEnv = (key: string): string | undefined => {
 
   if (
     typeof window !== "undefined" &&
-    (window as typeof window & { Cypress?: typeof Cypress }).Cypress
+    (window as typeof window & { Cypress?: CypressEnv }).Cypress
   ) {
-    return (window as typeof window & { Cypress?: typeof Cypress }).Cypress?.env(key);
+    const cypress = (window as typeof window & { Cypress?: CypressEnv }).Cypress;
+    return cypress?.env(key);
   }
 
   return undefined;

@@ -19,7 +19,7 @@ set "APP_DIR=%ROOT_DIR%\_API_TESTING_GHERKIN_\DEMOAPP001_TYPESCRIPT_CYPRESS"
 set "SUITE_LABEL=DEMOAPP001"
 
 rem Load env vars (PORT/API_BASE_URL) just like RUN_ALL_APIS... helper does
-call "%SCRIPT_DIR%env_utils.bat" load_env_vars "%APP_DIR%" 3000 "http://localhost:3000" SERVER_PORT API_BASE_URL
+call "%SCRIPT_DIR%env_utils.bat" load_env_vars "%APP_DIR%" 3000 "http://localhost:3000" SERVER_PORT API_BASE_URL TOKENPARSER_LOG_LEVEL
 
 rem Timestamped log files for util + main suite
 for /f %%I in ('powershell -NoProfile -Command "(Get-Date).ToUniversalTime().ToString(\"yyyyMMddTHHmmZ\")"') do set "UTC_TIMESTAMP=%%I"
@@ -94,7 +94,7 @@ if "%PORT_IN_USE%"=="1" (
 )
 
 for /f "usebackq" %%I in (
-    `powershell -NoProfile -Command "$p = Start-Process -FilePath 'cmd.exe' -ArgumentList '/c','npm','run','start' -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"`
+    `powershell -NoProfile -Command "$command = \"set PORT=%PORT%\"; if ('!TOKENPARSER_LOG_LEVEL!' -ne '') { $command += ' && set TOKENPARSER_LOG_LEVEL=!TOKENPARSER_LOG_LEVEL!' }; $command += ' && npm run start'; $p = Start-Process -FilePath 'cmd.exe' -ArgumentList '/c',$command -WorkingDirectory '%PROJECT_DIR%' -PassThru; $p.Id"`
 ) do set "%PREFIX%_PID=%%I"
 if not defined %PREFIX%_PID (
     echo Failed to start %LABEL% API.
