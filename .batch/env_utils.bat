@@ -5,15 +5,29 @@ shift
 goto %FN%
 
 :load_env_vars
-rem %1 = project dir, %2 = default port, %3 = default base url, %4 = port var name, %5 = base var name (optional)
+rem %1 = project dir, %2 = default port, %3 = default base url, %4 = port var name, %5 = base var name (optional), %6 = stack key (optional)
 set "ENV_PROJECT_DIR=%~1"
 set "ENV_DEFAULT_PORT=%~2"
 set "ENV_DEFAULT_BASE=%~3"
 set "ENV_PORT_VAR=%~4"
 set "ENV_BASE_VAR=%~5"
+set "ENV_STACK_KEY=%~6"
 
 set "%ENV_PORT_VAR%="
 if not "%ENV_BASE_VAR%"=="" set "%ENV_BASE_VAR%="
+
+set "SHARED_ENV_FILE=%ENV_PROJECT_DIR%\..\.env.demoapp_ts_api"
+if exist "%SHARED_ENV_FILE%" (
+  for /f "usebackq tokens=1* delims==" %%A in (`
+    powershell -NoProfile -Command "Get-Content -LiteralPath '%SHARED_ENV_FILE%' | Where-Object { $_ -and $_ -notmatch '^\s*#' } | ForEach-Object { $_.Trim() }"
+  `) do (
+    if /I "%%A"=="TOKENPARSER_LOG_LEVEL" set "TOKENPARSER_LOG_LEVEL=%%B"
+    if not "%ENV_STACK_KEY%"=="" (
+      if /I "%%A"=="%ENV_STACK_KEY%_PORT" set "%ENV_PORT_VAR%=%%B"
+      if /I "%%A"=="%ENV_STACK_KEY%_API_BASE_URL" if not "%ENV_BASE_VAR%"=="" set "%ENV_BASE_VAR%=%%B"
+    )
+  )
+)
 
 set "ENV_FILE=%ENV_PROJECT_DIR%\.env"
 if not exist "%ENV_FILE%" set "ENV_FILE=%ENV_PROJECT_DIR%\.env.example"
