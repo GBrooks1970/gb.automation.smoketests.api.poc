@@ -66,7 +66,7 @@ rem --- DEMOAPP001: Cypress stack ----------------------------------------------
 echo === Running TypeScript API and Cypress tests ===
 set "TS_BEFORE="
 for /f "usebackq delims=" %%I in (`powershell -NoProfile -File "%BATCH_DIR%\.ps\get-latest-log.ps1" -Directory "%RESULT_DIR%" -Filter "demoapp001_typescript_cypress_*.txt"`) do set "TS_BEFORE=%%I"
-call "%SCRIPT_DIR%\env_utils.bat" load_env_vars "%APP1_DIR%" 3000 "http://localhost:3000" APP1_PORT APP1_BASE >nul
+call "%SCRIPT_DIR%\env_utils.bat" load_env_vars "%APP1_DIR%" 3000 "http://localhost:3000" APP1_PORT APP1_BASE DEMOAPP001 >nul
 call "%SCRIPT_DIR%\env_utils.bat" is_port_in_use !APP1_PORT! APP1_PORT_BUSY >nul
 if "!APP1_PORT_BUSY!"=="1" (
     rem If port already used we tell the child runner to skip API startup.
@@ -88,7 +88,7 @@ echo.
 echo === Running TypeScript API and Playwright BDD tests ===
 set "PW_BEFORE="
 for /f "usebackq delims=" %%I in (`powershell -NoProfile -File "%BATCH_DIR%\.ps\get-latest-log.ps1" -Directory "%RESULT_DIR%" -Filter "demoapp003_typescript_playwright_*.txt"`) do set "PW_BEFORE=%%I"
-call "%SCRIPT_DIR%\env_utils.bat" load_env_vars "%APP3_DIR%" 3001 "http://localhost:3001" APP3_PORT APP3_BASE >nul
+call "%SCRIPT_DIR%\env_utils.bat" load_env_vars "%APP3_DIR%" 3001 "http://localhost:3001" APP3_PORT APP3_BASE DEMOAPP003 >nul
 call "%SCRIPT_DIR%\env_utils.bat" is_port_in_use !APP3_PORT! APP3_PORT_BUSY >nul
 if "!APP3_PORT_BUSY!"=="1" (
     set "SKIP_API_START=1"

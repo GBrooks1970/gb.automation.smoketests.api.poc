@@ -53,7 +53,7 @@ set "PREFIX=%~4"
 
 set "PORT_VAR=%~4_PORT"
 set "BASE_VAR=%~4_BASE"
-call "%SCRIPT_DIR%env_utils.bat" load_env_vars "%PROJECT_DIR%" %DEFAULT_PORT% "http://localhost:%DEFAULT_PORT%" %PORT_VAR% %BASE_VAR%
+call "%SCRIPT_DIR%env_utils.bat" load_env_vars "%PROJECT_DIR%" %DEFAULT_PORT% "http://localhost:%DEFAULT_PORT%" %PORT_VAR% %BASE_VAR% %LABEL%
 
 call set "CURRENT_PORT=%%%PORT_VAR%%%"
 call set "CURRENT_BASE=%%%BASE_VAR%%%"
@@ -111,7 +111,7 @@ set "PREFIX=%~4"
 
 set "PORT_VAR=%~4_PORT"
 set "BASE_VAR=%~4_BASE"
-call "%SCRIPT_DIR%env_utils.bat" load_env_vars "%PROJECT_DIR%" %DEFAULT_PORT% "http://localhost:%DEFAULT_PORT%" %PORT_VAR% %BASE_VAR%
+call "%SCRIPT_DIR%env_utils.bat" load_env_vars "%PROJECT_DIR%" %DEFAULT_PORT% "http://localhost:%DEFAULT_PORT%" %PORT_VAR% %BASE_VAR% %LABEL%
 
 call set "CURRENT_PORT=%%%PORT_VAR%%%"
 call set "CURRENT_BASE=%%%BASE_VAR%%%"
