@@ -1,6 +1,6 @@
 import { Given, When, Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
-import CommonUtils from "../../../../src/services/common-utils";
+import CommonUtils from "tokenparser-api-shared/services/common-utils";
 import { UseTokenParsers } from "../../../../screenplay/abilities/UseTokenParsers";
 import {
   LAST_PARSED_DATE,

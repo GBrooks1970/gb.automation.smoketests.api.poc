@@ -41,7 +41,7 @@ _None at this time. Track new findings here as they arise._
    - Remove now-redundant `src/` copies from DEMOAPP001/003, keeping only app-specific README/docs referencing the shared API.  
    - Update documentation (README, architecture guides, parity doc) to reflect the shared package.  
    - Acceptance: repository passes full orchestrator run using the shared API; PR closes with doc updates.  
-   - _Status_: README/docs already aligned, but redundant `src/` folders remain; keep open until duplicates can be deleted safely.
+   - _Status 21/11/25_: README/docs updated, and the duplicate `src/` folders have been deleted; both demos now import parser helpers directly from `tokenparser-api-shared`.
 
 ## Migration Plan - Establish single source of truth for features (5 bullets)
 - Consolidate features into a single shared folder

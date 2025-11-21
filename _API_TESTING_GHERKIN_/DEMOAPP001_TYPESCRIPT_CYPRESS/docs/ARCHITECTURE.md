@@ -1,64 +1,61 @@
 # DEMOAPP001 – Cypress Architecture Guide
 
-**Version 2 – 18/11/25**
+**Version 3 – 21/11/25**
 
 ## 1. Overview
-- **Purpose**: Reference implementation of the Token Parser API using Express + TypeScript, paired with Cypress+Badeball Cucumber for Screenplay-driven BDD.
-- **Primary Consumers**: DEMOAPP003 (Playwright TS) mirrors this codebase; DEMOAPP002/004 reuse its feature tables and API contract.
-- **Automation Entry Points**: `npm run verify`, `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT`, and the repo orchestrator `.batch/RUN_ALL_API_AND_TESTS.BAT`.
+- **Purpose**: Reference implementation of the Token Parser API using the shared Express host in `packages/tokenparser-api-shared`, paired with Cypress + Screenplay-powered BDD.
+- **Primary Consumers**: DEMOAPP003 (Playwright TS) mirrors the same tests and parser helpers; DEMOAPP002/004 reuse the shared feature files and API contract documentation.
+- **Automation Entry Points**: `npm run verify`, `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT`, and the orchestrator `.batch/RUN_ALL_API_AND_TESTS.BAT`.
 
 ## 2. Application Composition
 ### API Host
-- Location: `src/server.ts` bootstraps the Express host, Swagger, logging middleware, and two parser endpoints (`/parse-date-token`, `/parse-dynamic-string-token`) backed by `src/tokenparser`.
-- Configuration: `.env` (and `.env.example`) define `PORT`, `SWAGGER_URL`, and logging flags. Batch helpers hydrate these settings via `env_utils.bat`.
-- Logging: Uses the shared token parser logger abstraction (`TOKENPARSER_LOG_LEVEL`). Structured logs bubble into `.results` when the batch runner redirects output.
+- Host: `packages/tokenparser-api-shared/dist/cli/start.js` launches the Express server, Swagger routes, and the parser endpoints (`/alive`, `/parse-date-token`, `/parse-dynamic-string-token`). `npm run start` in this folder executes the CLI with `--port 3000 --label DEMOAPP001`.
+- Configuration: `.env` (and `.env.example`) define `PORT`, `SWAGGER_URL`, and logging flags. `.batch/env_utils.bat` hydrates these before the CLI runs so all TypeScript stacks share the *same* `.env.demoapp_ts_api` template.
+- Logging: `TOKENPARSER_LOG_LEVEL` + `TOKENPARSER_LOGGER_CATEGORY` inside the CLI control the shared `Logger`. Batch runners emit their stdout/stderr into `.results/demoapp001_typescript_cypress_<UTC>.txt` for later analysis.
 
 ### Screenplay + Cypress Runtime
-- Screenplay modules live under `screenplay/` at the repo root to allow reuse by DEMOAPP003. Cypress references them through `tsconfig.json` path aliases.
-- Badeball Cucumber preprocessor drives feature execution. Feature files live under `cypress/e2e/features/**` (API + util tags).
-- Custom worlds (`screenplay/core/api-world.ts` and `util-world.ts`) provision actors per scenario and tap into `cypress/support/e2e.ts`.
+- Screenplay helpers live under `screenplay/`; Cypress references them directly (no `src` alias) via `tsconfig` entries for the shared folders.
+- Feature files live under `cypress/integration/**` (util vs API). Automated worlds (`screenplay/core/api-world.ts`, `util-world.ts`) instantiate actors and abilities, including `UseTokenParsers`, which now imports directly from `tokenparser-api-shared`.
+- `cypress/support/e2e.ts` wires in the worlds so every scenario receives the consistent actor/ability set.
 
 ### Tooling & Automation
-- `package.json` scripts:
-  - `npm run start` / `npm run dev`: start the Express API.
-  - `npm run ts:check`: `tsc --noEmit` covering `src`, `screenplay`, and `cypress`.
-  - `npm run lint` / `lint:fix` (ESLint) and `npm run format` / `format:fix` (Prettier) across all TS folders.
-  - `npm run test:bdd`: Cypress headless run with default reporters.
-  - `npm run verify`: type check + Cypress suite (CI default).
-- `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT`: orchestrates util tests first, starts the API if port 3000 is free, opens Swagger, runs `npm run verify`, and captures `.results/demoapp001_typescript_cypress_<UTC>.txt` logs.
-- `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT`: starts this API alongside the .NET, Playwright TS, and Python FastAPI hosts for contract inspections.
+- `npm run start` / `npm run dev`: start the shared Express API via `node ../../packages/tokenparser-api-shared/dist/cli/start.js --port 3000 --label DEMOAPP001`.
+- `npm run ts:check`: `tsc --noEmit` covering `screenplay`, `cypress`, and type declarations.
+- `npm run lint` / `lint:fix` (ESLint) and `npm run format` / `format:fix` (Prettier) remain scoped to Cypress + Screenplay sources.
+- `npm run test:bdd`: headless Cypress run with default reporters.
+- `npm run verify`: type check + Cypress suite (CI default).
+- `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT`: orchestrates util tests first, starts the shared CLI when port 3000 is free, opens Swagger, runs the full suite, and records `.results` logs.
+- `.batch/RUN_ALL_APIS_AND_SWAGGER.BAT`: launches this API (via its CLI) alongside the .NET, Playwright TS, and Python hosts for contract inspections.
 
 ## 3. Folder Map
 ```
 DEMOAPP001_TYPESCRIPT_CYPRESS
 ├─ docs/ (architecture, QA, Screenplay)
-├─ cypress/
-│  ├─ e2e/features/api|util
-│  └─ support/step_definitions + screenplay glue
-├─ screenplay/  (shared Screenplay implementation)
-├─ src/         (Express host + token parser services)
-├─ .results/    (created by batch tooling)
+├─ cypress/ (feature files + step definitions)
+├─ screenplay/ (actors, abilities, tasks, questions, worlds)
+├─ types/ (ambient declarations)
+├─ .results/ (batch log captures)
 ├─ cypress.config.ts
-├─ tsconfig.json (path aliases for src + screenplay)
-├─ package.json / lockfile
+├─ tsconfig.json (targets Cypress + Screenplay)
+├─ package.json / package-lock
 └─ .env / .env.example
 ```
 
-> **Shared API Note:** `src/server.ts` and `src/tokenparser/*` now proxy to the `tokenparser-api-shared` workspace package so Express + parser logic is maintained in a single source of truth.
+> **Shared API Note:** This repo no longer contains the API host. The Express server, parsers, logging helpers, and Swagger wiring live in `packages/tokenparser-api-shared` and are started via `npm run start`. Cypress and Screenplay abilities import parser helpers directly from that package.
 
 ## 4. Runtime Interactions
-1. `.batch` script loads env vars, probes port 3000, and launches `npm run start` if needed.
-2. Express host exposes Swagger and tokens; Cypress util tests hit parser modules directly, API tests hit the HTTP endpoints.
-3. Screenplay actors store responses/memory under `screenplay/support/memory-keys.ts`.
-4. Test results stream to stdout; orchestrator pipes them into `.results` and aggregates metrics via `.batch/.ps/render-run-metrics.ps1`.
+1. `.batch/RUN_DEMOAPP001_TYPESCRIPT_CYPRESS_API_AND_TESTS.BAT` loads env vars, probes port 3000, and launches the shared CLI if the port is free.
+2. The shared Express host exposes Swagger + parser endpoints; Cypress util tests exercise the parser classes via `UseTokenParsers`, API tests hit the HTTP routes through `SendGetRequest`.
+3. Screenplay actors store responses/memory in `screenplay/support/memory-keys.ts`.
+4. Results stream to stdout; the orchestrator pipes them into `.results` and aggregates metrics via `.batch/.ps/render-run-metrics.ps1`.
 
 ## 5. Operational Considerations
-- **Parity**: Any change to feature tables or token parser logic must be propagated to DEMOAPP003 (TypeScript Playwright) and mirrored in SpecFlow/pytest docs. Track updates in `API Testing POC/DEMO_DOCS/screenplay_parity_demoapps.md`.
-- **Pre-flight Checks**: Run `npm run lint`, `npm run format`, and `npm run ts:check` before BDD runs to keep IDE feedback fast.
-- **Metrics**: Repository-level orchestrations produce `.results/run_metrics_<UTC>.{metrics,txt,md}`. These entries reference DEMOAPP001 log files and should stay green before merging.
-- **Dependencies**: Cypress install scripts attempt to verify browsers; use `npm install --ignore-scripts` when CI restrictions apply, then run `npx cypress verify` manually.
+- **Parity**: Any parser/API change must be mirrored in DEMOAPP003 and documented for DEMOAPP002/004 in `API Testing POC/DEMO_DOCS/screenplay_parity_demoapps.md`.
+- **Pre-flight Checks**: Run `npm run lint`, `npm run format`, and `npm run ts:check` before BDD runs for fast IDE feedback.
+- **Metrics**: Orchestrator executions write `.results/run_metrics_<UTC>.{metrics,txt,md}` referencing DEMOAPP001 logs; keep those files green before merging.
+- **Dependencies**: Cypress install scripts verify browsers; when CI restricts scripts, `npm install --ignore-scripts` + `npx cypress verify` is the fallback.
 
 ## 6. References
 - README (`_API_TESTING_GHERKIN_/DEMOAPP001_TYPESCRIPT_CYPRESS/README.md`) for setup commands.
-- QA strategy (`docs/QA_STRATEGY.md`) and Screenplay guide (`docs/SCREENPLAY_GUIDE.md`) for testing details.
+- QA strategy (`docs/QA_STRATEGY.md`) and Screenplay guide (`docs/SCREENPLAY_GUIDE.md`) for testing guidance.
 - Shared docs: `API Testing POC/DEMO_DOCS/batch_runner_design.md`, `.../screenplay_parity_demoapps.md`, and `.../tokenparser_api_contract.md`.

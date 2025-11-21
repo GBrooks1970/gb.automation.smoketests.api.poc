@@ -1,4 +1,4 @@
-# Shared TypeScript API Inventory (18/11/25)
+# Shared TypeScript API Inventory (21/11/25)
 
 ## Shared Package Contents
 - Location: `packages/tokenparser-api-shared/src`.
@@ -28,10 +28,10 @@
 - Shared package builds via `npm run workspace:build`.
 
 ## Consumers
-- DEMOAPP001 + DEMOAPP003 `src/server.ts` now proxy to `startTokenParserServer` with port overrides.
-- Existing `src/tokenparser`/`src/services` modules inside each app re-export from the shared package to keep import paths stable.
-- Cypress/Playwright util tests continue importing via local paths but receive shared implementations.
+- DEMOAPP001 + DEMOAPP003 run `npm run start`, which launches `node packages/tokenparser-api-shared/dist/cli/start.js` on ports 3000/3001; no local `src` host exists anymore.
+- Screenplay abilities, Cypress steps, and Playwright step definitions import parser helpers directly from `tokenparser-api-shared`.
+- `tsconfig.json` files focus on `cypress/`, `screenplay/`, `features/`, and tooling folders; parser/import paths now resolve through the shared package.
 
 ## Next Steps
-- Replace re-export shims with direct imports in util tasks/steps once downstream changes stabilise.
-- Update batch runners to call a shared start script when workspace build flow is automated.
+- Keep `Backlog_Parity` updated when further shared API refactors occur (features, logging, metrics, etc.).
+- Confirm orchestrator runs (e.g., `.batch/RUN_ALL_API_AND_TESTS.BAT`) remain green now that both demos rely on the shared CLI.

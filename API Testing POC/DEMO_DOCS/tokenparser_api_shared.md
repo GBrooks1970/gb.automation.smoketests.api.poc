@@ -1,6 +1,6 @@
 # tokenparser-api-shared Design & Usage Guide
 
-**Version 1 – 18/11/25**
+**Version 2 – 21/11/25**
 
 This note explains the rationale, structure, dependencies, and consumer workflows for the shared TypeScript API package that now powers DEMOAPP001 and DEMOAPP003.
 
@@ -47,8 +47,8 @@ Consumers *do not* need to install these packages directly—the compiled output
 
 | Demo | Usage |
 | --- | --- |
-| **DEMOAPP001 (Cypress)** | `src/server.ts` calls `startTokenParserServer({ port })`. Local `src/tokenparser/*`/`src/services/*` re-export shared modules. `tsconfig.json` maps imports to `../../packages/tokenparser-api-shared/dist`. |
-| **DEMOAPP003 (Playwright TS)** | Mirrors DEMOAPP001: thin bootstrap + tsconfig path aliases. Runs the shared server on port `3001`. |
+| **DEMOAPP001 (Cypress)** | `npm run start` executes `node ../../packages/tokenparser-api-shared/dist/cli/start.js --port 3000 --label DEMOAPP001`. Cypress/Screenplay helpers import parser utilities straight from `tokenparser-api-shared` so no local `src` assets remain. |
+| **DEMOAPP003 (Playwright TS)** | `npm run start` executes the same CLI on port `3001 --label DEMOAPP003`. Playwright step definitions and abilities pull parser helpers from `tokenparser-api-shared`. |
 | **DEMOAPP002 (C#)** | Not yet consuming the package; still hosts its own .NET API. Migration candidate once TypeScript shared host exposes a formal contract (Swagger already matches). |
 | **DEMOAPP004 (Python)** | Calls the FastAPI implementation; documentation references the shared package for parity but no code usage yet. |
 

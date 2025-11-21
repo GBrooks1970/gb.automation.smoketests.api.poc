@@ -1,7 +1,6 @@
-import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
+import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor/steps";
 import { expect } from "chai";
-import { TokenDateParser } from "../../../../../src/tokenparser/TokenDateParser";
-import { DateUtils } from "../../../../../src/utils/date-utils";
+import { TokenDateParser, DateUtils } from "tokenparser-api-shared";
 import { SendGetRequest } from "../../../../../screenplay/tasks/SendGetRequest";
 import { ResponseStatus } from "../../../../../screenplay/questions/ResponseStatus";
 import { ResponseBody } from "../../../../../screenplay/questions/ResponseBody";
